@@ -1,0 +1,3699 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模拟电路工作台 · 共射放大电路</title>
+    <style id="theme-vars">
+/* ==========================================================================
+   Golden Time · Lab Bench
+   Project-local token + layout layer derived from the "Golden Time" Design
+   Library (id: dl_builtin_golden_time, version 0).
+   Raw palette values come from the Library metadata; component/layout classes
+   are the project's application of those tokens.
+   ========================================================================== */
+
+:root {
+  --golden-background: #fbfaf9;
+  --golden-foreground: #3b352b;
+  --golden-card: #fbfaf9;
+  --golden-card-foreground: #3b352b;
+  --golden-popover: #fbfaf9;
+  --golden-popover-foreground: #3b352b;
+  --golden-primary: #3b352b;
+  --golden-primary-foreground: #fbfaf9;
+  --golden-primary-hover: #2e2921;
+  --golden-secondary: #9b965f;
+  --golden-secondary-foreground: #fbfaf9;
+  --golden-secondary-hover: #898552;
+  --golden-muted: #eae6db;
+  --golden-muted-foreground: #978365;
+  --golden-accent: #cbc0aa;
+  --golden-accent-foreground: #574d42;
+  --golden-accent-hover: #bcb098;
+  --golden-destructive: #ef4444;
+  --golden-destructive-foreground: #fafafa;
+  --golden-border: #e1dccf;
+  --golden-border-strong: #cfc5b2;
+  --golden-input: #eae6db;
+  --golden-ring: #3b352b;
+  --golden-chart-1: #d6d5c2;
+  --golden-chart-2: #5e4545;
+  --golden-chart-3: #b0b3a2;
+  --golden-chart-4: #9b965f;
+  --golden-chart-5: #f79b45;
+  --golden-chart-5-soft: #fbe2c9;
+  --golden-sidebar: #fbfaf9;
+  --golden-sidebar-foreground: #3b352b;
+  --golden-sidebar-primary: #3b352b;
+  --golden-sidebar-primary-foreground: #fbfaf9;
+  --golden-sidebar-accent: #cbc0aa;
+  --golden-sidebar-accent-foreground: #3b352b;
+  --golden-sidebar-border: #e1dccf;
+  --golden-sidebar-ring: #3b352b;
+
+  --golden-radius-sm: 10px;
+  --golden-radius-md: 18px;
+  --golden-radius-lg: 32px;
+  --golden-spacing: 4.8px;
+
+  --golden-font-display: Fraunces, Georgia, "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", serif;
+  --golden-font-body: "Noto Sans CJK SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --golden-font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+
+  --golden-shadow-xs: 0 1px 2px 0 rgba(59, 53, 43, 0.04);
+  --golden-shadow-sm: 0 6px 18px -12px rgba(59, 53, 43, 0.12);
+  --golden-shadow-float: 0 30px 70px -34px rgba(59, 53, 43, 0.34);
+  --golden-scrim: rgba(59, 53, 43, 0.26);
+}
+
+html.dark {
+  --golden-background: #060201;
+  --golden-foreground: #e3dfd6;
+  --golden-card: #0d0906;
+  --golden-card-foreground: #e3dfd6;
+  --golden-popover: #0d0906;
+  --golden-popover-foreground: #e3dfd6;
+  --golden-primary: #e3dfd6;
+  --golden-primary-foreground: #060201;
+  --golden-primary-hover: #f1ede4;
+  --golden-secondary: #605039;
+  --golden-secondary-foreground: #e3dfd6;
+  --golden-secondary-hover: #705e45;
+  --golden-muted: #16110c;
+  --golden-muted-foreground: #a89c8a;
+  --golden-accent: #806a4d;
+  --golden-accent-foreground: #e3dfd6;
+  --golden-accent-hover: #927a59;
+  --golden-border: #2d2b26;
+  --golden-border-strong: #494136;
+  --golden-input: #3b342b;
+  --golden-ring: #cbb99f;
+  --golden-chart-1: #b39d80;
+  --golden-chart-2: #7a5f52;
+  --golden-chart-3: #f2e1ca;
+  --golden-chart-4: #8c7773;
+  --golden-chart-5: #e65c33;
+  --golden-chart-5-soft: #3a2119;
+  --golden-sidebar: #060201;
+  --golden-sidebar-foreground: #e3dfd6;
+  --golden-sidebar-primary: #e3dfd6;
+  --golden-sidebar-primary-foreground: #060201;
+  --golden-sidebar-accent: #806a4d;
+  --golden-sidebar-accent-foreground: #e3dfd6;
+  --golden-sidebar-border: #494136;
+  --golden-sidebar-ring: #e3dfd6;
+  --golden-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.28);
+  --golden-shadow-sm: 0 8px 24px -16px rgba(0, 0, 0, 0.6);
+  --golden-shadow-float: 0 32px 80px -32px rgba(0, 0, 0, 0.7);
+  --golden-scrim: rgba(0, 0, 0, 0.56);
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--golden-background);
+  color: var(--golden-foreground);
+  font-family: var(--golden-font-body);
+  font-size: 13px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body.gt-app-body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.gt-hub-body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+svg {
+  display: block;
+}
+
+::selection {
+  background: var(--golden-accent);
+  color: var(--golden-accent-foreground);
+}
+
+:focus-visible {
+  outline: 2px solid var(--golden-chart-5);
+  outline-offset: 2px;
+}
+
+/* ---------- Typography ---------- */
+
+.gt-display {
+  font-family: var(--golden-font-display);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+}
+
+.gt-serif {
+  font-family: var(--golden-font-display);
+}
+
+.gt-mono {
+  font-family: var(--golden-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.gt-label {
+  font-family: var(--golden-font-body);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--golden-muted-foreground);
+}
+
+.gt-caption {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--golden-muted-foreground);
+}
+
+.gt-h2 {
+  font-family: var(--golden-font-display);
+  font-size: clamp(24px, 2.6vw, 34px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+}
+
+/* ---------- Utilities ---------- */
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mono {
+  font-family: var(--golden-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--golden-muted-foreground);
+}
+
+.gap-4 { gap: 4px; }
+.gap-6 { gap: 6px; }
+.gap-8 { gap: 8px; }
+.gap-10 { gap: 10px; }
+.gap-12 { gap: 12px; }
+.gap-14 { gap: 14px; }
+.gap-16 { gap: 16px; }
+.gap-20 { gap: 20px; }
+.gap-24 { gap: 24px; }
+
+.mt-4 { margin-top: 4px; }
+.mt-6 { margin-top: 6px; }
+.mt-8 { margin-top: 8px; }
+.mt-10 { margin-top: 10px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mt-24 { margin-top: 24px; }
+.mt-28 { margin-top: 28px; }
+.mt-32 { margin-top: 32px; }
+
+/* ---------- Buttons, chips, inputs ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 33px;
+  padding: 0 12px;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-sm);
+  background: var(--golden-card);
+  color: var(--golden-foreground);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.btn:hover {
+  background: var(--golden-muted);
+  border-color: var(--golden-accent);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  background: var(--golden-primary);
+  border-color: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+}
+
+.btn--primary:hover {
+  background: var(--golden-primary-hover);
+  border-color: var(--golden-primary-hover);
+}
+
+.btn--accent {
+  background: var(--golden-accent);
+  border-color: var(--golden-accent);
+  color: var(--golden-accent-foreground);
+}
+
+.btn--accent:hover {
+  background: var(--golden-accent-hover);
+  border-color: var(--golden-accent-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--golden-muted-foreground);
+}
+
+.btn--ghost:hover {
+  background: var(--golden-muted);
+  border-color: transparent;
+  color: var(--golden-foreground);
+}
+
+.btn--sm {
+  height: 28px;
+  padding: 0 9px;
+  font-size: 10.5px;
+  gap: 5px;
+}
+
+.btn--icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.btn--icon.btn--sm {
+  width: 28px;
+  height: 28px;
+}
+
+.btn .icon,
+.icon-btn .icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: var(--golden-muted-foreground);
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.icon-btn:hover {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+}
+
+.icon-btn .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 23px;
+  padding: 0 8px;
+  border: 1px solid var(--golden-border);
+  border-radius: 7px;
+  background: var(--golden-card);
+  color: var(--golden-muted-foreground);
+  font-size: 10px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.chip--active {
+  background: var(--golden-primary);
+  border-color: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+}
+
+.chip--muted {
+  background: var(--golden-muted);
+  border-color: transparent;
+}
+
+.chip--accent {
+  background: var(--golden-chart-5-soft);
+  border-color: var(--golden-chart-5);
+  color: var(--golden-chart-2);
+}
+
+.chip--warn {
+  background: var(--golden-muted);
+  border-color: transparent;
+  color: var(--golden-chart-2);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--golden-muted-foreground);
+  flex-shrink: 0;
+}
+
+.dot--high { background: var(--golden-chart-4); }
+.dot--low { background: var(--golden-accent); }
+.dot--warn { background: var(--golden-chart-5); }
+.dot--error { background: var(--golden-destructive); }
+.dot--live { background: var(--golden-chart-4); box-shadow: 0 0 0 3px var(--golden-muted); }
+
+.input {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+  color: var(--golden-foreground);
+  font-size: 11.5px;
+  outline: none;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.input::placeholder {
+  color: var(--golden-muted-foreground);
+}
+
+.input:focus {
+  border-color: var(--golden-accent);
+  background: var(--golden-card);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 9px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+  color: var(--golden-muted-foreground);
+}
+
+.search-box .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: 11.5px;
+  color: var(--golden-foreground);
+}
+
+.search-box input::placeholder {
+  color: var(--golden-muted-foreground);
+}
+
+.hairline {
+  border-top: 1px solid var(--golden-border);
+}
+
+.panel {
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-md);
+  background: var(--golden-card);
+}
+
+.panel--lg {
+  border-radius: var(--golden-radius-lg);
+}
+
+.panel--muted {
+  background: var(--golden-muted);
+  border-color: transparent;
+}
+
+/* ---------- Brand mark ---------- */
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+  flex-shrink: 0;
+}
+
+.brand-mark .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.brand-word {
+  font-family: var(--golden-font-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+.brand-word em {
+  font-style: normal;
+  color: var(--golden-muted-foreground);
+}
+
+/* ==========================================================================
+   Hub
+   ========================================================================== */
+
+.hub-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--golden-background);
+}
+
+.hub-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 66px;
+  padding: 0 clamp(18px, 4vw, 56px);
+  border-bottom: 1px solid var(--golden-border);
+  background: color-mix(in srgb, var(--golden-background) 93%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.hub-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.hub-brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.hub-brand-copy .gt-label {
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+}
+
+.hub-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hub-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  color: var(--golden-muted-foreground);
+  font-size: 11.5px;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.hub-nav a:hover {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+}
+
+.hub-nav a.is-active {
+  color: var(--golden-foreground);
+  font-weight: 600;
+}
+
+.hub-nav a.is-active::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -11px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--golden-chart-5);
+}
+
+.hub-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.hub-main {
+  width: min(1320px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: clamp(34px, 5vw, 72px) 0 56px;
+  flex: 1;
+}
+
+.hub-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(340px, 0.94fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.hub-hero::before {
+  content: "";
+  position: absolute;
+  inset: -80px -10% auto auto;
+  width: 760px;
+  height: 620px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(247, 155, 69, 0.10), transparent 64%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hub-hero-copy,
+.hub-hero-card {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  max-width: 14ch;
+  margin: 0;
+  font-family: var(--golden-font-display);
+  font-size: clamp(42px, 5.2vw, 76px);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+  text-wrap: balance;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.hero-title .soft {
+  color: var(--golden-muted-foreground);
+}
+
+.hero-sub {
+  max-width: 45ch;
+  margin: 22px 0 0;
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: var(--golden-muted-foreground);
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 28px;
+}
+
+.hero-facts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 30px;
+  color: var(--golden-muted-foreground);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+
+.hero-facts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.hero-facts .dot {
+  width: 4px;
+  height: 4px;
+  background: var(--golden-chart-5);
+}
+
+.hub-hero-card {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-lg);
+  background: var(--golden-card);
+  min-height: 360px;
+}
+
+.hero-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 4px 0;
+}
+
+.hero-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.hero-card-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--golden-font-mono);
+  font-size: 9px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.hero-schematic {
+  width: 100%;
+  height: auto;
+  border-radius: var(--golden-radius-md);
+  background: var(--golden-muted);
+}
+
+.hero-card-foot {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-sm);
+  background: var(--golden-border);
+}
+
+.hero-metric {
+  padding: 10px 11px;
+  background: var(--golden-card);
+}
+
+.hero-metric-value {
+  font-family: var(--golden-font-mono);
+  font-size: 17px;
+  line-height: 1;
+  color: var(--golden-foreground);
+}
+
+.hero-metric-label {
+  margin-top: 5px;
+  font-size: 9px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.hub-section {
+  margin-top: clamp(46px, 7vw, 86px);
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  margin: 0;
+  font-family: var(--golden-font-display);
+  font-size: clamp(24px, 2.5vw, 33px);
+  font-weight: 500;
+  letter-spacing: -0.022em;
+  line-height: 1.18;
+}
+
+.section-side {
+  max-width: 42ch;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--golden-muted-foreground);
+  text-align: right;
+}
+
+.domain-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.domain-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 196px;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-lg);
+  background: var(--golden-card);
+  transition: border-color 180ms ease, transform 180ms ease, background-color 180ms ease;
+}
+
+.domain-card:hover {
+  border-color: var(--golden-accent);
+  background: color-mix(in srgb, var(--golden-muted) 36%, var(--golden-card));
+  transform: translateY(-2px);
+}
+
+.domain-card--lead { grid-column: span 7; }
+.domain-card--side { grid-column: span 5; }
+.domain-card--third { grid-column: span 4; min-height: 176px; }
+
+.domain-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.domain-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--golden-muted);
+  color: var(--golden-chart-2);
+  flex-shrink: 0;
+}
+
+.domain-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.domain-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  color: var(--golden-muted-foreground);
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.domain-card:hover .domain-arrow {
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+  transform: translate(1px, -1px);
+}
+
+.domain-arrow .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.domain-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.domain-title {
+  margin: 0;
+  font-family: var(--golden-font-display);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.domain-card--third .domain-title {
+  font-size: 17px;
+}
+
+.domain-desc {
+  margin: 0;
+  max-width: 38ch;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--golden-muted-foreground);
+}
+
+.domain-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.domain-illustration {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 44%;
+  max-width: 240px;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.domain-card--third .domain-illustration {
+  width: 52%;
+  max-width: 160px;
+  opacity: 0.55;
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.template-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-md);
+  background: var(--golden-card);
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.template-card:hover {
+  border-color: var(--golden-accent);
+  transform: translateY(-2px);
+}
+
+.template-thumb {
+  aspect-ratio: 16 / 8.5;
+  background: var(--golden-muted);
+  border-bottom: 1px solid var(--golden-border);
+  overflow: hidden;
+}
+
+.template-thumb svg {
+  width: 100%;
+  height: 100%;
+}
+
+.template-body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 14px 14px;
+}
+
+.template-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.template-meta {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.template-arrow {
+  color: var(--golden-muted-foreground);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.template-arrow .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.project-list {
+  overflow: hidden;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-md);
+  background: var(--golden-card);
+}
+
+.project-list-head,
+.project-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) 120px 130px 40px;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+}
+
+.project-list-head {
+  height: 34px;
+  border-bottom: 1px solid var(--golden-border);
+  background: var(--golden-muted);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--golden-muted-foreground);
+}
+
+.project-row {
+  min-height: 54px;
+  border-bottom: 1px solid var(--golden-border);
+  transition: background-color 160ms ease;
+}
+
+.project-row:last-child {
+  border-bottom: 0;
+}
+
+.project-row:hover {
+  background: color-mix(in srgb, var(--golden-muted) 44%, var(--golden-card));
+}
+
+.project-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.project-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: var(--golden-muted);
+  color: var(--golden-chart-2);
+  flex-shrink: 0;
+}
+
+.project-glyph .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.project-name-copy {
+  min-width: 0;
+}
+
+.project-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-sub {
+  margin-top: 2px;
+  font-size: 9.5px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-time {
+  font-family: var(--golden-font-mono);
+  font-size: 10px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.project-state {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9.5px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.hub-footer {
+  border-top: 1px solid var(--golden-border);
+  background: var(--golden-muted);
+}
+
+.hub-footer-inner {
+  width: min(1320px, calc(100% - 40px));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  font-size: 9.5px;
+  color: var(--golden-muted-foreground);
+}
+
+.hub-footer-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hub-footer-links a:hover {
+  color: var(--golden-foreground);
+}
+
+/* ==========================================================================
+   Workspace shell
+   ========================================================================== */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr) 316px;
+  grid-template-rows: 54px minmax(0, 1fr) 236px 30px;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--golden-background);
+}
+
+.app-topbar {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--golden-border);
+  background: var(--golden-background);
+}
+
+.topbar-home {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.topbar-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--golden-border);
+  flex-shrink: 0;
+}
+
+.project-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  max-width: 190px;
+  flex-shrink: 1;
+}
+
+.project-block .project-name {
+  display: block;
+  font-family: var(--golden-font-display);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-block .project-meta {
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.domain-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--golden-border);
+  border-radius: 11px;
+  background: var(--golden-muted);
+  margin-left: auto;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.domain-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.domain-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 27px;
+  padding: 0 9px;
+  border-radius: 8px;
+  color: var(--golden-muted-foreground);
+  font-size: 10.5px;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.domain-tab:hover {
+  color: var(--golden-foreground);
+}
+
+.domain-tab.is-active {
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+}
+
+.domain-tab .icon {
+  width: 12px;
+  height: 12px;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.engine-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 7px;
+  background: var(--golden-muted);
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.engine-chip .dot {
+  width: 5px;
+  height: 5px;
+  background: var(--golden-chart-5);
+}
+
+/* ---------- Palette ---------- */
+
+.app-palette {
+  grid-column: 1;
+  grid-row: 2 / 4;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--golden-border);
+  background: var(--golden-background);
+}
+
+.palette-head {
+  padding: 13px 13px 11px;
+  border-bottom: 1px solid var(--golden-border);
+}
+
+.palette-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.palette-title {
+  font-family: var(--golden-font-display);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.palette-count {
+  font-family: var(--golden-font-mono);
+  font-size: 9px;
+  color: var(--golden-muted-foreground);
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 9px;
+  padding-bottom: 1px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filter-row::-webkit-scrollbar {
+  display: none;
+}
+
+.palette-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 11px 13px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.part-group + .part-group {
+  margin-top: 15px;
+}
+
+.part-group-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--golden-muted-foreground);
+}
+
+.part-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.part-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding: 6px 7px 7px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.part-card:hover {
+  border-color: var(--golden-accent);
+  background: var(--golden-muted);
+}
+
+.part-card.is-selected {
+  border-color: var(--golden-chart-5);
+  background: color-mix(in srgb, var(--golden-chart-5) 7%, var(--golden-card));
+}
+
+.part-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  color: var(--golden-chart-2);
+}
+
+.part-symbol svg {
+  width: 44px;
+  height: 28px;
+}
+
+.part-name {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.part-meta {
+  font-size: 8.5px;
+  line-height: 1.25;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.palette-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 13px;
+  border-top: 1px solid var(--golden-border);
+  background: var(--golden-muted);
+  font-size: 9px;
+  color: var(--golden-muted-foreground);
+}
+
+/* ---------- Canvas ---------- */
+
+.app-canvas {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--golden-background);
+}
+
+.canvas-surface {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--golden-border) 1px, transparent 1px);
+  background-size: 18px 18px;
+  background-position: -9px -9px;
+}
+
+.canvas-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%, transparent 52%, color-mix(in srgb, var(--golden-muted) 42%, transparent) 100%);
+  pointer-events: none;
+}
+
+.schematic {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-toolbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 3px;
+  border: 1px solid var(--golden-border);
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--golden-card) 93%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 8px;
+  color: var(--golden-muted-foreground);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.tool-btn:hover {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+}
+
+.tool-btn.is-active {
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+}
+
+.tool-btn .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.tool-sep {
+  width: 1px;
+  height: 17px;
+  margin: 0 3px;
+  background: var(--golden-border);
+}
+
+.canvas-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 27px;
+  padding: 0 9px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--golden-card) 93%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.canvas-hint {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--golden-border);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--golden-card) 90%, transparent);
+  color: var(--golden-muted-foreground);
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.zoom-box {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 2px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--golden-card) 93%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.zoom-box .tool-btn {
+  width: 25px;
+  height: 25px;
+}
+
+.zoom-value {
+  min-width: 42px;
+  text-align: center;
+  font-family: var(--golden-font-mono);
+  font-size: 9px;
+  color: var(--golden-muted-foreground);
+}
+
+.selection-tag {
+  position: absolute;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 7px;
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+  box-shadow: var(--golden-shadow-sm);
+}
+
+.selection-tag .dot {
+  width: 5px;
+  height: 5px;
+  background: var(--golden-chart-5);
+}
+
+/* ---------- Schematic primitives ---------- */
+
+.sch-wire {
+  fill: none;
+  stroke: var(--golden-chart-2);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sch-wire--power { stroke: var(--golden-chart-4); }
+.sch-wire--analog { stroke: var(--golden-chart-5); }
+.sch-wire--muted { stroke: var(--golden-accent); }
+.sch-wire--thin { stroke-width: 0.9; }
+
+.sch-junction {
+  fill: var(--golden-chart-2);
+}
+
+.sch-chip {
+  fill: var(--golden-card);
+  stroke: var(--golden-chart-2);
+  stroke-width: 1.4;
+}
+
+.sch-chip--soft {
+  fill: var(--golden-muted);
+}
+
+.sch-chip--selected {
+  stroke: var(--golden-chart-5);
+  stroke-width: 2.2;
+}
+
+.sch-chip--board {
+  fill: var(--golden-muted);
+  stroke: var(--golden-chart-2);
+  stroke-width: 1.3;
+}
+
+.sch-chip--dark {
+  fill: var(--golden-chart-2);
+  stroke: var(--golden-chart-2);
+}
+
+.sch-pin {
+  stroke: var(--golden-chart-2);
+  stroke-width: 1;
+}
+
+.sch-pin--power {
+  stroke: var(--golden-chart-4);
+}
+
+.sch-pad {
+  fill: var(--golden-accent);
+  stroke: var(--golden-chart-2);
+  stroke-width: 0.6;
+}
+
+.sch-label {
+  fill: var(--golden-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 8.5px;
+}
+
+.sch-label--muted { fill: var(--golden-muted-foreground); }
+.sch-label--tiny { font-size: 7.2px; }
+.sch-label--bold { font-weight: 600; }
+
+.sch-label--serif {
+  font-family: var(--golden-font-display);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.sch-netlabel {
+  fill: var(--golden-muted-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 8px;
+  paint-order: stroke;
+  stroke: var(--golden-background);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.sch-value {
+  fill: var(--golden-chart-4);
+  font-family: var(--golden-font-mono);
+  font-size: 8.5px;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: var(--golden-background);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.sch-handle {
+  fill: var(--golden-card);
+  stroke: var(--golden-chart-5);
+  stroke-width: 1.4;
+}
+
+.sch-seg-on {
+  stroke: var(--golden-chart-5);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.sch-seg-off {
+  stroke: var(--golden-accent);
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.sch-led {
+  fill: var(--golden-chart-5);
+}
+
+.sch-led-glow {
+  fill: var(--golden-chart-5-soft);
+}
+
+.sch-grid {
+  stroke: var(--golden-border);
+  stroke-width: 1;
+}
+
+.sch-grid-strong {
+  stroke: var(--golden-accent);
+  stroke-width: 1;
+}
+
+.sch-node {
+  fill: var(--golden-chart-5);
+}
+
+/* ---------- Inspector ---------- */
+
+.app-inspector {
+  grid-column: 3;
+  grid-row: 2 / 4;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-left: 1px solid var(--golden-border);
+  background: var(--golden-background);
+}
+
+.inspector-head {
+  padding: 13px 15px 11px;
+  border-bottom: 1px solid var(--golden-border);
+}
+
+.inspector-kicker {
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--golden-muted-foreground);
+}
+
+.inspector-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.inspector-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  font-family: var(--golden-font-display);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.inspector-title .chip {
+  height: 19px;
+  font-size: 8.5px;
+  padding: 0 6px;
+}
+
+.inspector-tabs {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 15px;
+  border-bottom: 1px solid var(--golden-border);
+}
+
+.inspector-tab {
+  position: relative;
+  padding: 8px 0;
+  font-size: 10.5px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.inspector-tab.is-active {
+  color: var(--golden-foreground);
+  font-weight: 600;
+}
+
+.inspector-tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--golden-chart-5);
+}
+
+.inspector-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px 15px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.inspect-section + .inspect-section {
+  margin-top: 15px;
+}
+
+.inspect-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--golden-muted-foreground);
+}
+
+.param-list {
+  overflow: hidden;
+  border: 1px solid var(--golden-border);
+  border-radius: 11px;
+  background: var(--golden-card);
+}
+
+.param-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 30px;
+  padding: 5px 9px;
+  border-bottom: 1px solid var(--golden-border);
+  font-size: 10.5px;
+}
+
+.param-row:last-child {
+  border-bottom: 0;
+}
+
+.param-key {
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.param-val {
+  font-family: var(--golden-font-mono);
+  font-size: 10px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pin-table,
+.reg-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5px;
+}
+
+.pin-table th,
+.reg-table th {
+  padding: 0 4px 5px;
+  border-bottom: 1px solid var(--golden-border);
+  color: var(--golden-muted-foreground);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pin-table td,
+.reg-table td {
+  padding: 5px 4px;
+  border-bottom: 1px solid var(--golden-border);
+  white-space: nowrap;
+}
+
+.pin-table tr:last-child td,
+.reg-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.pin-table td:last-child,
+.reg-table td:last-child {
+  text-align: right;
+  font-family: var(--golden-font-mono);
+}
+
+.net-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: 5px;
+  background: var(--golden-muted);
+  font-family: var(--golden-font-mono);
+  font-size: 8.5px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.ai-card {
+  padding: 11px;
+  border: 1px solid var(--golden-accent);
+  border-radius: 14px;
+  background: var(--golden-muted);
+}
+
+.ai-card-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ai-card-title .icon {
+  width: 14px;
+  height: 14px;
+  color: var(--golden-chart-5);
+}
+
+.ai-card-desc {
+  margin-top: 5px;
+  font-size: 9.5px;
+  line-height: 1.6;
+  color: var(--golden-muted-foreground);
+}
+
+.ai-snippet {
+  margin-top: 8px;
+  max-height: 74px;
+  overflow: hidden;
+  padding: 7px 8px;
+  border: 1px solid var(--golden-border);
+  border-radius: 8px;
+  background: var(--golden-card);
+  font-family: var(--golden-font-mono);
+  font-size: 8px;
+  line-height: 1.55;
+  color: var(--golden-muted-foreground);
+  white-space: pre;
+}
+
+.check-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--golden-border);
+  font-size: 9.5px;
+  line-height: 1.5;
+}
+
+.check-row:last-child {
+  border-bottom: 0;
+}
+
+.check-row .dot {
+  margin-top: 4px;
+}
+
+.check-copy {
+  min-width: 0;
+}
+
+.check-copy strong {
+  font-weight: 600;
+}
+
+.check-copy span {
+  display: block;
+  margin-top: 1px;
+  color: var(--golden-muted-foreground);
+}
+
+/* ---------- Firmware / MCU ---------- */
+
+.fw-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 10px;
+  border: 1px dashed var(--golden-accent);
+  border-radius: 12px;
+  background: var(--golden-muted);
+  text-align: center;
+}
+
+.fw-drop .icon {
+  width: 18px;
+  height: 18px;
+  color: var(--golden-chart-5);
+}
+
+.fw-drop-title {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.fw-drop-sub {
+  font-size: 8.5px;
+  color: var(--golden-muted-foreground);
+}
+
+.fw-file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 7px 8px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+}
+
+.fw-file-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--golden-muted);
+  color: var(--golden-chart-2);
+  flex-shrink: 0;
+}
+
+.fw-file-icon .icon {
+  width: 13px;
+  height: 13px;
+}
+
+.fw-file-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.fw-file-name {
+  font-family: var(--golden-font-mono);
+  font-size: 9.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fw-file-meta {
+  margin-top: 1px;
+  font-size: 8px;
+  color: var(--golden-muted-foreground);
+}
+
+.fw-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 8.5px;
+  color: var(--golden-chart-4);
+  white-space: nowrap;
+}
+
+.progress {
+  height: 4px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--golden-accent);
+}
+
+.progress > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--golden-chart-4);
+}
+
+.btn-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.btn-row .btn {
+  flex: 1;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.stat-box {
+  padding: 7px 8px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+  min-width: 0;
+}
+
+.stat-value {
+  font-family: var(--golden-font-mono);
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-label {
+  margin-top: 4px;
+  font-size: 8px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+/* ---------- Dock ---------- */
+
+.app-dock {
+  grid-column: 2;
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-top: 1px solid var(--golden-border);
+  background: var(--golden-card);
+}
+
+.dock-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 37px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--golden-border);
+  background: var(--golden-card);
+  flex-shrink: 0;
+}
+
+.dock-tabs {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.dock-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.dock-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 25px;
+  padding: 0 8px;
+  border-radius: 7px;
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.dock-tab:hover {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+}
+
+.dock-tab.is-active {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+  font-weight: 600;
+}
+
+.dock-tab .icon {
+  width: 12px;
+  height: 12px;
+}
+
+.dock-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.dock-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.dock-wave {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  border-right: 1px solid var(--golden-border);
+  background: var(--golden-background);
+  overflow: hidden;
+}
+
+.scope-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.wave-grid {
+  stroke: var(--golden-border);
+  stroke-width: 1;
+}
+
+.wave-grid--strong {
+  stroke: var(--golden-accent);
+  stroke-width: 1;
+}
+
+.wave-label {
+  fill: var(--golden-muted-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 7.5px;
+}
+
+.wave-channel {
+  fill: var(--golden-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.trace-1 { stroke: var(--golden-chart-2); stroke-width: 1.5; fill: none; }
+.trace-2 { stroke: var(--golden-chart-4); stroke-width: 1.5; fill: none; }
+.trace-3 { stroke: var(--golden-chart-5); stroke-width: 1.5; fill: none; }
+.trace-4 { stroke: var(--golden-chart-3); stroke-width: 1.5; fill: none; }
+
+.trace--thin { stroke-width: 1.1; }
+
+.wave-cursor {
+  stroke: var(--golden-chart-5);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.cursor-tag {
+  fill: var(--golden-chart-5);
+}
+
+.cursor-tag-text {
+  fill: var(--golden-primary-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 7px;
+  font-weight: 600;
+}
+
+.dock-side {
+  width: 208px;
+  flex-shrink: 0;
+  padding: 8px 10px 10px;
+  overflow: auto;
+  background: var(--golden-card);
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.dock-side .inspect-label {
+  margin-bottom: 4px;
+}
+
+.dock-side .param-row {
+  min-height: 25px;
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--golden-border);
+  font-size: 9px;
+}
+
+.dock-side .param-key {
+  font-size: 8.5px;
+}
+
+.dock-side .param-val {
+  font-size: 9px;
+  color: var(--golden-foreground);
+}
+
+.channel-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  font-size: 8.5px;
+  color: var(--golden-muted-foreground);
+}
+
+.channel-swatch {
+  width: 12px;
+  height: 2px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.channel-swatch--1 { background: var(--golden-chart-2); }
+.channel-swatch--2 { background: var(--golden-chart-4); }
+.channel-swatch--3 { background: var(--golden-chart-5); }
+
+.channel-value {
+  margin-left: auto;
+  font-family: var(--golden-font-mono);
+  color: var(--golden-foreground);
+  white-space: nowrap;
+}
+
+.terminal {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  padding: 10px 13px;
+  background: var(--golden-background);
+  font-family: var(--golden-font-mono);
+  font-size: 9.5px;
+  line-height: 1.9;
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.terminal-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.terminal-time {
+  color: var(--golden-muted-foreground);
+}
+
+.terminal-ok { color: var(--golden-chart-4); }
+.terminal-warn { color: var(--golden-chart-5); }
+.terminal-dim { color: var(--golden-muted-foreground); }
+
+.terminal-prompt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--golden-muted-foreground);
+}
+
+.terminal-cursor {
+  width: 6px;
+  height: 11px;
+  background: var(--golden-chart-4);
+  animation: gt-blink 1.2s steps(1) infinite;
+}
+
+.burn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.burn-step {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 6px;
+  border-radius: 7px;
+  background: var(--golden-muted);
+  font-size: 8.5px;
+  color: var(--golden-muted-foreground);
+}
+
+.burn-step .icon {
+  width: 11px;
+  height: 11px;
+  color: var(--golden-chart-4);
+}
+
+/* ---------- Status bar ---------- */
+
+.app-statusbar {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 0 12px;
+  border-top: 1px solid var(--golden-border);
+  background: var(--golden-muted);
+  color: var(--golden-muted-foreground);
+  font-size: 8.5px;
+  line-height: 1;
+}
+
+.status-left,
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-center {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-item .icon {
+  width: 11px;
+  height: 11px;
+}
+
+/* ==========================================================================
+   AI drawer
+   ========================================================================== */
+
+.ai-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--golden-scrim);
+  backdrop-filter: blur(2px);
+}
+
+.ai-drawer {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 41;
+  display: flex;
+  flex-direction: column;
+  width: min(620px, calc(100vw - 20px));
+  overflow: hidden;
+  border: 1px solid var(--golden-accent);
+  border-radius: var(--golden-radius-lg);
+  background: var(--golden-card);
+  box-shadow: var(--golden-shadow-float);
+}
+
+.ai-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--golden-border);
+}
+
+.ai-title {
+  margin: 0;
+  font-family: var(--golden-font-display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.ai-sub {
+  margin-top: 3px;
+  font-size: 10px;
+  color: var(--golden-muted-foreground);
+}
+
+.ai-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.ai-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.seg {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 2px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-muted);
+}
+
+.seg-item {
+  display: inline-flex;
+  align-items: center;
+  height: 25px;
+  padding: 0 8px;
+  border-radius: 7px;
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.seg-item.is-active {
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 25px;
+  padding: 0 8px;
+  border-radius: 7px;
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.toggle-track {
+  position: relative;
+  width: 22px;
+  height: 13px;
+  border-radius: 999px;
+  background: var(--golden-accent);
+  flex-shrink: 0;
+}
+
+.toggle-track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--golden-card);
+  transition: left 160ms ease;
+}
+
+.toggle.is-on {
+  color: var(--golden-foreground);
+}
+
+.toggle.is-on .toggle-track {
+  background: var(--golden-chart-4);
+}
+
+.toggle.is-on .toggle-track::after {
+  left: 11px;
+}
+
+.netlist-code {
+  overflow: auto;
+  border: 1px solid var(--golden-border);
+  border-radius: 13px;
+  background: var(--golden-muted);
+  padding: 9px 0;
+  font-family: var(--golden-font-mono);
+  font-size: 9.5px;
+  line-height: 1.72;
+  max-height: calc(100vh - 330px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.nl-line {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+}
+
+.nl-num {
+  padding-right: 8px;
+  text-align: right;
+  color: var(--golden-muted-foreground);
+  opacity: 0.55;
+  user-select: none;
+}
+
+.nl-text {
+  padding-right: 12px;
+  white-space: pre;
+  color: var(--golden-foreground);
+}
+
+.nl-comment { color: var(--golden-muted-foreground); }
+.nl-section { color: var(--golden-chart-4); font-weight: 600; }
+.nl-key { color: var(--golden-chart-2); font-weight: 600; }
+.nl-warn { color: var(--golden-chart-5); }
+.nl-link { color: var(--golden-chart-4); }
+
+.ai-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 18px 13px;
+  border-top: 1px solid var(--golden-border);
+  background: var(--golden-card);
+}
+
+.ai-meta {
+  min-width: 0;
+  font-size: 8.5px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ---------- Toast ---------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 42px;
+  z-index: 60;
+  padding: 8px 13px;
+  border-radius: 9px;
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+  font-size: 10.5px;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(8px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  max-width: min(420px, calc(100vw - 32px));
+  text-align: center;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.copy-buffer {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1240px) {
+  .app-shell {
+    grid-template-columns: 236px minmax(0, 1fr) 292px;
+  }
+  .domain-tabs {
+    gap: 0;
+  }
+  .domain-tab {
+    padding: 0 7px;
+  }
+  .domain-card--side .domain-illustration {
+    width: 34%;
+  }
+}
+
+@media (max-width: 1080px) {
+  .app-shell {
+    grid-template-columns: 228px minmax(0, 1fr);
+    grid-template-rows: 54px minmax(0, 1fr) 228px 30px;
+  }
+  .app-inspector {
+    display: none;
+  }
+  .hub-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+  .hub-hero-card {
+    min-height: 0;
+  }
+  .domain-card--lead,
+  .domain-card--side,
+  .domain-card--third {
+    grid-column: span 6;
+  }
+  .domain-illustration {
+    display: none;
+  }
+  .template-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .project-list-head,
+  .project-row {
+    grid-template-columns: minmax(0, 1.6fr) 100px 36px;
+  }
+  .project-list-head > :nth-child(3),
+  .project-row > :nth-child(3) {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 54px minmax(0, 1fr) 30px;
+  }
+  .app-palette,
+  .app-dock {
+    display: none;
+  }
+  .app-canvas {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .project-block,
+  .topbar-divider,
+  .engine-chip {
+    display: none;
+  }
+  .domain-tabs {
+    margin-left: auto;
+  }
+  .hub-nav {
+    display: none;
+  }
+  .hub-main {
+    width: calc(100% - 28px);
+    padding-top: 28px;
+  }
+  .hub-topbar {
+    height: 58px;
+    padding: 0 14px;
+    gap: 12px;
+  }
+  .hero-title {
+    font-size: clamp(34px, 8vw, 52px);
+    max-width: 16ch;
+  }
+  .hero-sub {
+    font-size: 12.5px;
+  }
+  .hub-hero::before {
+    display: none;
+  }
+  .domain-card--lead,
+  .domain-card--side,
+  .domain-card--third {
+    grid-column: span 12;
+    min-height: 0;
+  }
+  .domain-illustration {
+    display: none;
+  }
+  .template-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .section-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .section-side {
+    text-align: left;
+  }
+  .project-list-head {
+    display: none;
+  }
+  .project-row {
+    grid-template-columns: minmax(0, 1fr) 34px;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .project-row > :nth-child(2),
+  .project-row > :nth-child(3) {
+    display: none;
+  }
+  .hub-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .status-center {
+    display: none;
+  }
+  .canvas-hint {
+    display: none;
+  }
+  .canvas-status {
+    display: none;
+  }
+  .ai-drawer {
+    top: 6px;
+    right: 6px;
+    bottom: 6px;
+    width: calc(100vw - 12px);
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hub-actions .btn--ghost {
+    display: none;
+  }
+  .topbar-home .brand-word {
+    display: none;
+  }
+  .topbar-actions .btn--primary,
+  .topbar-actions > .icon-btn {
+    display: none;
+  }
+  .domain-tabs {
+    max-width: 100%;
+  }
+  .domain-tab {
+    font-size: 9px;
+    padding: 0 5px;
+  }
+  .hero-actions .btn {
+    height: 34px;
+  }
+  .hero-facts {
+    gap: 10px;
+  }
+  .status-right span:nth-child(2) {
+    display: none;
+  }
+  .ai-head {
+    padding: 13px 14px 10px;
+  }
+  .ai-body {
+    padding: 10px 14px;
+  }
+  .ai-foot {
+    padding: 9px 14px 12px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ai-actions {
+    justify-content: flex-end;
+  }
+}
+
+/* ---------- Motion ---------- */
+
+@keyframes gt-blink {
+  0%, 45% { opacity: 1; }
+  46%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--golden-background);
+    --color-foreground: var(--golden-foreground);
+    --color-card: var(--golden-card);
+    --color-card-foreground: var(--golden-card-foreground);
+    --color-popover: var(--golden-popover);
+    --color-popover-foreground: var(--golden-popover-foreground);
+    --color-primary: var(--golden-primary);
+    --color-primary-foreground: var(--golden-primary-foreground);
+    --color-secondary: var(--golden-secondary);
+    --color-secondary-foreground: var(--golden-secondary-foreground);
+    --color-muted: var(--golden-muted);
+    --color-muted-foreground: var(--golden-muted-foreground);
+    --color-accent: var(--golden-accent);
+    --color-accent-foreground: var(--golden-accent-foreground);
+    --color-destructive: var(--golden-destructive);
+    --color-destructive-foreground: var(--golden-destructive-foreground);
+    --color-border: var(--golden-border);
+    --color-input: var(--golden-input);
+    --color-ring: var(--golden-ring);
+    --color-chart-1: var(--golden-chart-1);
+    --color-chart-2: var(--golden-chart-2);
+    --color-chart-3: var(--golden-chart-3);
+    --color-chart-4: var(--golden-chart-4);
+    --color-chart-5: var(--golden-chart-5);
+    --color-sidebar: var(--golden-sidebar);
+    --color-sidebar-foreground: var(--golden-sidebar-foreground);
+    --color-sidebar-primary: var(--golden-sidebar-primary);
+    --color-sidebar-primary-foreground: var(--golden-sidebar-primary-foreground);
+    --color-sidebar-accent: var(--golden-sidebar-accent);
+    --color-sidebar-accent-foreground: var(--golden-sidebar-accent-foreground);
+    --radius-sm: var(--golden-radius-sm);
+    --radius-md: var(--golden-radius-md);
+    --radius-lg: var(--golden-radius-lg);
+  }
+  @layer base {
+    body { background: var(--golden-background); color: var(--golden-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--golden-background); }
+      .text-background { color: var(--golden-background); }
+      .border-background { border-color: var(--golden-background); }
+      .ring-background { --tw-ring-color: var(--golden-background); }
+      .bg-foreground { background-color: var(--golden-foreground); }
+      .text-foreground { color: var(--golden-foreground); }
+      .border-foreground { border-color: var(--golden-foreground); }
+      .ring-foreground { --tw-ring-color: var(--golden-foreground); }
+      .bg-card { background-color: var(--golden-card); }
+      .text-card { color: var(--golden-card); }
+      .border-card { border-color: var(--golden-card); }
+      .ring-card { --tw-ring-color: var(--golden-card); }
+      .bg-card-foreground { background-color: var(--golden-card-foreground); }
+      .text-card-foreground { color: var(--golden-card-foreground); }
+      .border-card-foreground { border-color: var(--golden-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--golden-card-foreground); }
+      .bg-popover { background-color: var(--golden-popover); }
+      .text-popover { color: var(--golden-popover); }
+      .border-popover { border-color: var(--golden-popover); }
+      .ring-popover { --tw-ring-color: var(--golden-popover); }
+      .bg-popover-foreground { background-color: var(--golden-popover-foreground); }
+      .text-popover-foreground { color: var(--golden-popover-foreground); }
+      .border-popover-foreground { border-color: var(--golden-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--golden-popover-foreground); }
+      .bg-primary { background-color: var(--golden-primary); }
+      .text-primary { color: var(--golden-primary); }
+      .border-primary { border-color: var(--golden-primary); }
+      .ring-primary { --tw-ring-color: var(--golden-primary); }
+      .bg-primary-foreground { background-color: var(--golden-primary-foreground); }
+      .text-primary-foreground { color: var(--golden-primary-foreground); }
+      .border-primary-foreground { border-color: var(--golden-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--golden-primary-foreground); }
+      .bg-secondary { background-color: var(--golden-secondary); }
+      .text-secondary { color: var(--golden-secondary); }
+      .border-secondary { border-color: var(--golden-secondary); }
+      .ring-secondary { --tw-ring-color: var(--golden-secondary); }
+      .bg-secondary-foreground { background-color: var(--golden-secondary-foreground); }
+      .text-secondary-foreground { color: var(--golden-secondary-foreground); }
+      .border-secondary-foreground { border-color: var(--golden-secondary-foreground); }
+      .ring-secondary-foreground { --tw-ring-color: var(--golden-secondary-foreground); }
+      .bg-muted { background-color: var(--golden-muted); }
+      .text-muted { color: var(--golden-muted); }
+      .border-muted { border-color: var(--golden-muted); }
+      .ring-muted { --tw-ring-color: var(--golden-muted); }
+      .bg-muted-foreground { background-color: var(--golden-muted-foreground); }
+      .text-muted-foreground { color: var(--golden-muted-foreground); }
+      .border-muted-foreground { border-color: var(--golden-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--golden-muted-foreground); }
+      .bg-accent { background-color: var(--golden-accent); }
+      .text-accent { color: var(--golden-accent); }
+      .border-accent { border-color: var(--golden-accent); }
+      .ring-accent { --tw-ring-color: var(--golden-accent); }
+      .bg-accent-foreground { background-color: var(--golden-accent-foreground); }
+      .text-accent-foreground { color: var(--golden-accent-foreground); }
+      .border-accent-foreground { border-color: var(--golden-accent-foreground); }
+      .ring-accent-foreground { --tw-ring-color: var(--golden-accent-foreground); }
+      .bg-destructive { background-color: var(--golden-destructive); }
+      .text-destructive { color: var(--golden-destructive); }
+      .border-destructive { border-color: var(--golden-destructive); }
+      .ring-destructive { --tw-ring-color: var(--golden-destructive); }
+      .bg-destructive-foreground { background-color: var(--golden-destructive-foreground); }
+      .text-destructive-foreground { color: var(--golden-destructive-foreground); }
+      .border-destructive-foreground { border-color: var(--golden-destructive-foreground); }
+      .ring-destructive-foreground { --tw-ring-color: var(--golden-destructive-foreground); }
+      .bg-border { background-color: var(--golden-border); }
+      .text-border { color: var(--golden-border); }
+      .border-border { border-color: var(--golden-border); }
+      .ring-border { --tw-ring-color: var(--golden-border); }
+      .bg-input { background-color: var(--golden-input); }
+      .text-input { color: var(--golden-input); }
+      .border-input { border-color: var(--golden-input); }
+      .ring-input { --tw-ring-color: var(--golden-input); }
+      .bg-ring { background-color: var(--golden-ring); }
+      .text-ring { color: var(--golden-ring); }
+      .border-ring { border-color: var(--golden-ring); }
+      .ring-ring { --tw-ring-color: var(--golden-ring); }
+      .bg-chart-1 { background-color: var(--golden-chart-1); }
+      .text-chart-1 { color: var(--golden-chart-1); }
+      .border-chart-1 { border-color: var(--golden-chart-1); }
+      .ring-chart-1 { --tw-ring-color: var(--golden-chart-1); }
+      .bg-chart-2 { background-color: var(--golden-chart-2); }
+      .text-chart-2 { color: var(--golden-chart-2); }
+      .border-chart-2 { border-color: var(--golden-chart-2); }
+      .ring-chart-2 { --tw-ring-color: var(--golden-chart-2); }
+      .bg-chart-3 { background-color: var(--golden-chart-3); }
+      .text-chart-3 { color: var(--golden-chart-3); }
+      .border-chart-3 { border-color: var(--golden-chart-3); }
+      .ring-chart-3 { --tw-ring-color: var(--golden-chart-3); }
+      .bg-chart-4 { background-color: var(--golden-chart-4); }
+      .text-chart-4 { color: var(--golden-chart-4); }
+      .border-chart-4 { border-color: var(--golden-chart-4); }
+      .ring-chart-4 { --tw-ring-color: var(--golden-chart-4); }
+      .bg-chart-5 { background-color: var(--golden-chart-5); }
+      .text-chart-5 { color: var(--golden-chart-5); }
+      .border-chart-5 { border-color: var(--golden-chart-5); }
+      .ring-chart-5 { --tw-ring-color: var(--golden-chart-5); }
+      .bg-sidebar { background-color: var(--golden-sidebar); }
+      .text-sidebar { color: var(--golden-sidebar); }
+      .border-sidebar { border-color: var(--golden-sidebar); }
+      .ring-sidebar { --tw-ring-color: var(--golden-sidebar); }
+      .bg-sidebar-foreground { background-color: var(--golden-sidebar-foreground); }
+      .text-sidebar-foreground { color: var(--golden-sidebar-foreground); }
+      .border-sidebar-foreground { border-color: var(--golden-sidebar-foreground); }
+      .ring-sidebar-foreground { --tw-ring-color: var(--golden-sidebar-foreground); }
+      .bg-sidebar-primary { background-color: var(--golden-sidebar-primary); }
+      .text-sidebar-primary { color: var(--golden-sidebar-primary); }
+      .border-sidebar-primary { border-color: var(--golden-sidebar-primary); }
+      .ring-sidebar-primary { --tw-ring-color: var(--golden-sidebar-primary); }
+      .bg-sidebar-primary-foreground { background-color: var(--golden-sidebar-primary-foreground); }
+      .text-sidebar-primary-foreground { color: var(--golden-sidebar-primary-foreground); }
+      .border-sidebar-primary-foreground { border-color: var(--golden-sidebar-primary-foreground); }
+      .ring-sidebar-primary-foreground { --tw-ring-color: var(--golden-sidebar-primary-foreground); }
+      .bg-sidebar-accent { background-color: var(--golden-sidebar-accent); }
+      .text-sidebar-accent { color: var(--golden-sidebar-accent); }
+      .border-sidebar-accent { border-color: var(--golden-sidebar-accent); }
+      .ring-sidebar-accent { --tw-ring-color: var(--golden-sidebar-accent); }
+      .bg-sidebar-accent-foreground { background-color: var(--golden-sidebar-accent-foreground); }
+      .text-sidebar-accent-foreground { color: var(--golden-sidebar-accent-foreground); }
+      .border-sidebar-accent-foreground { border-color: var(--golden-sidebar-accent-foreground); }
+      .ring-sidebar-accent-foreground { --tw-ring-color: var(--golden-sidebar-accent-foreground); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="gt-app-body">
+  <main class="app-shell">
+    <header class="app-topbar">
+      <a class="topbar-home" href="project-hub.html" data-dom-id="nav-hub" aria-label="返回项目工作台">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 14h3l2.2-6 3.4 12 2.6-8 1.8 4H21"></path>
+          </svg>
+        </span>
+        <span class="brand-word">Golden Lab</span>
+      </a>
+
+      <span class="topbar-divider" aria-hidden="true"></span>
+
+      <div class="project-block">
+        <div class="project-name">共射放大电路 · 静态工作点</div>
+        <div class="project-meta">自动保存于 12:20 · 11 个器件</div>
+      </div>
+
+      <nav class="domain-tabs" aria-label="仿真域切换">
+        <a class="domain-tab" href="workspace-digital.html" data-dom-id="nav-digital">
+          <i data-lucide="activity" class="icon"></i>
+          数电
+        </a>
+        <a class="domain-tab is-active" href="workspace-analog.html" aria-current="page">模电</a>
+        <a class="domain-tab" href="workspace-power.html" data-dom-id="nav-power">电力电子</a>
+        <a class="domain-tab" href="workspace-mcu51.html" data-dom-id="nav-51">51</a>
+        <a class="domain-tab" href="workspace-mcu-stm32.html" data-dom-id="nav-stm32">STM32</a>
+      </nav>
+
+      <div class="topbar-actions">
+        <span class="engine-chip"><i class="dot"></i>界面预览</span>
+        <button class="btn btn--primary btn--sm" type="button" data-toast="仿真引擎将在下一阶段接入，当前展示界面与交互。">
+          <i data-lucide="play" class="icon"></i>
+          运行
+        </button>
+        <button class="btn btn--accent btn--sm" type="button" data-dom-id="open-ai-netlist">
+          <i data-lucide="sparkles" class="icon"></i>
+          AI 网表
+        </button>
+        <button class="icon-btn" type="button" data-toast="更多操作将在下一阶段接入" aria-label="更多操作">
+          <i data-lucide="more-horizontal" class="icon"></i>
+        </button>
+      </div>
+    </header>
+
+    <aside class="app-palette" aria-label="器件库">
+      <div class="palette-head">
+        <div class="palette-title-row">
+          <span class="palette-title">器件库</span>
+          <span class="palette-count">26 / 模拟</span>
+        </div>
+        <label class="search-box">
+          <i data-lucide="search" class="icon"></i>
+          <input type="text" placeholder="搜索三极管、运放、电容…" aria-label="搜索器件">
+        </label>
+        <div class="filter-row">
+          <button class="chip chip--active" type="button">全部</button>
+          <button class="chip" type="button">无源</button>
+          <button class="chip" type="button">半导体</button>
+          <button class="chip" type="button">运放</button>
+          <button class="chip" type="button">仪器</button>
+        </div>
+      </div>
+
+      <div class="palette-scroll">
+        <div class="part-group">
+          <div class="part-group-title"><span>最近使用</span><span>2</span></div>
+          <div class="part-grid">
+            <button class="part-card is-selected" type="button" aria-pressed="true">
+              <span class="part-symbol">
+                <svg viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="24" cy="15" r="9"></circle>
+                  <path d="M24 6V2M24 28V24M15 15H4M33 15H44"></path>
+                  <path d="M19 11L29 19M29 11L19 19"></path>
+                </svg>
+              </span>
+              <span class="part-name">NPN 三极管</span>
+              <span class="part-meta">2N2222 · TO-92</span>
+            </button>
+            <button class="part-card" type="button">
+              <span class="part-symbol">
+                <svg viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="14" y="4" width="20" height="22" rx="2"></rect>
+                  <path d="M14 9H6M14 15H6M14 21H6M34 9H42M34 15H42M34 21H42"></path>
+                  <text x="19" y="18" font-size="6" fill="currentColor" stroke="none">358</text>
+                </svg>
+              </span>
+              <span class="part-name">LM358</span>
+              <span class="part-meta">双运放 · DIP-8</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="part-group">
+          <div class="part-group-title"><span>无源器件</span><span>8</span></div>
+          <div class="part-grid">
+            <button class="part-card" type="button">
+              <span class="part-symbol">
+                <svg viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8 15H14L18 8L22 22L26 8L30 22L34 15H40"></path>
+                </svg>
+              </span>
+              <span class="part-name">电阻</span>
+              <span class="part-meta">4.7 kΩ · 1/4 W</span>
+            </button>
+            <button class="part-card" type="button">
+              <span class="part-symbol">
+                <svg viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 8V22M18 8V22"></path>
+                  <path d="M14 22V26M14 8V4"></path>
+                </svg>
+              </span>
+              <span class="part-name">电容</span>
+              <span class="part-meta">10 µF · 16V</span>
+            </button>
+            <button class="part-card" type="button">
+              <span class="part-symbol">
+                <svg viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 8V22M18 8V22M22 8V22"></path>
+                  <path d="M14 22V26M20 8V4"></path>
+                  <path d="M24 10H30"></path>
+                </svg>
+              </span>
+              <span class="part-name">电解电容</span>
+              <span class="part-meta">100 µF · 25V</span>
+            </button>
+            <button class="part-card" type="button">
+              <span class="part-symbol">
+                <svg viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8 15H18M30 15H40"></path>
+                  <path d="M18 8L30 22M30 8L18 22"></path>
+                </svg>
+              </span>
+              <span class="part-name">电位器</span>
+              <span class="part-meta">100 kΩ · 线性</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="part-group">
+          <div class="part-group-title"><span>半导体</span><span>6</span></div>
+          <div class="part-grid">
+            <button class="part-card" type="button">
+              <span class="part-symbol">
+                <svg viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 15H20M28 15H38"></path>
+                  <path d="M20 8V22M28 8V22"></path>
+                  <path d="M20 8L16 12M20 8L24 12"></path>
+                  <path d="M24 22H20"></path>
+                </svg>
+              </span>
+              <span class="part-name">二极管</span>
+              <span class="part-meta">1N4148</span>
+            </button>
+            <button class="part-card" type="button">
+              <span class="part-symbol">
+                <svg viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="20" cy="15" r="6"></circle>
+                  <path d="M28 15H40M32 9L38 4M32 21L38 26"></path>
+                </svg>
+              </span>
+              <span class="part-name">LED</span>
+              <span class="part-meta">红色 · 2.0 V</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="part-group">
+          <div class="part-group-title"><span>仪器与源</span><span>6</span></div>
+          <div class="part-grid">
+            <button class="part-card" type="button">
+              <span class="part-symbol">
+                <svg viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="24" cy="15" r="8"></circle>
+                  <path d="M19 15C21 9 27 9 29 15C31 21 27 21 24 15C21 9 17 15 19 19"></path>
+                  <path d="M24 23V27"></path>
+                </svg>
+              </span>
+              <span class="part-name">信号源</span>
+              <span class="part-meta">正弦 · 1 kHz</span>
+            </button>
+            <button class="part-card" type="button">
+              <span class="part-symbol">
+                <svg viewBox="0 0 48 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="8" y="6" width="32" height="18" rx="3"></rect>
+                  <path d="M12 15H16L20 10L24 20L28 12L32 15H36"></path>
+                </svg>
+              </span>
+              <span class="part-name">示波器</span>
+              <span class="part-meta">2 CH · 1 MS/s</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="palette-foot">
+        <span>拖入画布即可放置</span>
+        <span>26 种模拟器件</span>
+      </div>
+    </aside>
+
+    <section class="app-canvas" aria-label="原理图画布">
+      <div class="canvas-surface" aria-hidden="true"></div>
+      <div class="canvas-vignette" aria-hidden="true"></div>
+
+      <div class="canvas-toolbar" role="toolbar" aria-label="画布工具">
+        <button class="tool-btn is-active" type="button" aria-label="选择" aria-pressed="true">
+          <i data-lucide="mouse-pointer-2" class="icon"></i>
+        </button>
+        <button class="tool-btn" type="button" aria-label="连线">
+          <i data-lucide="cable" class="icon"></i>
+        </button>
+        <button class="tool-btn" type="button" aria-label="旋转">
+          <i data-lucide="rotate-cw" class="icon"></i>
+        </button>
+        <button class="tool-btn" type="button" aria-label="删除">
+          <i data-lucide="trash-2" class="icon"></i>
+        </button>
+        <span class="tool-sep" aria-hidden="true"></span>
+        <button class="tool-btn" type="button" aria-label="撤销">
+          <i data-lucide="undo-2" class="icon"></i>
+        </button>
+        <button class="tool-btn" type="button" aria-label="重做">
+          <i data-lucide="redo-2" class="icon"></i>
+        </button>
+        <span class="tool-sep" aria-hidden="true"></span>
+        <button class="tool-btn" type="button" aria-label="适配视图">
+          <i data-lucide="maximize" class="icon"></i>
+        </button>
+      </div>
+
+      <div class="canvas-status">
+        <i class="dot dot--warn"></i>
+        共射放大 · 静态预览
+      </div>
+
+      <div class="selection-tag" style="left: 34%; top: 38%;">
+        <i class="dot"></i>
+        Q1 · 2N2222
+      </div>
+
+      <svg class="schematic" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="共射放大电路原理图：偏置电阻、耦合电容、发射极电阻与旁路电容">
+        <path class="sch-wire sch-wire--power" d="M100 100H880"></path>
+        <path class="sch-wire" d="M100 520H880"></path>
+        <text x="106" y="92" class="sch-netlabel">VCC · 12.0 V</text>
+        <text x="106" y="538" class="sch-netlabel">GND</text>
+
+        <circle cx="120" cy="300" r="26" fill="var(--golden-card)" stroke="var(--golden-chart-4)" stroke-width="1.4"></circle>
+        <path class="sch-wire" d="M112 300C116 292 124 292 128 300C132 308 140 308 144 300"></path>
+        <path class="sch-wire sch-wire--power" d="M120 274V100"></path>
+        <path class="sch-wire" d="M120 326V520"></path>
+        <text x="102" y="266" class="sch-label sch-label--tiny sch-label--muted">VIN</text>
+        <text x="96" y="350" class="sch-label sch-label--tiny sch-label--muted">1 kHz</text>
+        <circle class="sch-junction" cx="120" cy="100" r="2.6"></circle>
+        <circle class="sch-junction" cx="120" cy="520" r="2.6"></circle>
+
+        <path class="sch-wire" d="M146 300H190"></path>
+        <path class="sch-wire" d="M190 300V312M190 328V340"></path>
+        <path class="sch-wire" d="M180 312H200M180 328H200"></path>
+        <text x="176" y="292" class="sch-label sch-label--tiny">C1</text>
+        <text x="172" y="356" class="sch-label sch-label--tiny sch-label--muted">10 µF</text>
+
+        <path class="sch-wire" d="M200 300H300"></path>
+        <path class="sch-wire sch-wire--power" d="M300 100V220H330"></path>
+        <path class="sch-wire" d="M300 380V520"></path>
+        <path class="sch-wire" d="M300 240H312M300 260H312"></path>
+        <path class="sch-wire sch-wire--thin" d="M300 250H316"></path>
+
+        <path class="sch-wire" d="M312 250H330"></path>
+        <circle cx="340" cy="250" r="22" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1.4"></circle>
+        <path class="sch-wire" d="M340 228V100"></path>
+        <path class="sch-wire" d="M340 272V520"></path>
+        <path class="sch-wire" d="M326 250H340M340 244L352 250L340 256"></path>
+        <text x="354" y="238" class="sch-label sch-label--bold">Q1</text>
+        <text x="354" y="252" class="sch-label sch-label--tiny sch-label--muted">2N2222</text>
+        <circle class="sch-junction" cx="340" cy="100" r="2.6"></circle>
+        <circle class="sch-junction" cx="340" cy="520" r="2.6"></circle>
+
+        <path class="sch-wire" d="M340 244H380V220"></path>
+        <rect x="362" y="150" width="22" height="70" rx="3" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1"></rect>
+        <path class="sch-wire" d="M373 220V100"></path>
+        <text x="390" y="188" class="sch-label sch-label--tiny">Rc</text>
+        <text x="390" y="202" class="sch-label sch-label--tiny sch-label--muted">4.7 kΩ</text>
+
+        <path class="sch-wire" d="M300 300H260V220"></path>
+        <rect x="248" y="150" width="22" height="70" rx="3" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1"></rect>
+        <path class="sch-wire" d="M259 150V100"></path>
+        <text x="216" y="188" class="sch-label sch-label--tiny">R1</text>
+        <text x="210" y="202" class="sch-label sch-label--tiny sch-label--muted">100 kΩ</text>
+
+        <path class="sch-wire" d="M300 340H260V420"></path>
+        <rect x="248" y="420" width="22" height="70" rx="3" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1"></rect>
+        <path class="sch-wire" d="M259 490V520"></path>
+        <text x="216" y="450" class="sch-label sch-label--tiny">R2</text>
+        <text x="210" y="464" class="sch-label sch-label--tiny sch-label--muted">22 kΩ</text>
+        <circle class="sch-junction" cx="300" cy="300" r="2.6"></circle>
+        <circle class="sch-junction" cx="300" cy="340" r="2.6"></circle>
+
+        <path class="sch-wire" d="M340 272H380V300"></path>
+        <rect x="362" y="300" width="22" height="70" rx="3" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1"></rect>
+        <path class="sch-wire" d="M373 370V520"></path>
+        <text x="390" y="330" class="sch-label sch-label--tiny">Re</text>
+        <text x="390" y="344" class="sch-label sch-label--tiny sch-label--muted">1 kΩ</text>
+
+        <path class="sch-wire" d="M340 272H430"></path>
+        <path class="sch-wire" d="M430 272V286M430 302V316"></path>
+        <path class="sch-wire" d="M420 286H440M420 302H440"></path>
+        <path class="sch-wire" d="M430 316V520"></path>
+        <text x="446" y="292" class="sch-label sch-label--tiny">Ce</text>
+        <text x="446" y="306" class="sch-label sch-label--tiny sch-label--muted">100 µF</text>
+        <circle class="sch-junction" cx="430" cy="272" r="2.6"></circle>
+        <circle class="sch-junction" cx="430" cy="520" r="2.6"></circle>
+
+        <path class="sch-wire" d="M373 150H460"></path>
+        <path class="sch-wire" d="M460 150V162M460 178V190"></path>
+        <path class="sch-wire" d="M450 162H470M450 178H470"></path>
+        <text x="476" y="162" class="sch-label sch-label--tiny">C2</text>
+        <text x="476" y="176" class="sch-label sch-label--tiny sch-label--muted">10 µF</text>
+
+        <path class="sch-wire" d="M470 150H640"></path>
+        <path class="sch-wire" d="M640 150V220"></path>
+        <rect x="628" y="220" width="24" height="70" rx="3" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1"></rect>
+        <path class="sch-wire" d="M640 290V520"></path>
+        <text x="660" y="248" class="sch-label sch-label--tiny">RL</text>
+        <text x="660" y="262" class="sch-label sch-label--tiny sch-label--muted">10 kΩ</text>
+
+        <path class="sch-wire sch-wire--analog" d="M146 300V180H180"></path>
+        <circle cx="190" cy="180" r="8" fill="var(--golden-card)" stroke="var(--golden-chart-5)" stroke-width="1.5"></circle>
+        <path class="sch-wire sch-wire--analog" d="M180 180H182"></path>
+        <text x="204" y="176" class="sch-label sch-label--tiny sch-label--bold">CH1</text>
+        <text x="204" y="188" class="sch-label sch-label--tiny sch-label--muted">Vin</text>
+
+        <path class="sch-wire" d="M640 150V120H610"></path>
+        <circle cx="602" cy="120" r="8" fill="var(--golden-card)" stroke="var(--golden-chart-4)" stroke-width="1.5"></circle>
+        <path class="sch-wire" d="M602 120H594"></path>
+        <text x="550" y="106" class="sch-label sch-label--tiny sch-label--bold">CH2</text>
+        <text x="550" y="118" class="sch-label sch-label--tiny sch-label--muted">Vout</text>
+
+        <rect x="470" y="60" width="96" height="30" rx="8" fill="var(--golden-chart-5-soft)" stroke="var(--golden-chart-5)" stroke-width="1"></rect>
+        <text x="482" y="79" class="sch-label sch-label--tiny sch-label--bold">Av −46</text>
+        <text x="530" y="79" class="sch-label sch-label--tiny sch-label--muted">1 kHz</text>
+
+        <rect x="470" y="372" width="116" height="30" rx="8" fill="var(--golden-muted)" stroke="var(--golden-border)" stroke-width="1"></rect>
+        <text x="482" y="391" class="sch-label sch-label--tiny sch-label--bold">Vce 5.6 V</text>
+        <text x="548" y="391" class="sch-label sch-label--tiny sch-label--muted">Ic 1.1 mA</text>
+
+        <circle class="sch-handle" cx="318" cy="228" r="3.2"></circle>
+        <circle class="sch-handle" cx="362" cy="228" r="3.2"></circle>
+        <circle class="sch-handle" cx="318" cy="272" r="3.2"></circle>
+        <circle class="sch-handle" cx="362" cy="272" r="3.2"></circle>
+      </svg>
+
+      <div class="canvas-hint">
+        <i data-lucide="move" class="icon" aria-hidden="true"></i>
+        空格拖动画布 · 滚轮缩放
+      </div>
+
+      <div class="zoom-box">
+        <button class="tool-btn" type="button" aria-label="缩小"><i data-lucide="minus" class="icon"></i></button>
+        <span class="zoom-value">100%</span>
+        <button class="tool-btn" type="button" aria-label="放大"><i data-lucide="plus" class="icon"></i></button>
+        <button class="tool-btn" type="button" aria-label="适配"><i data-lucide="scan" class="icon"></i></button>
+      </div>
+    </section>
+
+    <aside class="app-inspector" aria-label="检查器">
+      <div class="inspector-head">
+        <div class="inspector-kicker">已选中 · 半导体</div>
+        <div class="inspector-title-row">
+          <div class="inspector-title">
+            Q1 · 2N2222
+            <span class="chip chip--muted">TO-92</span>
+          </div>
+          <button class="icon-btn" type="button" aria-label="器件操作" data-toast="器件操作将在下一阶段接入">
+            <i data-lucide="more-horizontal" class="icon"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="inspector-tabs" role="tablist" aria-label="检查器面板">
+        <button class="inspector-tab is-active" type="button" role="tab" aria-selected="true">属性</button>
+        <button class="inspector-tab" type="button" role="tab" aria-selected="false">工作点</button>
+        <button class="inspector-tab" type="button" role="tab" aria-selected="false">检查 4</button>
+      </div>
+
+      <div class="inspector-body">
+        <section class="inspect-section">
+          <div class="inspect-label"><span>器件参数</span><span>NPN</span></div>
+          <div class="param-list">
+            <div class="param-row"><span class="param-key">h<sub>FE</sub></span><span class="param-val">200</span></div>
+            <div class="param-row"><span class="param-key">V<sub>BE(on)</sub></span><span class="param-val">0.70 V</span></div>
+            <div class="param-row"><span class="param-key">I<sub>C(max)</sub></span><span class="param-val">800 mA</span></div>
+            <div class="param-row"><span class="param-key">f<sub>T</sub></span><span class="param-val">300 MHz</span></div>
+            <div class="param-row"><span class="param-key">封装</span><span class="param-val">TO-92</span></div>
+          </div>
+        </section>
+
+        <section class="inspect-section">
+          <div class="inspect-label"><span>静态工作点</span><span>25 °C</span></div>
+          <div class="param-list">
+            <div class="param-row"><span class="param-key">V<sub>B</sub></span><span class="param-val">1.80 V</span></div>
+            <div class="param-row"><span class="param-key">V<sub>E</sub></span><span class="param-val">1.10 V</span></div>
+            <div class="param-row"><span class="param-key">V<sub>C</sub></span><span class="param-val">6.70 V</span></div>
+            <div class="param-row"><span class="param-key">I<sub>C</sub></span><span class="param-val">1.10 mA</span></div>
+            <div class="param-row"><span class="param-key">V<sub>CE</sub></span><span class="param-val">5.60 V</span></div>
+            <div class="param-row"><span class="param-key">增益 A<sub>v</sub></span><span class="param-val">−46</span></div>
+            <div class="param-row"><span class="param-key">输入阻抗</span><span class="param-val">2.2 kΩ</span></div>
+            <div class="param-row"><span class="param-key">输出阻抗</span><span class="param-val">4.7 kΩ</span></div>
+          </div>
+        </section>
+
+        <section class="inspect-section">
+          <div class="inspect-label"><span>AI 排查</span><span>一键生成</span></div>
+          <div class="ai-card">
+            <div class="ai-card-title"><i data-lucide="sparkles" class="icon"></i>AI 网表</div>
+            <p class="ai-card-desc">导出偏置网络、耦合电容与工作点，让 AI 帮你判断静态工作点是否合适、输出是否失真。</p>
+            <div class="ai-snippet">[COMPONENTS]
+Q1 | 2N2222 | NPN
+Rc | 4.7 kΩ | ...
+[NETS]
+NET VB : R1.2, R2.1, C1.2, Q1.B
+...</div>
+            <button class="btn btn--primary btn--sm mt-8" type="button" data-dom-id="open-ai-netlist-card" style="width: 100%;">
+              <i data-lucide="sparkles" class="icon"></i>
+              生成完整网表
+            </button>
+          </div>
+        </section>
+
+        <section class="inspect-section">
+          <div class="inspect-label"><span>检查结果</span><span>3 通过 · 1 提示</span></div>
+          <div class="check-list">
+            <div class="check-row">
+              <i class="dot dot--high"></i>
+              <div class="check-copy"><strong>静态工作点位于放大区</strong><span>Vce 5.6 V，未进入饱和或截止。</span></div>
+            </div>
+            <div class="check-row">
+              <i class="dot dot--high"></i>
+              <div class="check-copy"><strong>输入耦合电容已连接</strong><span>C1 隔直，避免信号源影响偏置。</span></div>
+            </div>
+            <div class="check-row">
+              <i class="dot dot--high"></i>
+              <div class="check-copy"><strong>输出无明显削顶</strong><span>输出摆幅 1.84 Vpp，仍在电源轨内。</span></div>
+            </div>
+            <div class="check-row">
+              <i class="dot dot--warn"></i>
+              <div class="check-copy"><strong>旁路电容提升增益</strong><span>Ce 使交流增益升高，调试时注意稳定性。</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </aside>
+
+    <section class="app-dock" aria-label="示波器">
+      <div class="dock-head">
+        <div class="dock-tabs" role="tablist" aria-label="底部面板">
+          <button class="dock-tab is-active" type="button" role="tab" aria-selected="true">
+            <i data-lucide="waves" class="icon"></i>
+            示波器
+          </button>
+          <button class="dock-tab" type="button" role="tab" aria-selected="false">万用表</button>
+          <button class="dock-tab" type="button" role="tab" aria-selected="false">频率分析</button>
+        </div>
+        <div class="dock-actions">
+          <span class="chip chip--muted">CH1 Vin · CH2 Vout</span>
+          <span class="chip">0.5 ms/div</span>
+          <button class="icon-btn" type="button" aria-label="暂停" data-toast="仿真引擎将在下一阶段接入">
+            <i data-lucide="pause" class="icon"></i>
+          </button>
+          <button class="icon-btn" type="button" aria-label="适配波形">
+            <i data-lucide="maximize" class="icon"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="dock-body">
+        <div class="dock-wave">
+          <svg class="scope-svg" viewBox="0 0 760 190" preserveAspectRatio="none" role="img" aria-label="共射放大电路输入与输出正弦波">
+            <line class="wave-grid" x1="56" y1="14" x2="56" y2="176"></line>
+            <line class="wave-grid" x1="124" y1="14" x2="124" y2="176"></line>
+            <line class="wave-grid" x1="192" y1="14" x2="192" y2="176"></line>
+            <line class="wave-grid" x1="260" y1="14" x2="260" y2="176"></line>
+            <line class="wave-grid" x1="328" y1="14" x2="328" y2="176"></line>
+            <line class="wave-grid" x1="396" y1="14" x2="396" y2="176"></line>
+            <line class="wave-grid" x1="464" y1="14" x2="464" y2="176"></line>
+            <line class="wave-grid" x1="532" y1="14" x2="532" y2="176"></line>
+            <line class="wave-grid" x1="600" y1="14" x2="600" y2="176"></line>
+            <line class="wave-grid" x1="668" y1="14" x2="668" y2="176"></line>
+            <line class="wave-grid" x1="736" y1="14" x2="736" y2="176"></line>
+            <line class="wave-grid" x1="56" y1="14" x2="736" y2="14"></line>
+            <line class="wave-grid" x1="56" y1="54" x2="736" y2="54"></line>
+            <line class="wave-grid" x1="56" y1="94" x2="736" y2="94"></line>
+            <line class="wave-grid" x1="56" y1="134" x2="736" y2="134"></line>
+            <line class="wave-grid" x1="56" y1="174" x2="736" y2="174"></line>
+            <line class="wave-grid--strong" x1="56" y1="174" x2="736" y2="174"></line>
+
+            <text x="14" y="34" class="wave-label">Vin</text>
+            <text x="14" y="154" class="wave-label">Vout</text>
+
+            <path class="trace-3 trace--thin" d="M56 44 C79 34 102 34 124 44 S170 54 192 44 S238 34 260 44 S306 54 328 44 S374 34 396 44 S442 54 464 44 S510 34 532 44 S578 54 600 44 S646 34 668 44 S714 54 736 44"></path>
+            <path class="trace-2" d="M56 120 C79 66 102 66 124 120 S170 174 192 120 S238 66 260 120 S306 174 328 120 S374 66 396 120 S442 174 464 120 S510 66 532 120 S578 174 600 120 S646 66 668 120 S714 174 736 120"></path>
+
+            <line class="wave-cursor" x1="328" y1="14" x2="328" y2="176"></line>
+            <rect class="cursor-tag" x="316" y="4" width="42" height="13" rx="4"></rect>
+            <text x="321" y="13" class="cursor-tag-text">2.50 ms</text>
+
+            <text x="56" y="187" class="wave-label">0</text>
+            <text x="192" y="187" class="wave-label">1</text>
+            <text x="328" y="187" class="wave-label">2</text>
+            <text x="464" y="187" class="wave-label">3</text>
+            <text x="600" y="187" class="wave-label">4</text>
+            <text x="690" y="187" class="wave-label">5 ms</text>
+          </svg>
+        </div>
+
+        <aside class="dock-side" aria-label="测量">
+          <div class="inspect-label"><span>通道</span><span>2 CH</span></div>
+          <div class="channel-row"><span class="channel-swatch channel-swatch--3"></span>Vin <span class="channel-value">20 mVpp</span></div>
+          <div class="channel-row"><span class="channel-swatch channel-swatch--2"></span>Vout <span class="channel-value">1.84 Vpp</span></div>
+
+          <div class="inspect-label mt-12"><span>测量</span><span>自动</span></div>
+          <div class="param-row"><span class="param-key">增益 A<sub>v</sub></span><span class="param-val">−46.0</span></div>
+          <div class="param-row"><span class="param-key">频率</span><span class="param-val">1.000 kHz</span></div>
+          <div class="param-row"><span class="param-key">相位差</span><span class="param-val">180°</span></div>
+          <div class="param-row"><span class="param-key">V<sub>CE</sub></span><span class="param-val">5.60 V</span></div>
+          <div class="param-row"><span class="param-key">I<sub>C</sub></span><span class="param-val">1.10 mA</span></div>
+
+          <div class="inspect-label mt-12"><span>触发</span><span>上升沿</span></div>
+          <div class="param-row"><span class="param-key">源</span><span class="param-val">CH1</span></div>
+          <div class="param-row"><span class="param-key">电平</span><span class="param-val">0.0 V</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <footer class="app-statusbar">
+      <div class="status-left">
+        <span class="status-item"><i data-lucide="hard-drive" class="icon"></i>本地工程</span>
+        <span class="status-item"><i data-lucide="check" class="icon"></i>自动保存 12:20</span>
+      </div>
+      <div class="status-center">提示：点击引脚开始连线 · R 旋转 · Space 拖动画布 · 界面原型，仿真引擎将在下一阶段接入</div>
+      <div class="status-right">
+        <span>缩放 100%</span>
+        <span>网格 10 px</span>
+        <span>v0.1</span>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>if (window.lucide) { lucide.createIcons(); }</script>
+  <script>
+    (function () {
+      var toast = document.getElementById('toast');
+      var timer;
+      function showToast(message) {
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('is-visible');
+        clearTimeout(timer);
+        timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 2200);
+      }
+      document.querySelectorAll('[data-toast]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          showToast(el.getAttribute('data-toast'));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

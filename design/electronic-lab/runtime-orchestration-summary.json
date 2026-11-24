@@ -1,0 +1,127 @@
+{
+  "skillProvenance": {
+    "name": "solo-design",
+    "version": "2026.10.13.09.48.16",
+    "version_source": "skill-release-manifest.json",
+    "read_status": "loaded"
+  },
+  "project": {
+    "resolvedLane": "library_bound",
+    "projectName": "电设仿真工作台",
+    "deviceType": "desktop",
+    "pageType": "task-driven",
+    "operatingMode": "library-bound",
+    "visualNorthStar": "Golden-hour lab bench: warm cream paper, ink-brown typography, olive instruments and a single orange signal accent.",
+    "compositionPattern": "workbench-shell",
+    "continuityAnchors": [
+      "cream background with hairline borders",
+      "serif project titles with mono measurements",
+      "32px outer panels with 10px controls",
+      "single dark-brown primary action",
+      "orange only for selection, cursor and live signal"
+    ],
+    "generationTree": {
+      "id": "root",
+      "type": "root",
+      "name": "电设仿真工作台",
+      "status": "generated",
+      "children": [
+        { "id": "shared-design-system", "type": "shared", "name": "Golden Time 设计令牌与应用外壳", "status": "generated", "outputs": ["colors_and_type.css"] },
+        { "id": "page-project-hub", "type": "leaf", "pageId": "page-project-hub", "htmlSrc": "pages/project-hub.html", "status": "generated" },
+        { "id": "page-workspace-digital", "type": "leaf", "pageId": "page-workspace-digital", "htmlSrc": "pages/workspace-digital.html", "status": "generated" },
+        { "id": "page-workspace-analog", "type": "leaf", "pageId": "page-workspace-analog", "htmlSrc": "pages/workspace-analog.html", "status": "generated" },
+        { "id": "page-workspace-power", "type": "leaf", "pageId": "page-workspace-power", "htmlSrc": "pages/workspace-power.html", "status": "generated" },
+        { "id": "page-workspace-mcu51", "type": "leaf", "pageId": "page-workspace-mcu51", "htmlSrc": "pages/workspace-mcu51.html", "status": "generated" },
+        { "id": "page-workspace-mcu-stm32", "type": "leaf", "pageId": "page-workspace-mcu-stm32", "htmlSrc": "pages/workspace-mcu-stm32.html", "status": "generated" },
+        { "id": "page-ai-netlist", "type": "leaf", "pageId": "page-ai-netlist", "htmlSrc": "pages/ai-netlist.html", "status": "generated" }
+      ]
+    },
+    "contextRequirementsLoaded": [
+      { "path": "shared-runtime/runtime-boundaries/lane-runtime-contracts.md", "readStatus": "loaded", "bodyRead": true },
+      { "path": "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md", "readStatus": "loaded", "bodyRead": true },
+      { "path": "delivery-quality/page-rendering-quality-gate.md", "readStatus": "loaded", "bodyRead": true },
+      { "path": "delivery-quality/design-artifact-validation.md", "readStatus": "loaded", "bodyRead": true },
+      { "path": "delivery-quality/delivery-evidence-contract.md", "readStatus": "loaded", "bodyRead": true },
+      { "path": "intent-workflows/intent-page-library-bound/design-library-ingestion.md", "readStatus": "loaded", "bodyRead": true },
+      { "path": "intent-workflows/intent-page-library-bound/design-token-fidelity-rules.md", "readStatus": "loaded", "bodyRead": true },
+      { "path": "intent-workflows/intent-page-library-bound/component-conformance-rules.md", "readStatus": "loaded", "bodyRead": true }
+    ],
+    "validationRunDiscipline": {
+      "maxFullValidationRuns": 2,
+      "softWarningsTriggerRepair": false,
+      "blockingRepairMode": "targeted-once",
+      "forbiddenRepairTriggers": ["soft-warning-only", "provenance-warning-only", "style-warning-only"]
+    }
+  },
+  "designSource": {
+    "operatingMode": "library-bound",
+    "libraryIdentity": {
+      "name": "Golden Time",
+      "id": "dl_builtin_golden_time",
+      "version": "0",
+      "scope": "built-in-global",
+      "path": "/data/user/design_libraries/Golden Time",
+      "versionSource": "metadata.json"
+    },
+    "tokenFidelity": "strict",
+    "actualTokenNameReference": [
+      "--golden-background",
+      "--golden-foreground",
+      "--golden-card",
+      "--golden-card-foreground",
+      "--golden-popover",
+      "--golden-popover-foreground",
+      "--golden-primary",
+      "--golden-primary-foreground",
+      "--golden-primary-hover",
+      "--golden-secondary",
+      "--golden-secondary-foreground",
+      "--golden-muted",
+      "--golden-muted-foreground",
+      "--golden-accent",
+      "--golden-accent-foreground",
+      "--golden-accent-hover",
+      "--golden-destructive",
+      "--golden-border",
+      "--golden-border-strong",
+      "--golden-input",
+      "--golden-ring",
+      "--golden-chart-1",
+      "--golden-chart-2",
+      "--golden-chart-3",
+      "--golden-chart-4",
+      "--golden-chart-5",
+      "--golden-chart-5-soft",
+      "--golden-radius-sm",
+      "--golden-radius-md",
+      "--golden-radius-lg",
+      "--golden-font-display",
+      "--golden-font-body",
+      "--golden-font-mono",
+      "--golden-shadow-float",
+      "--golden-scrim"
+    ],
+    "tokenDerivations": [
+      "Base palette, dark palette, 32px radius, 4.8px spacing base, display serif and mono fonts are taken from the Golden Time metadata.",
+      "radius-sm (10px) and radius-md (18px) are derived from the single 32px library radius so controls and inner cards stay on the same soft-shape family.",
+      "Hover colors are darker/lighter steps of the Library primary, secondary and accent values.",
+      "A CJK sans body stack is paired with the Library serif display stack for dense Chinese UI legibility; the Library display serif remains the heading face.",
+      "Layout/component classes are the project application layer built exclusively from Library tokens; no new brand hue is introduced."
+    ],
+    "componentPlan": [],
+    "allowedComponents": [],
+    "forbiddenInventedComponents": [],
+    "designDecisionSummary": "Warm cream workbench, dark-brown primary actions, olive secondary/measurements, orange signal accent, serif display + mono readouts, border-led depth, rounded 32px outer panels."
+  },
+  "pages": [
+    { "pageId": "page-project-hub", "htmlSrc": "pages/project-hub.html", "pageType": "showcase", "componentPlan": [], "stateGroupId": null },
+    { "pageId": "page-workspace-digital", "htmlSrc": "pages/workspace-digital.html", "pageType": "task-driven", "componentPlan": [], "stateGroupId": null },
+    { "pageId": "page-workspace-analog", "htmlSrc": "pages/workspace-analog.html", "pageType": "task-driven", "componentPlan": [], "stateGroupId": null },
+    { "pageId": "page-workspace-power", "htmlSrc": "pages/workspace-power.html", "pageType": "task-driven", "componentPlan": [], "stateGroupId": null },
+    { "pageId": "page-workspace-mcu51", "htmlSrc": "pages/workspace-mcu51.html", "pageType": "task-driven", "componentPlan": [], "stateGroupId": null },
+    { "pageId": "page-workspace-mcu-stm32", "htmlSrc": "pages/workspace-mcu-stm32.html", "pageType": "task-driven", "componentPlan": [], "stateGroupId": null },
+    { "pageId": "page-ai-netlist", "htmlSrc": "pages/ai-netlist.html", "pageType": "task-driven", "componentPlan": [], "stateGroupId": null }
+  ],
+  "expectedDispatches": [],
+  "dispatchPreflightManifest": []
+}

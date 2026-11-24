@@ -1311,6 +1311,26 @@ svg {
   height: 12px;
 }
 
+.domain-tab::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+  background-color: currentColor;
+  -webkit-mask: var(--domain-icon) center / contain no-repeat;
+  mask: var(--domain-icon) center / contain no-repeat;
+}
+
+.domain-tab > .icon {
+  display: none;
+}
+
+.domain-tab:nth-child(1) { --domain-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7h4l3 10h4L17 7h4'/%3E%3Cpath d='M6 17v3M18 4v3'/%3E%3C/svg%3E"); }
+.domain-tab:nth-child(2) { --domain-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 14c4 0 4-8 8-8s4 8 8 8h2'/%3E%3Cpath d='M3 18h18'/%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3C/svg%3E"); }
+.domain-tab:nth-child(3) { --domain-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 17h4V7h4v10h4V7h4v10h2'/%3E%3Cpath d='M7 7L3 4M17 17l4 3'/%3E%3C/svg%3E"); }
+.domain-tab:nth-child(4) { --domain-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='7' y='7' width='10' height='10' rx='1.5'/%3E%3Cpath d='M9 3v4M12 3v4M15 3v4M9 17v4M12 17v4M15 17v4M3 9h4M3 12h4M3 15h4M17 9h4M17 12h4M17 15h4'/%3E%3C/svg%3E"); }
+.domain-tab:nth-child(5) { --domain-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='5' width='14' height='14' rx='2'/%3E%3Cpath d='M9 9h6v6H9zM9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3'/%3E%3C/svg%3E"); }
+
 .topbar-actions {
   display: flex;
   align-items: center;

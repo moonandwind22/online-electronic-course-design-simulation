@@ -57,7 +57,7 @@
   --golden-radius-lg: 32px;
   --golden-spacing: 4.8px;
 
-  --golden-font-display: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "Fraunces", Georgia, serif;
+  --golden-font-display: Fraunces, Georgia, "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", serif;
   --golden-font-body: "Noto Sans CJK SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   --golden-font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Code", Consolas, "Liberation Mono", monospace;
 
@@ -128,8 +128,8 @@ body {
   color: var(--golden-foreground);
   font-family: var(--golden-font-body);
   font-size: 13px;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum" 1;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -189,7 +189,8 @@ svg {
 .gt-display {
   font-family: var(--golden-font-display);
   font-weight: 500;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
   letter-spacing: -0.025em;
   line-height: 1.12;
 }
@@ -200,7 +201,8 @@ svg {
 
 .gt-mono {
   font-family: var(--golden-font-mono);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
 
 .gt-label {
@@ -273,7 +275,8 @@ svg {
 
 .mono {
   font-family: var(--golden-font-mono);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
 
 .muted {
@@ -944,7 +947,8 @@ svg {
   font-family: var(--golden-font-display);
   font-size: 20px;
   font-weight: 500;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
@@ -1726,6 +1730,8 @@ svg {
   font-family: var(--golden-font-display);
   font-size: 11px;
   font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
 
 .sch-netlabel {
@@ -3271,14 +3277,14 @@ svg {
             <path class="sch-pin" d="M172 108H192"></path>
             <path class="sch-pin" d="M172 128H192"></path>
             <path class="sch-pin" d="M172 148H192"></path>
-            <text x="48" y="91" class="sch-label sch-label--tiny">CLR</text>
-            <text x="48" y="111" class="sch-label sch-label--tiny">CLK</text>
-            <text x="48" y="131" class="sch-label sch-label--tiny">ENP</text>
-            <text x="48" y="151" class="sch-label sch-label--tiny">LOAD</text>
-            <text x="150" y="91" class="sch-label sch-label--tiny">QA</text>
-            <text x="150" y="111" class="sch-label sch-label--tiny">QB</text>
-            <text x="150" y="131" class="sch-label sch-label--tiny">QC</text>
-            <text x="150" y="151" class="sch-label sch-label--tiny">QD</text>
+            <text x="48" y="86" class="sch-label sch-label--tiny">CLR</text>
+            <text x="48" y="106" class="sch-label sch-label--tiny">CLK</text>
+            <text x="48" y="126" class="sch-label sch-label--tiny">ENP</text>
+            <text x="48" y="146" class="sch-label sch-label--tiny">LOAD</text>
+            <text x="150" y="86" class="sch-label sch-label--tiny">QA</text>
+            <text x="150" y="106" class="sch-label sch-label--tiny">QB</text>
+            <text x="150" y="126" class="sch-label sch-label--tiny">QC</text>
+            <text x="150" y="146" class="sch-label sch-label--tiny">QD</text>
 
             <rect class="sch-chip" x="236" y="72" width="96" height="104" rx="6"></rect>
             <path d="M268 72 A10 10 0 0 1 288 72" fill="var(--golden-muted)" stroke="var(--golden-chart-2)" stroke-width="1.2"></path>

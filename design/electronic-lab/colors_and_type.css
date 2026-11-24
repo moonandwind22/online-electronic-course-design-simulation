@@ -50,7 +50,7 @@
   --golden-radius-lg: 32px;
   --golden-spacing: 4.8px;
 
-  --golden-font-display: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "Fraunces", Georgia, serif;
+  --golden-font-display: Fraunces, Georgia, "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", serif;
   --golden-font-body: "Noto Sans CJK SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   --golden-font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Code", Consolas, "Liberation Mono", monospace;
 
@@ -121,8 +121,8 @@ body {
   color: var(--golden-foreground);
   font-family: var(--golden-font-body);
   font-size: 13px;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum" 1;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -182,7 +182,8 @@ svg {
 .gt-display {
   font-family: var(--golden-font-display);
   font-weight: 500;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
   letter-spacing: -0.025em;
   line-height: 1.12;
 }
@@ -193,7 +194,8 @@ svg {
 
 .gt-mono {
   font-family: var(--golden-font-mono);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
 
 .gt-label {
@@ -266,7 +268,8 @@ svg {
 
 .mono {
   font-family: var(--golden-font-mono);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
 
 .muted {
@@ -937,7 +940,8 @@ svg {
   font-family: var(--golden-font-display);
   font-size: 20px;
   font-weight: 500;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
@@ -1719,6 +1723,8 @@ svg {
   font-family: var(--golden-font-display);
   font-size: 11px;
   font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
 
 .sch-netlabel {

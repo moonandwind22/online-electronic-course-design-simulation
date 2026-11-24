@@ -6,20 +6,68 @@
       "type": "page",
       "version": 1,
       "createdAt": 1795532953152,
+      "canvasData": {
+        "x": 0,
+        "y": -144,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 1664,
+          "viewportWidth": 1522,
+          "sourceHash": "fnv1a-d100f50d",
+          "measuredAt": 1795533499305
+        },
+        "deviceType": "freeSize",
+        "windowSize": {
+          "width": 1522,
+          "height": 2074
+        }
+      },
       "devMetadata": {
         "htmlSrc": "pages/project-hub.html",
         "interactions": [
-          { "domId": "open-digital", "targetPageId": "page-workspace-digital", "transitionLabel": "打开数字电路工作台" },
-          { "domId": "open-analog", "targetPageId": "page-workspace-analog", "transitionLabel": "打开模拟电路工作台" },
-          { "domId": "open-power", "targetPageId": "page-workspace-power", "transitionLabel": "打开电力电子工作台" },
-          { "domId": "open-mcu51", "targetPageId": "page-workspace-mcu51", "transitionLabel": "打开 51 单片机工作台" },
-          { "domId": "open-stm32", "targetPageId": "page-workspace-mcu-stm32", "transitionLabel": "打开 STM32 工作台" },
-          { "domId": "open-template-digital", "targetPageId": "page-workspace-digital", "transitionLabel": "打开数电模板" },
-          { "domId": "open-template-power", "targetPageId": "page-workspace-power", "transitionLabel": "打开电力电子模板" },
-          { "domId": "open-template-stm32", "targetPageId": "page-workspace-mcu-stm32", "transitionLabel": "打开 STM32 模板" }
+          {
+            "domId": "open-digital",
+            "targetPageId": "page-workspace-digital",
+            "transitionLabel": "打开数字电路工作台"
+          },
+          {
+            "domId": "open-analog",
+            "targetPageId": "page-workspace-analog",
+            "transitionLabel": "打开模拟电路工作台"
+          },
+          {
+            "domId": "open-power",
+            "targetPageId": "page-workspace-power",
+            "transitionLabel": "打开电力电子工作台"
+          },
+          {
+            "domId": "open-mcu51",
+            "targetPageId": "page-workspace-mcu51",
+            "transitionLabel": "打开 51 单片机工作台"
+          },
+          {
+            "domId": "open-stm32",
+            "targetPageId": "page-workspace-mcu-stm32",
+            "transitionLabel": "打开 STM32 工作台"
+          },
+          {
+            "domId": "open-template-digital",
+            "targetPageId": "page-workspace-digital",
+            "transitionLabel": "打开数电模板"
+          },
+          {
+            "domId": "open-template-power",
+            "targetPageId": "page-workspace-power",
+            "transitionLabel": "打开电力电子模板"
+          },
+          {
+            "domId": "open-template-stm32",
+            "targetPageId": "page-workspace-mcu-stm32",
+            "transitionLabel": "打开 STM32 模板"
+          }
         ]
-      },
-      "canvasData": { "x": 0, "y": 0, "group": 0 }
+      }
     },
     {
       "id": "page-workspace-digital",
@@ -27,19 +75,58 @@
       "type": "page",
       "version": 1,
       "createdAt": 1795532953152,
+      "canvasData": {
+        "x": 480,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-8a7ac6c3",
+          "measuredAt": 1795533305644
+        }
+      },
       "devMetadata": {
         "htmlSrc": "pages/workspace-digital.html",
         "interactions": [
-          { "domId": "nav-hub", "targetPageId": "page-project-hub", "transitionLabel": "返回项目工作台" },
-          { "domId": "nav-analog", "targetPageId": "page-workspace-analog", "transitionLabel": "切换到模拟电路" },
-          { "domId": "nav-power", "targetPageId": "page-workspace-power", "transitionLabel": "切换到电力电子" },
-          { "domId": "nav-51", "targetPageId": "page-workspace-mcu51", "transitionLabel": "切换到 51 单片机" },
-          { "domId": "nav-stm32", "targetPageId": "page-workspace-mcu-stm32", "transitionLabel": "切换到 STM32" },
-          { "domId": "open-ai-netlist", "targetPageId": "page-ai-netlist", "transitionLabel": "生成 AI 网表" },
-          { "domId": "open-ai-netlist-card", "targetPageId": "page-ai-netlist", "transitionLabel": "生成 AI 网表" }
+          {
+            "domId": "nav-hub",
+            "targetPageId": "page-project-hub",
+            "transitionLabel": "返回项目工作台"
+          },
+          {
+            "domId": "nav-analog",
+            "targetPageId": "page-workspace-analog",
+            "transitionLabel": "切换到模拟电路"
+          },
+          {
+            "domId": "nav-power",
+            "targetPageId": "page-workspace-power",
+            "transitionLabel": "切换到电力电子"
+          },
+          {
+            "domId": "nav-51",
+            "targetPageId": "page-workspace-mcu51",
+            "transitionLabel": "切换到 51 单片机"
+          },
+          {
+            "domId": "nav-stm32",
+            "targetPageId": "page-workspace-mcu-stm32",
+            "transitionLabel": "切换到 STM32"
+          },
+          {
+            "domId": "open-ai-netlist",
+            "targetPageId": "page-ai-netlist",
+            "transitionLabel": "生成 AI 网表"
+          },
+          {
+            "domId": "open-ai-netlist-card",
+            "targetPageId": "page-ai-netlist",
+            "transitionLabel": "生成 AI 网表"
+          }
         ]
-      },
-      "canvasData": { "x": 0, "y": 0, "group": 0 }
+      }
     },
     {
       "id": "page-workspace-analog",
@@ -47,19 +134,58 @@
       "type": "page",
       "version": 1,
       "createdAt": 1795532953152,
+      "canvasData": {
+        "x": 480,
+        "y": 373,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-db579719",
+          "measuredAt": 1795533305644
+        }
+      },
       "devMetadata": {
         "htmlSrc": "pages/workspace-analog.html",
         "interactions": [
-          { "domId": "nav-hub", "targetPageId": "page-project-hub", "transitionLabel": "返回项目工作台" },
-          { "domId": "nav-digital", "targetPageId": "page-workspace-digital", "transitionLabel": "切换到数字电路" },
-          { "domId": "nav-power", "targetPageId": "page-workspace-power", "transitionLabel": "切换到电力电子" },
-          { "domId": "nav-51", "targetPageId": "page-workspace-mcu51", "transitionLabel": "切换到 51 单片机" },
-          { "domId": "nav-stm32", "targetPageId": "page-workspace-mcu-stm32", "transitionLabel": "切换到 STM32" },
-          { "domId": "open-ai-netlist", "targetPageId": "page-ai-netlist", "transitionLabel": "生成 AI 网表" },
-          { "domId": "open-ai-netlist-card", "targetPageId": "page-ai-netlist", "transitionLabel": "生成 AI 网表" }
+          {
+            "domId": "nav-hub",
+            "targetPageId": "page-project-hub",
+            "transitionLabel": "返回项目工作台"
+          },
+          {
+            "domId": "nav-digital",
+            "targetPageId": "page-workspace-digital",
+            "transitionLabel": "切换到数字电路"
+          },
+          {
+            "domId": "nav-power",
+            "targetPageId": "page-workspace-power",
+            "transitionLabel": "切换到电力电子"
+          },
+          {
+            "domId": "nav-51",
+            "targetPageId": "page-workspace-mcu51",
+            "transitionLabel": "切换到 51 单片机"
+          },
+          {
+            "domId": "nav-stm32",
+            "targetPageId": "page-workspace-mcu-stm32",
+            "transitionLabel": "切换到 STM32"
+          },
+          {
+            "domId": "open-ai-netlist",
+            "targetPageId": "page-ai-netlist",
+            "transitionLabel": "生成 AI 网表"
+          },
+          {
+            "domId": "open-ai-netlist-card",
+            "targetPageId": "page-ai-netlist",
+            "transitionLabel": "生成 AI 网表"
+          }
         ]
-      },
-      "canvasData": { "x": 0, "y": 0, "group": 0 }
+      }
     },
     {
       "id": "page-workspace-power",
@@ -67,19 +193,58 @@
       "type": "page",
       "version": 1,
       "createdAt": 1795532953152,
+      "canvasData": {
+        "x": 480,
+        "y": 746,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-ed21534c",
+          "measuredAt": 1795533305644
+        }
+      },
       "devMetadata": {
         "htmlSrc": "pages/workspace-power.html",
         "interactions": [
-          { "domId": "nav-hub", "targetPageId": "page-project-hub", "transitionLabel": "返回项目工作台" },
-          { "domId": "nav-digital", "targetPageId": "page-workspace-digital", "transitionLabel": "切换到数字电路" },
-          { "domId": "nav-analog", "targetPageId": "page-workspace-analog", "transitionLabel": "切换到模拟电路" },
-          { "domId": "nav-51", "targetPageId": "page-workspace-mcu51", "transitionLabel": "切换到 51 单片机" },
-          { "domId": "nav-stm32", "targetPageId": "page-workspace-mcu-stm32", "transitionLabel": "切换到 STM32" },
-          { "domId": "open-ai-netlist", "targetPageId": "page-ai-netlist", "transitionLabel": "生成 AI 网表" },
-          { "domId": "open-ai-netlist-card", "targetPageId": "page-ai-netlist", "transitionLabel": "生成 AI 网表" }
+          {
+            "domId": "nav-hub",
+            "targetPageId": "page-project-hub",
+            "transitionLabel": "返回项目工作台"
+          },
+          {
+            "domId": "nav-digital",
+            "targetPageId": "page-workspace-digital",
+            "transitionLabel": "切换到数字电路"
+          },
+          {
+            "domId": "nav-analog",
+            "targetPageId": "page-workspace-analog",
+            "transitionLabel": "切换到模拟电路"
+          },
+          {
+            "domId": "nav-51",
+            "targetPageId": "page-workspace-mcu51",
+            "transitionLabel": "切换到 51 单片机"
+          },
+          {
+            "domId": "nav-stm32",
+            "targetPageId": "page-workspace-mcu-stm32",
+            "transitionLabel": "切换到 STM32"
+          },
+          {
+            "domId": "open-ai-netlist",
+            "targetPageId": "page-ai-netlist",
+            "transitionLabel": "生成 AI 网表"
+          },
+          {
+            "domId": "open-ai-netlist-card",
+            "targetPageId": "page-ai-netlist",
+            "transitionLabel": "生成 AI 网表"
+          }
         ]
-      },
-      "canvasData": { "x": 0, "y": 0, "group": 0 }
+      }
     },
     {
       "id": "page-workspace-mcu51",
@@ -87,19 +252,58 @@
       "type": "page",
       "version": 1,
       "createdAt": 1795532953152,
+      "canvasData": {
+        "x": 480,
+        "y": 1119,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-c68c6b5d",
+          "measuredAt": 1795533305644
+        }
+      },
       "devMetadata": {
         "htmlSrc": "pages/workspace-mcu51.html",
         "interactions": [
-          { "domId": "nav-hub", "targetPageId": "page-project-hub", "transitionLabel": "返回项目工作台" },
-          { "domId": "nav-digital", "targetPageId": "page-workspace-digital", "transitionLabel": "切换到数字电路" },
-          { "domId": "nav-analog", "targetPageId": "page-workspace-analog", "transitionLabel": "切换到模拟电路" },
-          { "domId": "nav-power", "targetPageId": "page-workspace-power", "transitionLabel": "切换到电力电子" },
-          { "domId": "nav-stm32", "targetPageId": "page-workspace-mcu-stm32", "transitionLabel": "切换到 STM32" },
-          { "domId": "open-ai-netlist", "targetPageId": "page-ai-netlist", "transitionLabel": "生成 AI 网表" },
-          { "domId": "open-ai-netlist-card", "targetPageId": "page-ai-netlist", "transitionLabel": "生成 AI 网表" }
+          {
+            "domId": "nav-hub",
+            "targetPageId": "page-project-hub",
+            "transitionLabel": "返回项目工作台"
+          },
+          {
+            "domId": "nav-digital",
+            "targetPageId": "page-workspace-digital",
+            "transitionLabel": "切换到数字电路"
+          },
+          {
+            "domId": "nav-analog",
+            "targetPageId": "page-workspace-analog",
+            "transitionLabel": "切换到模拟电路"
+          },
+          {
+            "domId": "nav-power",
+            "targetPageId": "page-workspace-power",
+            "transitionLabel": "切换到电力电子"
+          },
+          {
+            "domId": "nav-stm32",
+            "targetPageId": "page-workspace-mcu-stm32",
+            "transitionLabel": "切换到 STM32"
+          },
+          {
+            "domId": "open-ai-netlist",
+            "targetPageId": "page-ai-netlist",
+            "transitionLabel": "生成 AI 网表"
+          },
+          {
+            "domId": "open-ai-netlist-card",
+            "targetPageId": "page-ai-netlist",
+            "transitionLabel": "生成 AI 网表"
+          }
         ]
-      },
-      "canvasData": { "x": 0, "y": 0, "group": 0 }
+      }
     },
     {
       "id": "page-workspace-mcu-stm32",
@@ -107,19 +311,58 @@
       "type": "page",
       "version": 1,
       "createdAt": 1795532953152,
+      "canvasData": {
+        "x": 480,
+        "y": 1492,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-5998d560",
+          "measuredAt": 1795533305644
+        }
+      },
       "devMetadata": {
         "htmlSrc": "pages/workspace-mcu-stm32.html",
         "interactions": [
-          { "domId": "nav-hub", "targetPageId": "page-project-hub", "transitionLabel": "返回项目工作台" },
-          { "domId": "nav-digital", "targetPageId": "page-workspace-digital", "transitionLabel": "切换到数字电路" },
-          { "domId": "nav-analog", "targetPageId": "page-workspace-analog", "transitionLabel": "切换到模拟电路" },
-          { "domId": "nav-power", "targetPageId": "page-workspace-power", "transitionLabel": "切换到电力电子" },
-          { "domId": "nav-51", "targetPageId": "page-workspace-mcu51", "transitionLabel": "切换到 51 单片机" },
-          { "domId": "open-ai-netlist", "targetPageId": "page-ai-netlist", "transitionLabel": "生成 AI 网表" },
-          { "domId": "open-ai-netlist-card", "targetPageId": "page-ai-netlist", "transitionLabel": "生成 AI 网表" }
+          {
+            "domId": "nav-hub",
+            "targetPageId": "page-project-hub",
+            "transitionLabel": "返回项目工作台"
+          },
+          {
+            "domId": "nav-digital",
+            "targetPageId": "page-workspace-digital",
+            "transitionLabel": "切换到数字电路"
+          },
+          {
+            "domId": "nav-analog",
+            "targetPageId": "page-workspace-analog",
+            "transitionLabel": "切换到模拟电路"
+          },
+          {
+            "domId": "nav-power",
+            "targetPageId": "page-workspace-power",
+            "transitionLabel": "切换到电力电子"
+          },
+          {
+            "domId": "nav-51",
+            "targetPageId": "page-workspace-mcu51",
+            "transitionLabel": "切换到 51 单片机"
+          },
+          {
+            "domId": "open-ai-netlist",
+            "targetPageId": "page-ai-netlist",
+            "transitionLabel": "生成 AI 网表"
+          },
+          {
+            "domId": "open-ai-netlist-card",
+            "targetPageId": "page-ai-netlist",
+            "transitionLabel": "生成 AI 网表"
+          }
         ]
-      },
-      "canvasData": { "x": 0, "y": 0, "group": 0 }
+      }
     },
     {
       "id": "page-ai-netlist",
@@ -127,20 +370,41 @@
       "type": "page",
       "version": 1,
       "createdAt": 1795532953152,
+      "canvasData": {
+        "x": 0,
+        "y": 484.99999999999994,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 900,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-1906d4a6",
+          "measuredAt": 1795533305644
+        }
+      },
       "devMetadata": {
         "htmlSrc": "pages/ai-netlist.html",
         "interactions": [
-          { "domId": "ai-close", "targetPageId": "page-workspace-digital", "hideEdge": true, "transitionLabel": "关闭 AI 网表" },
-          { "domId": "ai-backdrop", "targetPageId": "page-workspace-digital", "hideEdge": true, "transitionLabel": "关闭 AI 网表" }
+          {
+            "domId": "ai-close",
+            "targetPageId": "page-workspace-digital",
+            "hideEdge": true,
+            "transitionLabel": "关闭 AI 网表"
+          },
+          {
+            "domId": "ai-backdrop",
+            "targetPageId": "page-workspace-digital",
+            "hideEdge": true,
+            "transitionLabel": "关闭 AI 网表"
+          }
         ]
-      },
-      "canvasData": { "x": 0, "y": 0, "group": 0 }
+      }
     }
   ],
   "config": {
-    "autoLayout": true,
+    "autoLayout": false,
     "deviceType": "desktop",
-    "projectName": "电设仿真工作台",
+    "projectName": "电子课程设计仿真工作台",
     "designLibrary": {
       "name": "Golden Time",
       "id": "dl_builtin_golden_time",
@@ -148,6 +412,7 @@
       "scope": "built-in-global",
       "path": "/data/user/design_libraries/Golden Time",
       "versionSource": "metadata.json"
-    }
+    },
+    "visualEditorEnabled": false
   }
 }

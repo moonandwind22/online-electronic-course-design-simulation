@@ -57,7 +57,7 @@
   --golden-radius-lg: 32px;
   --golden-spacing: 4.8px;
 
-  --golden-font-display: Fraunces, Georgia, "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", serif;
+  --golden-font-display: "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", "Fraunces", Georgia, serif;
   --golden-font-body: "Noto Sans CJK SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   --golden-font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Code", Consolas, "Liberation Mono", monospace;
 
@@ -128,9 +128,19 @@ body {
   color: var(--golden-foreground);
   font-family: var(--golden-font-body);
   font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+.symbol-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 body.gt-app-body {
@@ -179,6 +189,7 @@ svg {
 .gt-display {
   font-family: var(--golden-font-display);
   font-weight: 500;
+  font-variant-numeric: tabular-nums;
   letter-spacing: -0.025em;
   line-height: 1.12;
 }
@@ -596,8 +607,12 @@ svg {
 }
 
 .hub-brand-copy .gt-label {
+  max-width: 250px;
+  overflow: hidden;
   font-size: 8.5px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .hub-nav {
@@ -929,12 +944,26 @@ svg {
   font-family: var(--golden-font-display);
   font-size: 20px;
   font-weight: 500;
+  font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
 
 .domain-card--third .domain-title {
   font-size: 17px;
+}
+
+.domain-card--third .domain-copy,
+.domain-card--third .domain-meta {
+  max-width: 58%;
+  position: relative;
+  z-index: 1;
+}
+
+.domain-card--third .domain-illustration {
+  width: 34%;
+  max-width: 130px;
+  opacity: 0.72;
 }
 
 .domain-desc {
@@ -962,12 +991,6 @@ svg {
   max-width: 240px;
   opacity: 0.9;
   pointer-events: none;
-}
-
-.domain-card--third .domain-illustration {
-  width: 52%;
-  max-width: 160px;
-  opacity: 0.55;
 }
 
 .template-grid {
@@ -1695,6 +1718,7 @@ svg {
 }
 
 .sch-label--muted { fill: var(--golden-muted-foreground); }
+.sch-label--on-dark { fill: var(--golden-primary-foreground); }
 .sch-label--tiny { font-size: 7.2px; }
 .sch-label--bold { font-weight: 600; }
 
@@ -2885,6 +2909,9 @@ svg {
   .hub-actions .btn--ghost {
     display: none;
   }
+  .hub-brand-copy .gt-label {
+    max-width: 150px;
+  }
   .topbar-home .brand-word {
     display: none;
   }
@@ -3135,7 +3162,7 @@ svg {
             <path d="M3 14h3l2.2-6 3.4 12 2.6-8 1.8 4H21"></path>
           </svg>
         </span>
-        <span class="brand-word">Golden Lab</span>
+        <span class="brand-word">电子课程设计仿真工作台</span>
       </span>
 
       <span class="topbar-divider" aria-hidden="true"></span>
@@ -3443,7 +3470,7 @@ NET N1 : U1.11(QA), U2.7(A)
 
       <div class="netlist-code" aria-label="AI 网表内容">
         <div class="nl-line"><span class="nl-num">1</span><span class="nl-text nl-comment"># ============================================================</span></div>
-        <div class="nl-line"><span class="nl-num">2</span><span class="nl-text nl-comment"># CIRCUIT SNAPSHOT — 电设仿真工作台 v1</span></div>
+        <div class="nl-line"><span class="nl-num">2</span><span class="nl-text nl-comment"># CIRCUIT SNAPSHOT — 电子课程设计仿真工作台 v1</span></div>
         <div class="nl-line"><span class="nl-num">3</span><span class="nl-text nl-comment"># 工程: 74LS161 四位二进制计数器</span></div>
         <div class="nl-line"><span class="nl-num">4</span><span class="nl-text nl-comment"># 仿真域: digital (数电)</span></div>
         <div class="nl-line"><span class="nl-num">5</span><span class="nl-text nl-comment"># 生成时间: 2026-11-24T15:00:00+08:00</span></div>

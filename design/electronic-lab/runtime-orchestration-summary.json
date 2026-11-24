@@ -7,7 +7,7 @@
   },
   "project": {
     "resolvedLane": "library_bound",
-    "projectName": "电设仿真工作台",
+    "projectName": "电子课程设计仿真工作台",
     "deviceType": "desktop",
     "pageType": "task-driven",
     "operatingMode": "library-bound",
@@ -23,7 +23,7 @@
     "generationTree": {
       "id": "root",
       "type": "root",
-      "name": "电设仿真工作台",
+      "name": "电子课程设计仿真工作台",
       "status": "generated",
       "children": [
         { "id": "shared-design-system", "type": "shared", "name": "Golden Time 设计令牌与应用外壳", "status": "generated", "outputs": ["colors_and_type.css"] },

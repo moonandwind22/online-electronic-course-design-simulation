@@ -41,6 +41,13 @@ design/electronic-lab/
 └─ assets/                          # 预留图片目录（当前芯片/外设插画均内联）
 ```
 
+完整 EDA 素材包位于仓库根目录 `eda-component-svg-pack/`：
+
+- `assets/`：芯片、外设、板卡与原理图符号的 SVG 源文件。
+- `manifest.json`：素材名称、型号、封装与页面使用关系。
+- `preview/index.html`：素材预览页，可直接在浏览器打开。
+- `redesigned-design/`：使用这些素材重绘后的设计副本，便于对照。
+
 ## 本地查看
 
 直接打开：
@@ -108,7 +115,7 @@ node "$TRAE_DESIGN_SKILL/shared-runtime/deterministic-tooling/apply-html-head-co
 2. 在页面中通过 `<use href="#sym-xxx">` 引用。
 3. 如果页面还没有该 sprite，把 sprite 内联到页面 `<body>` 开头（页面已有的 `class="symbol-sprite"` 节点就是它）。
 
-芯片、外设和板卡的插画来自 EDA SVG Pack，已以内联 `<svg data-component="...">` 的形式写进页面，不依赖外部图片。修改某个芯片或外设时，在对应页面搜索 `data-component="74ls161-dip16"`、`data-component="stm32f103c8t6-lqfp48"` 等标识，替换整个 `<svg>` 块即可。插画中的 `var(--eda-pin, ...)`、`var(--eda-package, ...)`、`var(--eda-accent, ...)` 等变量可以在 `colors_and_type.css` 中统一改色；未定义时会使用内置回退色。
+芯片、外设和板卡的插画来自 EDA SVG Pack（源文件在仓库根目录 `eda-component-svg-pack/`），已以内联 `<svg data-component="...">` 的形式写进页面，不依赖外部图片。修改某个芯片或外设时，在对应页面搜索 `data-component="74ls161-dip16"`、`data-component="stm32f103c8t6-lqfp48"` 等标识，替换整个 `<svg>` 块即可。插画中的 `var(--eda-pin, ...)`、`var(--eda-package, ...)`、`var(--eda-accent, ...)` 等变量可以在 `colors_and_type.css` 中统一改色；未定义时会使用内置回退色。
 
 ### 4. 修改交互与页面跳转
 

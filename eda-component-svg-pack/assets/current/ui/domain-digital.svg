@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="title-domain-digital desc-domain-digital">
+  <title id="title-domain-digital">数电</title>
+  <desc id="desc-domain-digital">方波边沿与逻辑电平基线。</desc>
+  <path d="M3.5 8h4v8h5V8h5v8h3"/><circle cx="3.5" cy="8" r="1.2" fill="currentColor" stroke="none"/><circle cx="20.5" cy="16" r="1.2" fill="currentColor" stroke="none"/><path d="M6.5 18.5h11"/>
+</svg>

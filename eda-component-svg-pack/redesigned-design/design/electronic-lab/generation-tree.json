@@ -1,0 +1,79 @@
+{
+  "id": "root",
+  "type": "root",
+  "name": "电子课程设计仿真工作台",
+  "status": "generated",
+  "children": [
+    {
+      "id": "shared-design-system",
+      "type": "shared",
+      "name": "Golden Time 设计令牌与应用外壳",
+      "status": "generated",
+      "outputs": ["colors_and_type.css"],
+      "children": []
+    },
+    {
+      "id": "page-project-hub",
+      "type": "leaf",
+      "name": "项目工作台",
+      "pageId": "page-project-hub",
+      "htmlSrc": "pages/project-hub.html",
+      "status": "generated",
+      "dependsOn": ["shared-design-system"]
+    },
+    {
+      "id": "page-workspace-digital",
+      "type": "leaf",
+      "name": "数电工作台",
+      "pageId": "page-workspace-digital",
+      "htmlSrc": "pages/workspace-digital.html",
+      "status": "generated",
+      "dependsOn": ["shared-design-system"]
+    },
+    {
+      "id": "page-workspace-analog",
+      "type": "leaf",
+      "name": "模拟电路工作台",
+      "pageId": "page-workspace-analog",
+      "htmlSrc": "pages/workspace-analog.html",
+      "status": "generated",
+      "dependsOn": ["shared-design-system"]
+    },
+    {
+      "id": "page-workspace-power",
+      "type": "leaf",
+      "name": "电力电子工作台",
+      "pageId": "page-workspace-power",
+      "htmlSrc": "pages/workspace-power.html",
+      "status": "generated",
+      "dependsOn": ["shared-design-system"]
+    },
+    {
+      "id": "page-workspace-mcu51",
+      "type": "leaf",
+      "name": "51 单片机工作台",
+      "pageId": "page-workspace-mcu51",
+      "htmlSrc": "pages/workspace-mcu51.html",
+      "status": "generated",
+      "dependsOn": ["shared-design-system"]
+    },
+    {
+      "id": "page-workspace-mcu-stm32",
+      "type": "leaf",
+      "name": "STM32 工作台",
+      "pageId": "page-workspace-mcu-stm32",
+      "htmlSrc": "pages/workspace-mcu-stm32.html",
+      "status": "generated",
+      "dependsOn": ["shared-design-system"]
+    },
+    {
+      "id": "page-ai-netlist",
+      "type": "leaf",
+      "name": "AI 网表导出",
+      "pageId": "page-ai-netlist",
+      "htmlSrc": "pages/ai-netlist.html",
+      "status": "generated",
+      "dependsOn": ["shared-design-system", "page-workspace-digital"]
+    }
+  ]
+}

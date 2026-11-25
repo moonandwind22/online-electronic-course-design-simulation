@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" width="96" height="60" fill="none" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision" role="img" aria-labelledby="title-74ls32-or desc-74ls32-or" data-component="74ls32-or">
+  <title id="title-74ls32-or">74LS32 · 四路 2 输入或门</title>
+  <desc id="desc-74ls32-or">四路 2 输入或门，74LS32，OR。统一 EDA 封装风格，可编辑矢量。</desc>
+  <g id="terminals" ><path d="M7 21L30 21" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><path d="M7 39L30 39" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><path d="M68 30L89 30" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /></g><g id="logic-symbol" ><path d="M30 11Q43 30 30 49Q54 49 68 30Q54 11 30 11Z" fill="var(--eda-soft,#F1F5F9)" stroke="var(--eda-ink,currentColor)" stroke-width="2.2" /></g><g id="pin-markers" ><circle cx="7" cy="21" r="1.6" fill="var(--eda-ink,currentColor)" stroke="none" stroke-width="0" /><circle cx="7" cy="39" r="1.6" fill="var(--eda-ink,currentColor)" stroke="none" stroke-width="0" /></g>
+</svg>

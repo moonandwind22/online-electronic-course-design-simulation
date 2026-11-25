@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" width="96" height="60" fill="none" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision" role="img" aria-labelledby="title-reed-switch desc-reed-switch" data-component="reed-switch">
+  <title id="title-reed-switch">Reed Switch · 干簧管</title>
+  <desc id="desc-reed-switch">干簧管，Reed Switch，常开 · 磁控。统一 EDA 封装风格，可编辑矢量。</desc>
+  <g id="leads" ><path d="M3 30L25 30" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><path d="M71 30L93 30" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /></g><g id="glass" ><rect x="24" y="20" width="48" height="20" rx="10" fill="var(--eda-glass,#E0F2FE)" stroke="var(--eda-ink,currentColor)" stroke-width="1.8" /></g><g id="contacts" ><path d="M25 30L50 30" fill="none" stroke="var(--eda-reed,#64748B)" stroke-width="2.5" /><path d="M71 30L48 24" fill="none" stroke="var(--eda-reed,#64748B)" stroke-width="2.5" /></g>
+</svg>

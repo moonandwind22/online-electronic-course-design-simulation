@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" width="96" height="60" fill="none" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision" role="img" aria-labelledby="title-capacitor-ceramic desc-capacitor-ceramic" data-component="capacitor-ceramic">
+  <title id="title-capacitor-ceramic">Ceramic Capacitor · 瓷片电容</title>
+  <desc id="desc-capacitor-ceramic">瓷片电容，Ceramic Capacitor，径向 · THT。统一 EDA 封装风格，可编辑矢量。</desc>
+  <g id="leads" ><path d="M39 34L35 57" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><path d="M57 34L61 57" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /></g><g id="package" ><path d="M30 34V21C30 12 38 7 48 7S66 12 66 21V34Z" fill="var(--eda-capacitor,#60A5FA)" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><text x="48" y="27" fill="var(--eda-package-ink,#F8FAFC)" stroke="none" font-family="ui-monospace,SFMono-Regular,Consolas,monospace" font-size="10" font-weight="600" text-anchor="middle" >104</text></g>
+</svg>

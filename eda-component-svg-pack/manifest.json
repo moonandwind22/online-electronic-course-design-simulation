@@ -1,0 +1,1465 @@
+{
+  "name": "Electronic Course Design EDA SVG Library",
+  "source_project": "https://github.com/moonandwind22/online-electronic-course-design-simulation",
+  "version": "1.0.0",
+  "component_viewBox": "0 0 96 60",
+  "style": {
+    "stroke": 2,
+    "corner_radius": "2–6 units",
+    "pin_fill": "#CBD5E1",
+    "package_fill": "#334155",
+    "pcb_fill": "#DDEBE3",
+    "accent": "#F59E0B"
+  },
+  "assets": [
+    {
+      "slug": "74ls161-dip16",
+      "name": "四位二进制计数器",
+      "model": "74LS161",
+      "category": "芯片与逻辑",
+      "package": "DIP-16",
+      "kind": "dip",
+      "label": "74LS161",
+      "sub": "COUNTER",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html",
+        "ai-netlist.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/74ls161-dip16.svg"
+    },
+    {
+      "slug": "74ls47-dip16",
+      "name": "BCD 七段译码器",
+      "model": "74LS47",
+      "category": "芯片与逻辑",
+      "package": "DIP-16",
+      "kind": "dip",
+      "label": "74LS47",
+      "sub": "DECODER",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html",
+        "ai-netlist.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/74ls47-dip16.svg"
+    },
+    {
+      "slug": "74ls00-nand",
+      "name": "四路 2 输入与非门",
+      "model": "74LS00",
+      "category": "芯片与逻辑",
+      "package": "NAND",
+      "kind": "nand",
+      "label": "74LS00",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html",
+        "ai-netlist.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/74ls00-nand.svg"
+    },
+    {
+      "slug": "74ls08-and",
+      "name": "四路 2 输入与门",
+      "model": "74LS08",
+      "category": "芯片与逻辑",
+      "package": "AND",
+      "kind": "and",
+      "label": "74LS08",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html",
+        "ai-netlist.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/74ls08-and.svg"
+    },
+    {
+      "slug": "74ls32-or",
+      "name": "四路 2 输入或门",
+      "model": "74LS32",
+      "category": "芯片与逻辑",
+      "package": "OR",
+      "kind": "or",
+      "label": "74LS32",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/74ls32-or.svg"
+    },
+    {
+      "slug": "74ls86-xor",
+      "name": "四路 2 输入异或门",
+      "model": "74LS86",
+      "category": "芯片与逻辑",
+      "package": "XOR",
+      "kind": "xor",
+      "label": "74LS86",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/74ls86-xor.svg"
+    },
+    {
+      "slug": "74ls74-dip14",
+      "name": "双 D 触发器",
+      "model": "74LS74",
+      "category": "芯片与逻辑",
+      "package": "DIP-14",
+      "kind": "dip",
+      "label": "74LS74",
+      "sub": "D FF",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/74ls74-dip14.svg"
+    },
+    {
+      "slug": "74ls138-dip16",
+      "name": "3-8 线译码器",
+      "model": "74LS138",
+      "category": "芯片与逻辑",
+      "package": "DIP-16",
+      "kind": "dip",
+      "label": "74LS138",
+      "sub": "3 TO 8",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/74ls138-dip16.svg"
+    },
+    {
+      "slug": "74ls373-dip20",
+      "name": "八路透明锁存器",
+      "model": "74LS373",
+      "category": "芯片与逻辑",
+      "package": "DIP-20",
+      "kind": "dip",
+      "label": "74LS373",
+      "sub": "LATCH",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/74ls373-dip20.svg"
+    },
+    {
+      "slug": "74hc595-dip16",
+      "name": "八位移位寄存器",
+      "model": "74HC595",
+      "category": "芯片与逻辑",
+      "package": "DIP-16",
+      "kind": "dip",
+      "label": "74HC595",
+      "sub": "SHIFT",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/74hc595-dip16.svg"
+    },
+    {
+      "slug": "stc89c52rc-dip40",
+      "name": "8051 最小系统",
+      "model": "STC89C52RC",
+      "category": "芯片与逻辑",
+      "package": "DIP-40",
+      "kind": "dip",
+      "label": "STC89C52",
+      "sub": "8051",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu51.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/stc89c52rc-dip40.svg"
+    },
+    {
+      "slug": "stm32f103c8t6-lqfp48",
+      "name": "ARM Cortex-M3 微控制器",
+      "model": "STM32F103C8T6",
+      "category": "芯片与逻辑",
+      "package": "LQFP-48",
+      "kind": "qfp",
+      "label": "STM32",
+      "sub": "F103C8",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu-stm32.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/stm32f103c8t6-lqfp48.svg"
+    },
+    {
+      "slug": "seven-segment-1digit",
+      "name": "一位七段数码管",
+      "model": "7-SEG-1",
+      "category": "显示器件",
+      "package": "共阴 · 1 位",
+      "kind": "seven1",
+      "label": "7-SEG-1",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html"
+      ],
+      "detail": "",
+      "file": "assets/current/displays/seven-segment-1digit.svg"
+    },
+    {
+      "slug": "seven-segment-4digit",
+      "name": "四位七段数码管",
+      "model": "7-SEG-4",
+      "category": "显示器件",
+      "package": "共阴 · 4 位",
+      "kind": "seven4",
+      "label": "7-SEG-4",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu51.html"
+      ],
+      "detail": "",
+      "file": "assets/current/displays/seven-segment-4digit.svg"
+    },
+    {
+      "slug": "lcd1602",
+      "name": "字符液晶模块",
+      "model": "LCD1602",
+      "category": "显示器件",
+      "package": "16×2 · 并行",
+      "kind": "lcd",
+      "label": "LCD1602",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu51.html",
+        "workspace-mcu-stm32.html"
+      ],
+      "detail": "",
+      "file": "assets/current/displays/lcd1602.svg"
+    },
+    {
+      "slug": "oled-096-i2c",
+      "name": "OLED 显示模块",
+      "model": "OLED 0.96\"",
+      "category": "显示器件",
+      "package": "128×64 · I²C",
+      "kind": "oled",
+      "label": "OLED 0.96\"",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu-stm32.html"
+      ],
+      "detail": "",
+      "file": "assets/current/displays/oled-096-i2c.svg"
+    },
+    {
+      "slug": "led-5mm-red",
+      "name": "发光二极管",
+      "model": "LED 5 mm",
+      "category": "显示器件",
+      "package": "红色 · THT",
+      "kind": "led",
+      "label": "LED 5 mm",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-analog.html",
+        "workspace-digital.html",
+        "workspace-mcu51.html",
+        "workspace-mcu-stm32.html"
+      ],
+      "detail": "",
+      "file": "assets/current/displays/led-5mm-red.svg"
+    },
+    {
+      "slug": "tactile-button-6mm",
+      "name": "轻触按键",
+      "model": "6×6 mm",
+      "category": "输入器件",
+      "package": "常开 · 4 脚",
+      "kind": "button",
+      "label": "6×6 mm",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html",
+        "workspace-mcu51.html"
+      ],
+      "detail": "",
+      "file": "assets/current/inputs/tactile-button-6mm.svg"
+    },
+    {
+      "slug": "keypad-4x4",
+      "name": "矩阵键盘",
+      "model": "4×4 Keypad",
+      "category": "输入器件",
+      "package": "16 键 · 扫描",
+      "kind": "keypad",
+      "label": "4×4 Keypad",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu51.html"
+      ],
+      "detail": "",
+      "file": "assets/current/inputs/keypad-4x4.svg"
+    },
+    {
+      "slug": "potentiometer",
+      "name": "电位器",
+      "model": "Potentiometer",
+      "category": "输入器件",
+      "package": "单圈 · 线性",
+      "kind": "potentiometer",
+      "label": "Potentiometer",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-analog.html",
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/inputs/potentiometer.svg"
+    },
+    {
+      "slug": "usb-ttl-ch340",
+      "name": "USB 转串口模块",
+      "model": "CH340 USB-TTL",
+      "category": "通信与接口",
+      "package": "4 Pin · UART",
+      "kind": "usbttl",
+      "label": "CH340 USB-TTL",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu-stm32.html"
+      ],
+      "detail": "",
+      "file": "assets/current/interfaces/usb-ttl-ch340.svg"
+    },
+    {
+      "slug": "logic-analyzer",
+      "name": "逻辑分析仪",
+      "model": "Logic Analyzer",
+      "category": "仪器与信号",
+      "package": "8 CH",
+      "kind": "analyzer",
+      "label": "Logic Analyzer",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu51.html",
+        "workspace-mcu-stm32.html"
+      ],
+      "detail": "",
+      "file": "assets/current/instruments/logic-analyzer.svg"
+    },
+    {
+      "slug": "serial-terminal",
+      "name": "串口终端",
+      "model": "UART Terminal",
+      "category": "仪器与信号",
+      "package": "TX / RX",
+      "kind": "terminal",
+      "label": "UART Terminal",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu51.html"
+      ],
+      "detail": "",
+      "file": "assets/current/instruments/serial-terminal.svg"
+    },
+    {
+      "slug": "oscilloscope",
+      "name": "双通道示波器",
+      "model": "Oscilloscope",
+      "category": "仪器与信号",
+      "package": "2 CH",
+      "kind": "oscilloscope",
+      "label": "Oscilloscope",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-analog.html",
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/instruments/oscilloscope.svg"
+    },
+    {
+      "slug": "signal-source-sine",
+      "name": "正弦信号源",
+      "model": "Sine Source",
+      "category": "仪器与信号",
+      "package": "1 kHz",
+      "kind": "sine",
+      "label": "Sine Source",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-analog.html"
+      ],
+      "detail": "",
+      "file": "assets/current/instruments/signal-source-sine.svg"
+    },
+    {
+      "slug": "clock-source-square",
+      "name": "方波时钟源",
+      "model": "Clock Source",
+      "category": "仪器与信号",
+      "package": "1 kHz",
+      "kind": "clock",
+      "label": "Clock Source",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-digital.html"
+      ],
+      "detail": "",
+      "file": "assets/current/instruments/clock-source-square.svg"
+    },
+    {
+      "slug": "pwm-driver",
+      "name": "PWM 功率驱动模块",
+      "model": "PWM Driver",
+      "category": "仪器与信号",
+      "package": "100 kHz",
+      "kind": "pwm",
+      "label": "PWM Driver",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/instruments/pwm-driver.svg"
+    },
+    {
+      "slug": "active-buzzer",
+      "name": "有源蜂鸣器",
+      "model": "Active Buzzer",
+      "category": "执行与声学",
+      "package": "5 V · THT",
+      "kind": "buzzer",
+      "label": "Active Buzzer",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu51.html"
+      ],
+      "detail": "",
+      "file": "assets/current/actuators/active-buzzer.svg"
+    },
+    {
+      "slug": "servo-sg90",
+      "name": "微型舵机",
+      "model": "SG90",
+      "category": "执行与声学",
+      "package": "PWM 50 Hz",
+      "kind": "servo",
+      "label": "SG90",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu-stm32.html"
+      ],
+      "detail": "",
+      "file": "assets/current/actuators/servo-sg90.svg"
+    },
+    {
+      "slug": "stepper-28byj48",
+      "name": "五线步进电机",
+      "model": "28BYJ-48",
+      "category": "执行与声学",
+      "package": "ULN2003",
+      "kind": "stepper",
+      "label": "28BYJ-48",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-mcu51.html",
+        "workspace-mcu-stm32.html"
+      ],
+      "detail": "",
+      "file": "assets/current/actuators/stepper-28byj48.svg"
+    },
+    {
+      "slug": "2n2222-to92",
+      "name": "NPN 三极管",
+      "model": "2N2222",
+      "category": "分立半导体",
+      "package": "TO-92",
+      "kind": "to92",
+      "label": "2222",
+      "sub": "NPN",
+      "scope": "current",
+      "sources": [
+        "workspace-analog.html"
+      ],
+      "detail": "",
+      "file": "assets/current/semiconductors/2n2222-to92.svg"
+    },
+    {
+      "slug": "lm358-dip8",
+      "name": "双运算放大器",
+      "model": "LM358",
+      "category": "芯片与逻辑",
+      "package": "DIP-8",
+      "kind": "soic",
+      "label": "LM358",
+      "sub": "DUAL OP",
+      "scope": "current",
+      "sources": [
+        "workspace-analog.html"
+      ],
+      "detail": "",
+      "file": "assets/current/chips/lm358-dip8.svg"
+    },
+    {
+      "slug": "irf540n-to220",
+      "name": "N 沟道 MOSFET",
+      "model": "IRF540N",
+      "category": "分立半导体",
+      "package": "TO-220",
+      "kind": "to220",
+      "label": "IRF540",
+      "sub": "N-MOS",
+      "scope": "current",
+      "sources": [
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/semiconductors/irf540n-to220.svg"
+    },
+    {
+      "slug": "irf9540n-to220",
+      "name": "P 沟道 MOSFET",
+      "model": "IRF9540N",
+      "category": "分立半导体",
+      "package": "TO-220",
+      "kind": "to220",
+      "label": "IRF9540",
+      "sub": "P-MOS",
+      "scope": "current",
+      "sources": [
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/semiconductors/irf9540n-to220.svg"
+    },
+    {
+      "slug": "fga25n120-to247",
+      "name": "绝缘栅双极晶体管",
+      "model": "FGA25N120",
+      "category": "分立半导体",
+      "package": "TO-247",
+      "kind": "to247",
+      "label": "25N120",
+      "sub": "IGBT",
+      "scope": "current",
+      "sources": [
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/semiconductors/fga25n120-to247.svg"
+    },
+    {
+      "slug": "bt151-to220",
+      "name": "晶闸管",
+      "model": "BT151",
+      "category": "分立半导体",
+      "package": "TO-220",
+      "kind": "to220",
+      "label": "BT151",
+      "sub": "SCR",
+      "scope": "current",
+      "sources": [
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/semiconductors/bt151-to220.svg"
+    },
+    {
+      "slug": "resistor-axial",
+      "name": "轴向电阻",
+      "model": "Resistor",
+      "category": "无源器件",
+      "package": "轴向 · 1/4 W",
+      "kind": "resistor",
+      "label": "Resistor",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-analog.html",
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/passives/resistor-axial.svg"
+    },
+    {
+      "slug": "capacitor-ceramic",
+      "name": "瓷片电容",
+      "model": "Ceramic Capacitor",
+      "category": "无源器件",
+      "package": "径向 · THT",
+      "kind": "capacitor",
+      "label": "Ceramic Capacitor",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-analog.html"
+      ],
+      "detail": "",
+      "file": "assets/current/passives/capacitor-ceramic.svg"
+    },
+    {
+      "slug": "electrolytic-capacitor",
+      "name": "铝电解电容",
+      "model": "Electrolytic",
+      "category": "无源器件",
+      "package": "径向 · 极性",
+      "kind": "electrolytic",
+      "label": "Electrolytic",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-analog.html",
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/passives/electrolytic-capacitor.svg"
+    },
+    {
+      "slug": "inductor-shielded",
+      "name": "功率电感",
+      "model": "Inductor",
+      "category": "无源器件",
+      "package": "屏蔽式 · SMD",
+      "kind": "inductor",
+      "label": "Inductor",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/passives/inductor-shielded.svg"
+    },
+    {
+      "slug": "1n4148-axial",
+      "name": "开关二极管",
+      "model": "1N4148",
+      "category": "分立半导体",
+      "package": "DO-35",
+      "kind": "diode",
+      "label": "1N4148",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-analog.html"
+      ],
+      "detail": "",
+      "file": "assets/current/semiconductors/1n4148-axial.svg"
+    },
+    {
+      "slug": "ss34-sma",
+      "name": "肖特基二极管",
+      "model": "SS34",
+      "category": "分立半导体",
+      "package": "SMA",
+      "kind": "schottky",
+      "label": "SS34",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/semiconductors/ss34-sma.svg"
+    },
+    {
+      "slug": "spst-rocker",
+      "name": "单刀单掷开关",
+      "model": "SPST",
+      "category": "输入器件",
+      "package": "船型 · 2 脚",
+      "kind": "rocker",
+      "label": "SPST",
+      "sub": "",
+      "scope": "current",
+      "sources": [
+        "workspace-power.html"
+      ],
+      "detail": "",
+      "file": "assets/current/inputs/spst-rocker.svg"
+    },
+    {
+      "slug": "atmega328p-dip28",
+      "name": "8 位 AVR 微控制器",
+      "model": "ATmega328P",
+      "category": "芯片与逻辑",
+      "package": "DIP-28",
+      "kind": "dip",
+      "label": "ATmega328P",
+      "sub": "AVR",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/chips/atmega328p-dip28.svg"
+    },
+    {
+      "slug": "blue-pill-stm32",
+      "name": "STM32 核心开发板",
+      "model": "Blue Pill",
+      "category": "开发板",
+      "package": "STM32F103 · 2×20 Pin",
+      "kind": "board",
+      "label": "STM32",
+      "sub": "BLUE PILL",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/boards/blue-pill-stm32.svg"
+    },
+    {
+      "slug": "esp32-devkit",
+      "name": "Wi-Fi / 蓝牙开发板",
+      "model": "ESP32 DevKit",
+      "category": "开发板",
+      "package": "ESP32-WROOM · 38 Pin",
+      "kind": "board",
+      "label": "ESP32",
+      "sub": "DEVKIT",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/boards/esp32-devkit.svg"
+    },
+    {
+      "slug": "esp8266-nodemcu",
+      "name": "Wi-Fi 开发板",
+      "model": "NodeMCU ESP8266",
+      "category": "开发板",
+      "package": "ESP-12E · 30 Pin",
+      "kind": "board",
+      "label": "ESP8266",
+      "sub": "NODE MCU",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/boards/esp8266-nodemcu.svg"
+    },
+    {
+      "slug": "raspberry-pi-pico",
+      "name": "RP2040 微控制器板",
+      "model": "Pico RP2040",
+      "category": "开发板",
+      "package": "40 Pin · 3 个调试焊盘",
+      "kind": "board",
+      "label": "RP2040",
+      "sub": "PICO",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/boards/raspberry-pi-pico.svg"
+    },
+    {
+      "slug": "arduino-uno-r3",
+      "name": "ATmega328P 学习板",
+      "model": "UNO R3 Compatible",
+      "category": "开发板",
+      "package": "USB-B · DC Jack",
+      "kind": "arduino",
+      "label": "UNO R3 Compatible",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "通用兼容板轮廓，不含品牌商标",
+      "file": "assets/extended/boards/arduino-uno-r3.svg"
+    },
+    {
+      "slug": "ne555-dip8",
+      "name": "定时器",
+      "model": "NE555",
+      "category": "芯片与逻辑",
+      "package": "DIP-8",
+      "kind": "soic",
+      "label": "NE555",
+      "sub": "TIMER",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/chips/ne555-dip8.svg"
+    },
+    {
+      "slug": "uln2003-dip16",
+      "name": "七路达林顿驱动",
+      "model": "ULN2003",
+      "category": "芯片与逻辑",
+      "package": "DIP-16",
+      "kind": "dip",
+      "label": "ULN2003",
+      "sub": "DRIVER",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/chips/uln2003-dip16.svg"
+    },
+    {
+      "slug": "l293d-dip16",
+      "name": "双 H 桥电机驱动",
+      "model": "L293D",
+      "category": "芯片与逻辑",
+      "package": "DIP-16",
+      "kind": "dip",
+      "label": "L293D",
+      "sub": "H-BRIDGE",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/chips/l293d-dip16.svg"
+    },
+    {
+      "slug": "max3232-soic16",
+      "name": "RS-232 电平转换",
+      "model": "MAX3232",
+      "category": "通信与接口",
+      "package": "SOIC-16",
+      "kind": "soic",
+      "label": "MAX3232",
+      "sub": "RS232",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/interfaces/max3232-soic16.svg"
+    },
+    {
+      "slug": "mcp2551-soic8",
+      "name": "CAN 总线收发器",
+      "model": "MCP2551",
+      "category": "通信与接口",
+      "package": "SOIC-8",
+      "kind": "soic",
+      "label": "MCP2551",
+      "sub": "CAN",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/interfaces/mcp2551-soic8.svg"
+    },
+    {
+      "slug": "pcf8574-soic16",
+      "name": "I²C 八路 IO 扩展",
+      "model": "PCF8574",
+      "category": "芯片与逻辑",
+      "package": "SOIC-16",
+      "kind": "soic",
+      "label": "PCF8574",
+      "sub": "I/O EXP",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/chips/pcf8574-soic16.svg"
+    },
+    {
+      "slug": "at24c02-soic8",
+      "name": "I²C EEPROM",
+      "model": "AT24C02",
+      "category": "芯片与逻辑",
+      "package": "SOIC-8",
+      "kind": "soic",
+      "label": "24C02",
+      "sub": "EEPROM",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/chips/at24c02-soic8.svg"
+    },
+    {
+      "slug": "w25q64-soic8",
+      "name": "SPI NOR Flash",
+      "model": "W25Q64",
+      "category": "芯片与逻辑",
+      "package": "SOIC-8",
+      "kind": "soic",
+      "label": "W25Q64",
+      "sub": "FLASH",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/chips/w25q64-soic8.svg"
+    },
+    {
+      "slug": "ads1115-msop10",
+      "name": "16 位四通道 ADC",
+      "model": "ADS1115",
+      "category": "芯片与逻辑",
+      "package": "MSOP-10",
+      "kind": "qfn",
+      "label": "ADS1115",
+      "sub": "ADC",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/chips/ads1115-msop10.svg"
+    },
+    {
+      "slug": "hx711-module",
+      "name": "24 位称重 ADC 模块",
+      "model": "HX711",
+      "category": "传感器",
+      "package": "24 bit · 差分输入",
+      "kind": "module-chip",
+      "label": "HX711",
+      "sub": "LOAD CELL",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/hx711-module.svg"
+    },
+    {
+      "slug": "ds3231-rtc-module",
+      "name": "实时时钟模块",
+      "model": "DS3231 RTC",
+      "category": "芯片与逻辑",
+      "package": "I²C · 电池座",
+      "kind": "rtc",
+      "label": "DS3231 RTC",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/chips/ds3231-rtc-module.svg"
+    },
+    {
+      "slug": "lm7805-to220",
+      "name": "三端线性稳压器",
+      "model": "LM7805",
+      "category": "电源器件",
+      "package": "TO-220",
+      "kind": "to220",
+      "label": "LM7805",
+      "sub": "+5 V",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/power/lm7805-to220.svg"
+    },
+    {
+      "slug": "ams1117-sot223",
+      "name": "低压差线性稳压器",
+      "model": "AMS1117-3.3",
+      "category": "电源器件",
+      "package": "SOT-223",
+      "kind": "sot223",
+      "label": "1117",
+      "sub": "3V3",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/power/ams1117-sot223.svg"
+    },
+    {
+      "slug": "buck-lm2596",
+      "name": "降压电源模块",
+      "model": "LM2596 Buck",
+      "category": "电源器件",
+      "package": "DC-DC · Step Down",
+      "kind": "power-module",
+      "label": "LM2596",
+      "sub": "BUCK",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/power/buck-lm2596.svg"
+    },
+    {
+      "slug": "boost-mt3608",
+      "name": "升压电源模块",
+      "model": "MT3608 Boost",
+      "category": "电源器件",
+      "package": "DC-DC · Step Up",
+      "kind": "power-module",
+      "label": "MT3608",
+      "sub": "BOOST",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/power/boost-mt3608.svg"
+    },
+    {
+      "slug": "battery-18650",
+      "name": "锂离子电芯",
+      "model": "18650 Li-ion",
+      "category": "电源器件",
+      "package": "3.7 V · 圆柱",
+      "kind": "battery",
+      "label": "18650 Li-ion",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/power/battery-18650.svg"
+    },
+    {
+      "slug": "crystal-hc49",
+      "name": "无源晶振",
+      "model": "HC-49S",
+      "category": "无源器件",
+      "package": "2 Pin · THT",
+      "kind": "crystal",
+      "label": "HC-49S",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/passives/crystal-hc49.svg"
+    },
+    {
+      "slug": "transformer",
+      "name": "低频变压器",
+      "model": "Transformer",
+      "category": "电源器件",
+      "package": "E-I 铁芯",
+      "kind": "transformer",
+      "label": "Transformer",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/power/transformer.svg"
+    },
+    {
+      "slug": "mpu6050-module",
+      "name": "六轴姿态传感器",
+      "model": "MPU6050",
+      "category": "传感器",
+      "package": "I²C · 3 轴陀螺 + 3 轴加速度",
+      "kind": "sensor-axis",
+      "label": "MPU6050",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/mpu6050-module.svg"
+    },
+    {
+      "slug": "dht11-module",
+      "name": "温湿度传感器",
+      "model": "DHT11",
+      "category": "传感器",
+      "package": "单总线 · 数字输出",
+      "kind": "dht11",
+      "label": "DHT11",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/dht11-module.svg"
+    },
+    {
+      "slug": "ds18b20-to92",
+      "name": "数字温度传感器",
+      "model": "DS18B20",
+      "category": "传感器",
+      "package": "TO-92 · 1-Wire",
+      "kind": "to92",
+      "label": "18B20",
+      "sub": "1-WIRE",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/ds18b20-to92.svg"
+    },
+    {
+      "slug": "bme280-module",
+      "name": "温湿度气压传感器",
+      "model": "BME280",
+      "category": "传感器",
+      "package": "I²C / SPI",
+      "kind": "sensor-metal",
+      "label": "BME280",
+      "sub": "ENV",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/bme280-module.svg"
+    },
+    {
+      "slug": "bh1750-module",
+      "name": "数字光照传感器",
+      "model": "BH1750",
+      "category": "传感器",
+      "package": "I²C · Lux",
+      "kind": "sensor-light",
+      "label": "BH1750",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/bh1750-module.svg"
+    },
+    {
+      "slug": "hc-sr04",
+      "name": "超声波测距模块",
+      "model": "HC-SR04",
+      "category": "传感器",
+      "package": "Trig / Echo",
+      "kind": "ultrasonic",
+      "label": "HC-SR04",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/hc-sr04.svg"
+    },
+    {
+      "slug": "hc-sr501-pir",
+      "name": "人体红外感应模块",
+      "model": "HC-SR501",
+      "category": "传感器",
+      "package": "PIR · 数字输出",
+      "kind": "pir",
+      "label": "HC-SR501",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/hc-sr501-pir.svg"
+    },
+    {
+      "slug": "ir-receiver",
+      "name": "红外接收管",
+      "model": "IR Receiver",
+      "category": "传感器",
+      "package": "38 kHz · 3 Pin",
+      "kind": "ir",
+      "label": "IR Receiver",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/ir-receiver.svg"
+    },
+    {
+      "slug": "photoresistor",
+      "name": "光敏电阻",
+      "model": "LDR",
+      "category": "传感器",
+      "package": "CdS · 模拟量",
+      "kind": "ldr",
+      "label": "LDR",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/photoresistor.svg"
+    },
+    {
+      "slug": "reed-switch",
+      "name": "干簧管",
+      "model": "Reed Switch",
+      "category": "传感器",
+      "package": "常开 · 磁控",
+      "kind": "reed",
+      "label": "Reed Switch",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/reed-switch.svg"
+    },
+    {
+      "slug": "microphone-module",
+      "name": "声音传感器模块",
+      "model": "Microphone",
+      "category": "传感器",
+      "package": "模拟 / 数字输出",
+      "kind": "microphone",
+      "label": "Microphone",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/sensors/microphone-module.svg"
+    },
+    {
+      "slug": "sd-card-module",
+      "name": "Micro SD 存储模块",
+      "model": "TF Card",
+      "category": "通信与接口",
+      "package": "SPI · 3.3 V",
+      "kind": "sd",
+      "label": "TF Card",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/interfaces/sd-card-module.svg"
+    },
+    {
+      "slug": "tft-18-spi",
+      "name": "彩色 TFT 显示模块",
+      "model": "1.8\" TFT",
+      "category": "显示器件",
+      "package": "128×160 · SPI",
+      "kind": "tft",
+      "label": "1.8\" TFT",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/displays/tft-18-spi.svg"
+    },
+    {
+      "slug": "led-matrix-8x8",
+      "name": "LED 点阵模块",
+      "model": "8×8 Matrix",
+      "category": "显示器件",
+      "package": "共阴 / 共阳",
+      "kind": "matrix",
+      "label": "8×8 Matrix",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/displays/led-matrix-8x8.svg"
+    },
+    {
+      "slug": "rgb-led-5mm",
+      "name": "全彩发光二极管",
+      "model": "RGB LED",
+      "category": "显示器件",
+      "package": "4 Pin · 共阴",
+      "kind": "rgbled",
+      "label": "RGB LED",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/displays/rgb-led-5mm.svg"
+    },
+    {
+      "slug": "ws2812-5050",
+      "name": "可寻址 RGB LED",
+      "model": "WS2812",
+      "category": "显示器件",
+      "package": "5050 · 单总线",
+      "kind": "ws2812",
+      "label": "WS2812",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/displays/ws2812-5050.svg"
+    },
+    {
+      "slug": "rotary-encoder",
+      "name": "增量式旋转编码器",
+      "model": "EC11",
+      "category": "输入器件",
+      "package": "A / B / SW",
+      "kind": "encoder",
+      "label": "EC11",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/inputs/rotary-encoder.svg"
+    },
+    {
+      "slug": "dual-axis-joystick",
+      "name": "双轴摇杆模块",
+      "model": "Joystick",
+      "category": "输入器件",
+      "package": "X / Y / SW",
+      "kind": "joystick",
+      "label": "Joystick",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/inputs/dual-axis-joystick.svg"
+    },
+    {
+      "slug": "relay-srd05",
+      "name": "电磁继电器",
+      "model": "SRD-05VDC",
+      "category": "执行与声学",
+      "package": "5 V · SPDT",
+      "kind": "relay",
+      "label": "SRD-05VDC",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/actuators/relay-srd05.svg"
+    },
+    {
+      "slug": "dc-motor-130",
+      "name": "微型直流电机",
+      "model": "DC Motor 130",
+      "category": "执行与声学",
+      "package": "3–6 V",
+      "kind": "motor",
+      "label": "DC Motor 130",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/actuators/dc-motor-130.svg"
+    },
+    {
+      "slug": "cooling-fan",
+      "name": "直流散热风扇",
+      "model": "DC Fan",
+      "category": "执行与声学",
+      "package": "2 Pin · 无刷",
+      "kind": "fan",
+      "label": "DC Fan",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/actuators/cooling-fan.svg"
+    },
+    {
+      "slug": "speaker-8r",
+      "name": "小型扬声器",
+      "model": "Speaker 8 Ω",
+      "category": "执行与声学",
+      "package": "8 Ω · 0.5 W",
+      "kind": "speaker",
+      "label": "Speaker 8 Ω",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/actuators/speaker-8r.svg"
+    },
+    {
+      "slug": "usb-c-connector",
+      "name": "USB Type-C 母座",
+      "model": "USB-C",
+      "category": "连接器",
+      "package": "16 Pin · SMT",
+      "kind": "usbc",
+      "label": "USB-C",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/connectors/usb-c-connector.svg"
+    },
+    {
+      "slug": "pin-header-40",
+      "name": "单排针",
+      "model": "Pin Header",
+      "category": "连接器",
+      "package": "1×40 · 2.54 mm",
+      "kind": "header",
+      "label": "Pin Header",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/connectors/pin-header-40.svg"
+    },
+    {
+      "slug": "terminal-block-3p",
+      "name": "螺钉式接线端子",
+      "model": "KF301-3P",
+      "category": "连接器",
+      "package": "3 Pin · 5.08 mm",
+      "kind": "terminal-block",
+      "label": "KF301-3P",
+      "sub": "",
+      "scope": "extended",
+      "sources": [],
+      "detail": "",
+      "file": "assets/extended/connectors/terminal-block-3p.svg"
+    }
+  ],
+  "schematic_symbol_ids": [
+    "sym-resistor-right",
+    "sym-resistor-down",
+    "sym-capacitor-right",
+    "sym-capacitor-down",
+    "sym-capacitor-polarized-down",
+    "sym-inductor-right",
+    "sym-diode-right",
+    "sym-diode-down",
+    "sym-led-right",
+    "sym-npn-down",
+    "sym-pnp-down",
+    "sym-nmos",
+    "sym-pmos",
+    "sym-opamp-right",
+    "sym-scr-horz",
+    "sym-igbt-horz",
+    "sym-ground-down",
+    "sym-battery-right",
+    "sym-button-right",
+    "sym-pot-vert",
+    "sym-zener-down",
+    "sym-crystal-down",
+    "sym-spst-right",
+    "sym-fuse-horz",
+    "sym-speaker-right",
+    "sym-square-wave-right"
+  ],
+  "ui_icons": [
+    {
+      "slug": "brand-logo",
+      "name": "电子课程设计品牌图标",
+      "file": "assets/current/ui/brand-logo.svg"
+    },
+    {
+      "slug": "domain-digital",
+      "name": "数电",
+      "file": "assets/current/ui/domain-digital.svg"
+    },
+    {
+      "slug": "domain-analog",
+      "name": "模电",
+      "file": "assets/current/ui/domain-analog.svg"
+    },
+    {
+      "slug": "domain-power",
+      "name": "电力电子",
+      "file": "assets/current/ui/domain-power.svg"
+    },
+    {
+      "slug": "domain-8051",
+      "name": "8051",
+      "file": "assets/current/ui/domain-8051.svg"
+    },
+    {
+      "slug": "domain-stm32",
+      "name": "STM32",
+      "file": "assets/current/ui/domain-stm32.svg"
+    }
+  ]
+}

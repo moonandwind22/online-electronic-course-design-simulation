@@ -1,0 +1,3743 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电子课程设计仿真工作台 · 设计原型</title>
+    <style id="theme-vars">
+/* ==========================================================================
+   Golden Time · Lab Bench
+   Project-local token + layout layer derived from the "Golden Time" Design
+   Library (id: dl_builtin_golden_time, version 0).
+   Raw palette values come from the Library metadata; component/layout classes
+   are the project's application of those tokens.
+   ========================================================================== */
+
+:root {
+  --golden-background: #fbfaf9;
+  --golden-foreground: #3b352b;
+  --golden-card: #fbfaf9;
+  --golden-card-foreground: #3b352b;
+  --golden-popover: #fbfaf9;
+  --golden-popover-foreground: #3b352b;
+  --golden-primary: #3b352b;
+  --golden-primary-foreground: #fbfaf9;
+  --golden-primary-hover: #2e2921;
+  --golden-secondary: #9b965f;
+  --golden-secondary-foreground: #fbfaf9;
+  --golden-secondary-hover: #898552;
+  --golden-muted: #eae6db;
+  --golden-muted-foreground: #978365;
+  --golden-accent: #cbc0aa;
+  --golden-accent-foreground: #574d42;
+  --golden-accent-hover: #bcb098;
+  --golden-destructive: #ef4444;
+  --golden-destructive-foreground: #fafafa;
+  --golden-border: #e1dccf;
+  --golden-border-strong: #cfc5b2;
+  --golden-input: #eae6db;
+  --golden-ring: #3b352b;
+  --golden-chart-1: #d6d5c2;
+  --golden-chart-2: #5e4545;
+  --golden-chart-3: #b0b3a2;
+  --golden-chart-4: #9b965f;
+  --golden-chart-5: #f79b45;
+  --golden-chart-5-soft: #fbe2c9;
+  --golden-sidebar: #fbfaf9;
+  --golden-sidebar-foreground: #3b352b;
+  --golden-sidebar-primary: #3b352b;
+  --golden-sidebar-primary-foreground: #fbfaf9;
+  --golden-sidebar-accent: #cbc0aa;
+  --golden-sidebar-accent-foreground: #3b352b;
+  --golden-sidebar-border: #e1dccf;
+  --golden-sidebar-ring: #3b352b;
+
+  --golden-radius-sm: 10px;
+  --golden-radius-md: 18px;
+  --golden-radius-lg: 32px;
+  --golden-spacing: 4.8px;
+
+  --golden-font-display: Fraunces, Georgia, "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", serif;
+  --golden-font-body: "Noto Sans CJK SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --golden-font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+
+  --golden-shadow-xs: 0 1px 2px 0 rgba(59, 53, 43, 0.04);
+  --golden-shadow-sm: 0 6px 18px -12px rgba(59, 53, 43, 0.12);
+  --golden-shadow-float: 0 30px 70px -34px rgba(59, 53, 43, 0.34);
+  --golden-scrim: rgba(59, 53, 43, 0.26);
+}
+
+html.dark {
+  --golden-background: #060201;
+  --golden-foreground: #e3dfd6;
+  --golden-card: #0d0906;
+  --golden-card-foreground: #e3dfd6;
+  --golden-popover: #0d0906;
+  --golden-popover-foreground: #e3dfd6;
+  --golden-primary: #e3dfd6;
+  --golden-primary-foreground: #060201;
+  --golden-primary-hover: #f1ede4;
+  --golden-secondary: #605039;
+  --golden-secondary-foreground: #e3dfd6;
+  --golden-secondary-hover: #705e45;
+  --golden-muted: #16110c;
+  --golden-muted-foreground: #a89c8a;
+  --golden-accent: #806a4d;
+  --golden-accent-foreground: #e3dfd6;
+  --golden-accent-hover: #927a59;
+  --golden-border: #2d2b26;
+  --golden-border-strong: #494136;
+  --golden-input: #3b342b;
+  --golden-ring: #cbb99f;
+  --golden-chart-1: #b39d80;
+  --golden-chart-2: #7a5f52;
+  --golden-chart-3: #f2e1ca;
+  --golden-chart-4: #8c7773;
+  --golden-chart-5: #e65c33;
+  --golden-chart-5-soft: #3a2119;
+  --golden-sidebar: #060201;
+  --golden-sidebar-foreground: #e3dfd6;
+  --golden-sidebar-primary: #e3dfd6;
+  --golden-sidebar-primary-foreground: #060201;
+  --golden-sidebar-accent: #806a4d;
+  --golden-sidebar-accent-foreground: #e3dfd6;
+  --golden-sidebar-border: #494136;
+  --golden-sidebar-ring: #e3dfd6;
+  --golden-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.28);
+  --golden-shadow-sm: 0 8px 24px -16px rgba(0, 0, 0, 0.6);
+  --golden-shadow-float: 0 32px 80px -32px rgba(0, 0, 0, 0.7);
+  --golden-scrim: rgba(0, 0, 0, 0.56);
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--golden-background);
+  color: var(--golden-foreground);
+  font-family: var(--golden-font-body);
+  font-size: 13px;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.symbol-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+body.gt-app-body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.gt-hub-body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+svg {
+  display: block;
+}
+
+::selection {
+  background: var(--golden-accent);
+  color: var(--golden-accent-foreground);
+}
+
+:focus-visible {
+  outline: 2px solid var(--golden-chart-5);
+  outline-offset: 2px;
+}
+
+/* ---------- Typography ---------- */
+
+.gt-display {
+  font-family: var(--golden-font-display);
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+}
+
+.gt-serif {
+  font-family: var(--golden-font-display);
+}
+
+.gt-mono {
+  font-family: var(--golden-font-mono);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+}
+
+.gt-label {
+  font-family: var(--golden-font-body);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--golden-muted-foreground);
+}
+
+.gt-caption {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--golden-muted-foreground);
+}
+
+.gt-h2 {
+  font-family: var(--golden-font-display);
+  font-size: clamp(24px, 2.6vw, 34px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+}
+
+/* ---------- Utilities ---------- */
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mono {
+  font-family: var(--golden-font-mono);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+}
+
+.muted {
+  color: var(--golden-muted-foreground);
+}
+
+.gap-4 { gap: 4px; }
+.gap-6 { gap: 6px; }
+.gap-8 { gap: 8px; }
+.gap-10 { gap: 10px; }
+.gap-12 { gap: 12px; }
+.gap-14 { gap: 14px; }
+.gap-16 { gap: 16px; }
+.gap-20 { gap: 20px; }
+.gap-24 { gap: 24px; }
+
+.mt-4 { margin-top: 4px; }
+.mt-6 { margin-top: 6px; }
+.mt-8 { margin-top: 8px; }
+.mt-10 { margin-top: 10px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mt-24 { margin-top: 24px; }
+.mt-28 { margin-top: 28px; }
+.mt-32 { margin-top: 32px; }
+
+/* ---------- Buttons, chips, inputs ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 33px;
+  padding: 0 12px;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-sm);
+  background: var(--golden-card);
+  color: var(--golden-foreground);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.btn:hover {
+  background: var(--golden-muted);
+  border-color: var(--golden-accent);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  background: var(--golden-primary);
+  border-color: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+}
+
+.btn--primary:hover {
+  background: var(--golden-primary-hover);
+  border-color: var(--golden-primary-hover);
+}
+
+.btn--accent {
+  background: var(--golden-accent);
+  border-color: var(--golden-accent);
+  color: var(--golden-accent-foreground);
+}
+
+.btn--accent:hover {
+  background: var(--golden-accent-hover);
+  border-color: var(--golden-accent-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--golden-muted-foreground);
+}
+
+.btn--ghost:hover {
+  background: var(--golden-muted);
+  border-color: transparent;
+  color: var(--golden-foreground);
+}
+
+.btn--sm {
+  height: 28px;
+  padding: 0 9px;
+  font-size: 10.5px;
+  gap: 5px;
+}
+
+.btn--icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.btn--icon.btn--sm {
+  width: 28px;
+  height: 28px;
+}
+
+.btn .icon,
+.icon-btn .icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: var(--golden-muted-foreground);
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.icon-btn:hover {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+}
+
+.icon-btn .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 23px;
+  padding: 0 8px;
+  border: 1px solid var(--golden-border);
+  border-radius: 7px;
+  background: var(--golden-card);
+  color: var(--golden-muted-foreground);
+  font-size: 10px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.chip--active {
+  background: var(--golden-primary);
+  border-color: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+}
+
+.chip--muted {
+  background: var(--golden-muted);
+  border-color: transparent;
+}
+
+.chip--accent {
+  background: var(--golden-chart-5-soft);
+  border-color: var(--golden-chart-5);
+  color: var(--golden-chart-2);
+}
+
+.chip--warn {
+  background: var(--golden-muted);
+  border-color: transparent;
+  color: var(--golden-chart-2);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--golden-muted-foreground);
+  flex-shrink: 0;
+}
+
+.dot--high { background: var(--golden-chart-4); }
+.dot--low { background: var(--golden-accent); }
+.dot--warn { background: var(--golden-chart-5); }
+.dot--error { background: var(--golden-destructive); }
+.dot--live { background: var(--golden-chart-4); box-shadow: 0 0 0 3px var(--golden-muted); }
+
+.input {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+  color: var(--golden-foreground);
+  font-size: 11.5px;
+  outline: none;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.input::placeholder {
+  color: var(--golden-muted-foreground);
+}
+
+.input:focus {
+  border-color: var(--golden-accent);
+  background: var(--golden-card);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 9px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+  color: var(--golden-muted-foreground);
+}
+
+.search-box .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font-size: 11.5px;
+  color: var(--golden-foreground);
+}
+
+.search-box input::placeholder {
+  color: var(--golden-muted-foreground);
+}
+
+.hairline {
+  border-top: 1px solid var(--golden-border);
+}
+
+.panel {
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-md);
+  background: var(--golden-card);
+}
+
+.panel--lg {
+  border-radius: var(--golden-radius-lg);
+}
+
+.panel--muted {
+  background: var(--golden-muted);
+  border-color: transparent;
+}
+
+/* ---------- Brand mark ---------- */
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+  flex-shrink: 0;
+}
+
+.brand-mark .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.brand-word {
+  font-family: var(--golden-font-display);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+.brand-word em {
+  font-style: normal;
+  color: var(--golden-muted-foreground);
+}
+
+/* ==========================================================================
+   Hub
+   ========================================================================== */
+
+.hub-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--golden-background);
+}
+
+.hub-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 66px;
+  padding: 0 clamp(18px, 4vw, 56px);
+  border-bottom: 1px solid var(--golden-border);
+  background: color-mix(in srgb, var(--golden-background) 93%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.hub-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.hub-brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.hub-brand-copy .gt-label {
+  max-width: 250px;
+  overflow: hidden;
+  font-size: 8.5px;
+  letter-spacing: 0.18em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hub-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hub-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  color: var(--golden-muted-foreground);
+  font-size: 11.5px;
+  transition: color 160ms ease, background-color 160ms ease;
+}
+
+.hub-nav a:hover {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+}
+
+.hub-nav a.is-active {
+  color: var(--golden-foreground);
+  font-weight: 600;
+}
+
+.hub-nav a.is-active::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -11px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--golden-chart-5);
+}
+
+.hub-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.hub-main {
+  width: min(1320px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: clamp(34px, 5vw, 72px) 0 56px;
+  flex: 1;
+}
+
+.hub-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(340px, 0.94fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.hub-hero::before {
+  content: "";
+  position: absolute;
+  inset: -80px -10% auto auto;
+  width: 760px;
+  height: 620px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(247, 155, 69, 0.10), transparent 64%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hub-hero-copy,
+.hub-hero-card {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  max-width: 14ch;
+  margin: 0;
+  font-family: var(--golden-font-display);
+  font-size: clamp(42px, 5.2vw, 76px);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+  text-wrap: balance;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.hero-title .soft {
+  color: var(--golden-muted-foreground);
+}
+
+.hero-sub {
+  max-width: 45ch;
+  margin: 22px 0 0;
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: var(--golden-muted-foreground);
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 28px;
+}
+
+.hero-facts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 30px;
+  color: var(--golden-muted-foreground);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+
+.hero-facts span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.hero-facts .dot {
+  width: 4px;
+  height: 4px;
+  background: var(--golden-chart-5);
+}
+
+.hub-hero-card {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-lg);
+  background: var(--golden-card);
+  min-height: 360px;
+}
+
+.hero-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 4px 0;
+}
+
+.hero-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.hero-card-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--golden-font-mono);
+  font-size: 9px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.hero-schematic {
+  width: 100%;
+  height: auto;
+  border-radius: var(--golden-radius-md);
+  background: var(--golden-muted);
+}
+
+.hero-card-foot {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-sm);
+  background: var(--golden-border);
+}
+
+.hero-metric {
+  padding: 10px 11px;
+  background: var(--golden-card);
+}
+
+.hero-metric-value {
+  font-family: var(--golden-font-mono);
+  font-size: 17px;
+  line-height: 1;
+  color: var(--golden-foreground);
+}
+
+.hero-metric-label {
+  margin-top: 5px;
+  font-size: 9px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.hub-section {
+  margin-top: clamp(46px, 7vw, 86px);
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  margin: 0;
+  font-family: var(--golden-font-display);
+  font-size: clamp(24px, 2.5vw, 33px);
+  font-weight: 500;
+  letter-spacing: -0.022em;
+  line-height: 1.18;
+}
+
+.section-side {
+  max-width: 42ch;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--golden-muted-foreground);
+  text-align: right;
+}
+
+.domain-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.domain-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 196px;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-lg);
+  background: var(--golden-card);
+  transition: border-color 180ms ease, transform 180ms ease, background-color 180ms ease;
+}
+
+.domain-card:hover {
+  border-color: var(--golden-accent);
+  background: color-mix(in srgb, var(--golden-muted) 36%, var(--golden-card));
+  transform: translateY(-2px);
+}
+
+.domain-card--lead { grid-column: span 7; }
+.domain-card--side { grid-column: span 5; }
+.domain-card--third { grid-column: span 4; min-height: 176px; }
+
+.domain-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.domain-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--golden-muted);
+  color: var(--golden-chart-2);
+  flex-shrink: 0;
+}
+
+.domain-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.domain-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  color: var(--golden-muted-foreground);
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.domain-card:hover .domain-arrow {
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+  transform: translate(1px, -1px);
+}
+
+.domain-arrow .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.domain-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.domain-title {
+  margin: 0;
+  font-family: var(--golden-font-display);
+  font-size: 20px;
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.domain-card--third .domain-title {
+  font-size: 17px;
+}
+
+.domain-card--third .domain-copy,
+.domain-card--third .domain-meta {
+  max-width: 58%;
+  position: relative;
+  z-index: 1;
+}
+
+.domain-card--third .domain-illustration {
+  width: 34%;
+  max-width: 130px;
+  opacity: 0.72;
+}
+
+.domain-desc {
+  margin: 0;
+  max-width: 38ch;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--golden-muted-foreground);
+}
+
+.domain-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.domain-illustration {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 44%;
+  max-width: 240px;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.template-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-md);
+  background: var(--golden-card);
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.template-card:hover {
+  border-color: var(--golden-accent);
+  transform: translateY(-2px);
+}
+
+.template-thumb {
+  aspect-ratio: 16 / 8.5;
+  background: var(--golden-muted);
+  border-bottom: 1px solid var(--golden-border);
+  overflow: hidden;
+}
+
+.template-thumb svg {
+  width: 100%;
+  height: 100%;
+}
+
+.template-body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 14px 14px;
+}
+
+.template-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.template-meta {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.template-arrow {
+  color: var(--golden-muted-foreground);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.template-arrow .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.project-list {
+  overflow: hidden;
+  border: 1px solid var(--golden-border);
+  border-radius: var(--golden-radius-md);
+  background: var(--golden-card);
+}
+
+.project-list-head,
+.project-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) 120px 130px 40px;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+}
+
+.project-list-head {
+  height: 34px;
+  border-bottom: 1px solid var(--golden-border);
+  background: var(--golden-muted);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--golden-muted-foreground);
+}
+
+.project-row {
+  min-height: 54px;
+  border-bottom: 1px solid var(--golden-border);
+  transition: background-color 160ms ease;
+}
+
+.project-row:last-child {
+  border-bottom: 0;
+}
+
+.project-row:hover {
+  background: color-mix(in srgb, var(--golden-muted) 44%, var(--golden-card));
+}
+
+.project-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.project-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: var(--golden-muted);
+  color: var(--golden-chart-2);
+  flex-shrink: 0;
+}
+
+.project-glyph .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.project-name-copy {
+  min-width: 0;
+}
+
+.project-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-sub {
+  margin-top: 2px;
+  font-size: 9.5px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-time {
+  font-family: var(--golden-font-mono);
+  font-size: 10px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.project-state {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9.5px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.hub-footer {
+  border-top: 1px solid var(--golden-border);
+  background: var(--golden-muted);
+}
+
+.hub-footer-inner {
+  width: min(1320px, calc(100% - 40px));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  font-size: 9.5px;
+  color: var(--golden-muted-foreground);
+}
+
+.hub-footer-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hub-footer-links a:hover {
+  color: var(--golden-foreground);
+}
+
+/* ==========================================================================
+   Workspace shell
+   ========================================================================== */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr) 316px;
+  grid-template-rows: 54px minmax(0, 1fr) 236px 30px;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--golden-background);
+}
+
+.app-topbar {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--golden-border);
+  background: var(--golden-background);
+}
+
+.topbar-home {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.topbar-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--golden-border);
+  flex-shrink: 0;
+}
+
+.project-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  max-width: 190px;
+  flex-shrink: 1;
+}
+
+.project-block .project-name {
+  display: block;
+  font-family: var(--golden-font-display);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-block .project-meta {
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.domain-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--golden-border);
+  border-radius: 11px;
+  background: var(--golden-muted);
+  margin-left: auto;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.domain-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.domain-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 27px;
+  padding: 0 9px;
+  border-radius: 8px;
+  color: var(--golden-muted-foreground);
+  font-size: 10.5px;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.domain-tab:hover {
+  color: var(--golden-foreground);
+}
+
+.domain-tab.is-active {
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+}
+
+.domain-tab .icon {
+  width: 12px;
+  height: 12px;
+}
+
+.domain-tab::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+  background-color: currentColor;
+  -webkit-mask: var(--domain-icon) center / contain no-repeat;
+  mask: var(--domain-icon) center / contain no-repeat;
+}
+
+.domain-tab > .icon {
+  display: none;
+}
+
+.domain-tab:nth-child(1) { --domain-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.7%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%22M3.5%208h4v8h5V8h5v8h3%22%2F%3E%3Ccircle%20cx%3D%223.5%22%20cy%3D%228%22%20r%3D%221.2%22%20fill%3D%22currentColor%22%20stroke%3D%22none%22%2F%3E%3Ccircle%20cx%3D%2220.5%22%20cy%3D%2216%22%20r%3D%221.2%22%20fill%3D%22currentColor%22%20stroke%3D%22none%22%2F%3E%3Cpath%20d%3D%22M6.5%2018.5h11%22%2F%3E%3C%2Fsvg%3E"); }
+.domain-tab:nth-child(2) { --domain-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.7%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%22M3.5%2014c3%200%203-8%206-8s3%208%206%208%203-8%205-8%22%2F%3E%3Cpath%20d%3D%22M3.5%2018.5h17%22%2F%3E%3Cpath%20d%3D%22M7.5%2018.5v2M16.5%2018.5v2%22%2F%3E%3C%2Fsvg%3E"); }
+.domain-tab:nth-child(3) { --domain-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.7%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%22M13%203.5%207.5%2013h4l-1.2%207.5L17%2010.5h-4z%22%2F%3E%3Cpath%20d%3D%22M3.5%2012h4M16.5%2012h4%22%2F%3E%3Ccircle%20cx%3D%223.5%22%20cy%3D%2212%22%20r%3D%221.15%22%20fill%3D%22currentColor%22%20stroke%3D%22none%22%2F%3E%3Ccircle%20cx%3D%2220.5%22%20cy%3D%2212%22%20r%3D%221.15%22%20fill%3D%22currentColor%22%20stroke%3D%22none%22%2F%3E%3C%2Fsvg%3E"); }
+.domain-tab:nth-child(4) { --domain-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.7%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%227%22%20y%3D%225%22%20width%3D%2210%22%20height%3D%2214%22%20rx%3D%222%22%2F%3E%3Cpath%20d%3D%22M9.5%205a2.5%202.5%200%200%200%205%200%22%2F%3E%3Ccircle%20cx%3D%229.4%22%20cy%3D%2216.8%22%20r%3D%220.85%22%20fill%3D%22currentColor%22%20stroke%3D%22none%22%2F%3E%3Cpath%20d%3D%22M4%208.5h3M4%2012h3M4%2015.5h3M17%208.5h3M17%2012h3M17%2015.5h3%22%2F%3E%3Cpath%20d%3D%22M10.5%2010.5h3M10.5%2013.5h3%22%2F%3E%3C%2Fsvg%3E"); }
+.domain-tab:nth-child(5) { --domain-icon: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%271.7%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%227%22%20y%3D%227%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%221.8%22%2F%3E%3Ccircle%20cx%3D%229.3%22%20cy%3D%2214.7%22%20r%3D%220.85%22%20fill%3D%22currentColor%22%20stroke%3D%22none%22%2F%3E%3Cpath%20d%3D%22M9.5%203.5V7M12%203.5V7M14.5%203.5V7M9.5%2017v3.5M12%2017v3.5M14.5%2017v3.5M3.5%209.5H7M3.5%2012H7M3.5%2014.5H7M17%209.5h3.5M17%2012h3.5M17%2014.5h3.5%22%2F%3E%3Cpath%20d%3D%22M10.5%2011.5h3v2h-3z%22%2F%3E%3C%2Fsvg%3E"); }
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.engine-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 7px;
+  background: var(--golden-muted);
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.engine-chip .dot {
+  width: 5px;
+  height: 5px;
+  background: var(--golden-chart-5);
+}
+
+/* ---------- Palette ---------- */
+
+.app-palette {
+  grid-column: 1;
+  grid-row: 2 / 4;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--golden-border);
+  background: var(--golden-background);
+}
+
+.palette-head {
+  padding: 13px 13px 11px;
+  border-bottom: 1px solid var(--golden-border);
+}
+
+.palette-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.palette-title {
+  font-family: var(--golden-font-display);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.palette-count {
+  font-family: var(--golden-font-mono);
+  font-size: 9px;
+  color: var(--golden-muted-foreground);
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 9px;
+  padding-bottom: 1px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filter-row::-webkit-scrollbar {
+  display: none;
+}
+
+.palette-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 11px 13px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.part-group + .part-group {
+  margin-top: 15px;
+}
+
+.part-group-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--golden-muted-foreground);
+}
+
+.part-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.part-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding: 6px 7px 7px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.part-card:hover {
+  border-color: var(--golden-accent);
+  background: var(--golden-muted);
+}
+
+.part-card.is-selected {
+  border-color: var(--golden-chart-5);
+  background: color-mix(in srgb, var(--golden-chart-5) 7%, var(--golden-card));
+}
+
+.part-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  color: var(--golden-chart-2);
+}
+
+.part-symbol svg {
+  width: 44px;
+  height: 28px;
+}
+
+.part-name {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.part-meta {
+  font-size: 8.5px;
+  line-height: 1.25;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.palette-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 13px;
+  border-top: 1px solid var(--golden-border);
+  background: var(--golden-muted);
+  font-size: 9px;
+  color: var(--golden-muted-foreground);
+}
+
+/* ---------- Canvas ---------- */
+
+.app-canvas {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--golden-background);
+}
+
+.canvas-surface {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--golden-border) 1px, transparent 1px);
+  background-size: 18px 18px;
+  background-position: -9px -9px;
+}
+
+.canvas-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%, transparent 52%, color-mix(in srgb, var(--golden-muted) 42%, transparent) 100%);
+  pointer-events: none;
+}
+
+.schematic {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-toolbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 3px;
+  border: 1px solid var(--golden-border);
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--golden-card) 93%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border-radius: 8px;
+  color: var(--golden-muted-foreground);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.tool-btn:hover {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+}
+
+.tool-btn.is-active {
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+}
+
+.tool-btn .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.tool-sep {
+  width: 1px;
+  height: 17px;
+  margin: 0 3px;
+  background: var(--golden-border);
+}
+
+.canvas-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 27px;
+  padding: 0 9px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--golden-card) 93%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.canvas-hint {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--golden-border);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--golden-card) 90%, transparent);
+  color: var(--golden-muted-foreground);
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.canvas-hint .icon,
+.canvas-hint svg {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+}
+
+.zoom-box {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 2px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--golden-card) 93%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.zoom-box .tool-btn {
+  width: 25px;
+  height: 25px;
+}
+
+.zoom-value {
+  min-width: 42px;
+  text-align: center;
+  font-family: var(--golden-font-mono);
+  font-size: 9px;
+  color: var(--golden-muted-foreground);
+}
+
+.selection-tag {
+  position: absolute;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 7px;
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+  box-shadow: var(--golden-shadow-sm);
+}
+
+.selection-tag .dot {
+  width: 5px;
+  height: 5px;
+  background: var(--golden-chart-5);
+}
+
+/* ---------- Schematic primitives ---------- */
+
+.sch-wire {
+  fill: none;
+  stroke: var(--golden-chart-2);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sch-wire--power { stroke: var(--golden-chart-4); }
+.sch-wire--analog { stroke: var(--golden-chart-5); }
+.sch-wire--muted { stroke: var(--golden-accent); }
+.sch-wire--thin { stroke-width: 0.9; }
+
+.sch-junction {
+  fill: var(--golden-chart-2);
+}
+
+.sch-chip {
+  fill: var(--golden-card);
+  stroke: var(--golden-chart-2);
+  stroke-width: 1.4;
+}
+
+.sch-chip--soft {
+  fill: var(--golden-muted);
+}
+
+.sch-chip--selected {
+  stroke: var(--golden-chart-5);
+  stroke-width: 2.2;
+}
+
+.sch-chip--board {
+  fill: var(--golden-muted);
+  stroke: var(--golden-chart-2);
+  stroke-width: 1.3;
+}
+
+.sch-chip--dark {
+  fill: var(--golden-chart-2);
+  stroke: var(--golden-chart-2);
+}
+
+.sch-pin {
+  fill: none;
+  stroke: var(--golden-chart-2);
+  stroke-width: 1;
+}
+
+.sch-pin--power {
+  stroke: var(--golden-chart-4);
+}
+
+.sch-pad {
+  fill: var(--golden-accent);
+  stroke: var(--golden-chart-2);
+  stroke-width: 0.6;
+}
+
+.sch-label {
+  fill: var(--golden-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 8.5px;
+}
+
+.sch-label--muted { fill: var(--golden-muted-foreground); }
+.sch-label--on-dark { fill: var(--golden-primary-foreground); }
+.sch-label--tiny { font-size: 7.2px; }
+.sch-label--bold { font-weight: 600; }
+
+.sch-label--serif {
+  font-family: var(--golden-font-display);
+  font-size: 11px;
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+}
+
+.sch-netlabel {
+  fill: var(--golden-muted-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 8px;
+  paint-order: stroke;
+  stroke: var(--golden-background);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.sch-value {
+  fill: var(--golden-chart-4);
+  font-family: var(--golden-font-mono);
+  font-size: 8.5px;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: var(--golden-background);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.sch-handle {
+  fill: var(--golden-card);
+  stroke: var(--golden-chart-5);
+  stroke-width: 1.4;
+}
+
+.sch-seg-on {
+  stroke: var(--golden-chart-5);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.sch-seg-off {
+  stroke: var(--golden-accent);
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.sch-led {
+  fill: var(--golden-chart-5);
+}
+
+.sch-led-glow {
+  fill: var(--golden-chart-5-soft);
+}
+
+.sch-grid {
+  stroke: var(--golden-border);
+  stroke-width: 1;
+}
+
+.sch-grid-strong {
+  stroke: var(--golden-accent);
+  stroke-width: 1;
+}
+
+.sch-node {
+  fill: var(--golden-chart-5);
+}
+
+/* ---------- Inspector ---------- */
+
+.app-inspector {
+  grid-column: 3;
+  grid-row: 2 / 4;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-left: 1px solid var(--golden-border);
+  background: var(--golden-background);
+}
+
+.inspector-head {
+  padding: 13px 15px 11px;
+  border-bottom: 1px solid var(--golden-border);
+}
+
+.inspector-kicker {
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--golden-muted-foreground);
+}
+
+.inspector-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.inspector-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  font-family: var(--golden-font-display);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.inspector-title .chip {
+  height: 19px;
+  font-size: 8.5px;
+  padding: 0 6px;
+}
+
+.inspector-tabs {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 15px;
+  border-bottom: 1px solid var(--golden-border);
+}
+
+.inspector-tab {
+  position: relative;
+  padding: 8px 0;
+  font-size: 10.5px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.inspector-tab.is-active {
+  color: var(--golden-foreground);
+  font-weight: 600;
+}
+
+.inspector-tab.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--golden-chart-5);
+}
+
+.inspector-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px 15px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.inspect-section + .inspect-section {
+  margin-top: 15px;
+}
+
+.inspect-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--golden-muted-foreground);
+}
+
+.param-list {
+  overflow: hidden;
+  border: 1px solid var(--golden-border);
+  border-radius: 11px;
+  background: var(--golden-card);
+}
+
+.param-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 30px;
+  padding: 5px 9px;
+  border-bottom: 1px solid var(--golden-border);
+  font-size: 10.5px;
+}
+
+.param-row:last-child {
+  border-bottom: 0;
+}
+
+.param-key {
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.param-val {
+  font-family: var(--golden-font-mono);
+  font-size: 10px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pin-table,
+.reg-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5px;
+}
+
+.pin-table th,
+.reg-table th {
+  padding: 0 4px 5px;
+  border-bottom: 1px solid var(--golden-border);
+  color: var(--golden-muted-foreground);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pin-table td,
+.reg-table td {
+  padding: 5px 4px;
+  border-bottom: 1px solid var(--golden-border);
+  white-space: nowrap;
+}
+
+.pin-table tr:last-child td,
+.reg-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.pin-table td:last-child,
+.reg-table td:last-child {
+  text-align: right;
+  font-family: var(--golden-font-mono);
+}
+
+.net-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: 5px;
+  background: var(--golden-muted);
+  font-family: var(--golden-font-mono);
+  font-size: 8.5px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+.ai-card {
+  padding: 11px;
+  border: 1px solid var(--golden-accent);
+  border-radius: 14px;
+  background: var(--golden-muted);
+}
+
+.ai-card-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ai-card-title .icon {
+  width: 14px;
+  height: 14px;
+  color: var(--golden-chart-5);
+}
+
+.ai-card-desc {
+  margin-top: 5px;
+  font-size: 9.5px;
+  line-height: 1.6;
+  color: var(--golden-muted-foreground);
+}
+
+.ai-snippet {
+  margin-top: 8px;
+  max-height: 74px;
+  overflow: hidden;
+  padding: 7px 8px;
+  border: 1px solid var(--golden-border);
+  border-radius: 8px;
+  background: var(--golden-card);
+  font-family: var(--golden-font-mono);
+  font-size: 8px;
+  line-height: 1.55;
+  color: var(--golden-muted-foreground);
+  white-space: pre;
+}
+
+.check-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--golden-border);
+  font-size: 9.5px;
+  line-height: 1.5;
+}
+
+.check-row:last-child {
+  border-bottom: 0;
+}
+
+.check-row .dot {
+  margin-top: 4px;
+}
+
+.check-copy {
+  min-width: 0;
+}
+
+.check-copy strong {
+  font-weight: 600;
+}
+
+.check-copy span {
+  display: block;
+  margin-top: 1px;
+  color: var(--golden-muted-foreground);
+}
+
+/* ---------- Firmware / MCU ---------- */
+
+.fw-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 10px;
+  border: 1px dashed var(--golden-accent);
+  border-radius: 12px;
+  background: var(--golden-muted);
+  text-align: center;
+}
+
+.fw-drop .icon {
+  width: 18px;
+  height: 18px;
+  color: var(--golden-chart-5);
+}
+
+.fw-drop-title {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.fw-drop-sub {
+  font-size: 8.5px;
+  color: var(--golden-muted-foreground);
+}
+
+.fw-file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 7px 8px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+}
+
+.fw-file-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--golden-muted);
+  color: var(--golden-chart-2);
+  flex-shrink: 0;
+}
+
+.fw-file-icon .icon {
+  width: 13px;
+  height: 13px;
+}
+
+.fw-file-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.fw-file-name {
+  font-family: var(--golden-font-mono);
+  font-size: 9.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fw-file-meta {
+  margin-top: 1px;
+  font-size: 8px;
+  color: var(--golden-muted-foreground);
+}
+
+.fw-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 8.5px;
+  color: var(--golden-chart-4);
+  white-space: nowrap;
+}
+
+.progress {
+  height: 4px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--golden-accent);
+}
+
+.progress > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--golden-chart-4);
+}
+
+.btn-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.btn-row .btn {
+  flex: 1;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.stat-box {
+  padding: 7px 8px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+  min-width: 0;
+}
+
+.stat-value {
+  font-family: var(--golden-font-mono);
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-label {
+  margin-top: 4px;
+  font-size: 8px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+}
+
+/* ---------- Dock ---------- */
+
+.app-dock {
+  grid-column: 2;
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-top: 1px solid var(--golden-border);
+  background: var(--golden-card);
+}
+
+.dock-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 37px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--golden-border);
+  background: var(--golden-card);
+  flex-shrink: 0;
+}
+
+.dock-tabs {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.dock-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.dock-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 25px;
+  padding: 0 8px;
+  border-radius: 7px;
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.dock-tab:hover {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+}
+
+.dock-tab.is-active {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+  font-weight: 600;
+}
+
+.dock-tab .icon {
+  width: 12px;
+  height: 12px;
+}
+
+.dock-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.dock-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.dock-wave {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  border-right: 1px solid var(--golden-border);
+  background: var(--golden-background);
+  overflow: hidden;
+}
+
+.scope-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.wave-grid {
+  stroke: var(--golden-border);
+  stroke-width: 1;
+}
+
+.wave-grid--strong {
+  stroke: var(--golden-accent);
+  stroke-width: 1;
+}
+
+.wave-label {
+  fill: var(--golden-muted-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 7.5px;
+}
+
+.wave-channel {
+  fill: var(--golden-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.trace-1 { stroke: var(--golden-chart-2); stroke-width: 1.5; fill: none; }
+.trace-2 { stroke: var(--golden-chart-4); stroke-width: 1.5; fill: none; }
+.trace-3 { stroke: var(--golden-chart-5); stroke-width: 1.5; fill: none; }
+.trace-4 { stroke: var(--golden-chart-3); stroke-width: 1.5; fill: none; }
+
+.trace--thin { stroke-width: 1.1; }
+
+.wave-cursor {
+  stroke: var(--golden-chart-5);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.cursor-tag {
+  fill: var(--golden-chart-5);
+}
+
+.cursor-tag-text {
+  fill: var(--golden-primary-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 7px;
+  font-weight: 600;
+}
+
+.dock-side {
+  width: 208px;
+  flex-shrink: 0;
+  padding: 8px 10px 10px;
+  overflow: auto;
+  background: var(--golden-card);
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.dock-side .inspect-label {
+  margin-bottom: 4px;
+}
+
+.dock-side .param-row {
+  min-height: 25px;
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--golden-border);
+  font-size: 9px;
+}
+
+.dock-side .param-key {
+  font-size: 8.5px;
+}
+
+.dock-side .param-val {
+  font-size: 9px;
+  color: var(--golden-foreground);
+}
+
+.channel-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  font-size: 8.5px;
+  color: var(--golden-muted-foreground);
+}
+
+.channel-swatch {
+  width: 12px;
+  height: 2px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.channel-swatch--1 { background: var(--golden-chart-2); }
+.channel-swatch--2 { background: var(--golden-chart-4); }
+.channel-swatch--3 { background: var(--golden-chart-5); }
+
+.channel-value {
+  margin-left: auto;
+  font-family: var(--golden-font-mono);
+  color: var(--golden-foreground);
+  white-space: nowrap;
+}
+
+.terminal {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  padding: 10px 13px;
+  background: var(--golden-background);
+  font-family: var(--golden-font-mono);
+  font-size: 9.5px;
+  line-height: 1.9;
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.terminal-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.terminal-time {
+  color: var(--golden-muted-foreground);
+}
+
+.terminal-ok { color: var(--golden-chart-4); }
+.terminal-warn { color: var(--golden-chart-5); }
+.terminal-dim { color: var(--golden-muted-foreground); }
+
+.terminal-prompt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--golden-muted-foreground);
+}
+
+.terminal-cursor {
+  width: 6px;
+  height: 11px;
+  background: var(--golden-chart-4);
+  animation: gt-blink 1.2s steps(1) infinite;
+}
+
+.burn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.burn-step {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 6px;
+  border-radius: 7px;
+  background: var(--golden-muted);
+  font-size: 8.5px;
+  color: var(--golden-muted-foreground);
+}
+
+.burn-step .icon {
+  width: 11px;
+  height: 11px;
+  color: var(--golden-chart-4);
+}
+
+/* ---------- Status bar ---------- */
+
+.app-statusbar {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 0 12px;
+  border-top: 1px solid var(--golden-border);
+  background: var(--golden-muted);
+  color: var(--golden-muted-foreground);
+  font-size: 8.5px;
+  line-height: 1;
+}
+
+.status-left,
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-center {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-item .icon {
+  width: 11px;
+  height: 11px;
+}
+
+/* ==========================================================================
+   AI drawer
+   ========================================================================== */
+
+.ai-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--golden-scrim);
+  backdrop-filter: blur(2px);
+}
+
+.ai-drawer {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 41;
+  display: flex;
+  flex-direction: column;
+  width: min(620px, calc(100vw - 20px));
+  overflow: hidden;
+  border: 1px solid var(--golden-accent);
+  border-radius: var(--golden-radius-lg);
+  background: var(--golden-card);
+  box-shadow: var(--golden-shadow-float);
+}
+
+.ai-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--golden-border);
+}
+
+.ai-title {
+  margin: 0;
+  font-family: var(--golden-font-display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.ai-sub {
+  margin-top: 3px;
+  font-size: 10px;
+  color: var(--golden-muted-foreground);
+}
+
+.ai-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px 18px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.ai-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.seg {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 2px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-muted);
+}
+
+.seg-item {
+  display: inline-flex;
+  align-items: center;
+  height: 25px;
+  padding: 0 8px;
+  border-radius: 7px;
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.seg-item.is-active {
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 25px;
+  padding: 0 8px;
+  border-radius: 7px;
+  color: var(--golden-muted-foreground);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.toggle-track {
+  position: relative;
+  width: 22px;
+  height: 13px;
+  border-radius: 999px;
+  background: var(--golden-accent);
+  flex-shrink: 0;
+}
+
+.toggle-track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--golden-card);
+  transition: left 160ms ease;
+}
+
+.toggle.is-on {
+  color: var(--golden-foreground);
+}
+
+.toggle.is-on .toggle-track {
+  background: var(--golden-chart-4);
+}
+
+.toggle.is-on .toggle-track::after {
+  left: 11px;
+}
+
+.netlist-code {
+  overflow: auto;
+  border: 1px solid var(--golden-border);
+  border-radius: 13px;
+  background: var(--golden-muted);
+  padding: 9px 0;
+  font-family: var(--golden-font-mono);
+  font-size: 9.5px;
+  line-height: 1.72;
+  max-height: calc(100vh - 330px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--golden-accent) transparent;
+}
+
+.nl-line {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+}
+
+.nl-num {
+  padding-right: 8px;
+  text-align: right;
+  color: var(--golden-muted-foreground);
+  opacity: 0.55;
+  user-select: none;
+}
+
+.nl-text {
+  padding-right: 12px;
+  white-space: pre;
+  color: var(--golden-foreground);
+}
+
+.nl-comment { color: var(--golden-muted-foreground); }
+.nl-section { color: var(--golden-chart-4); font-weight: 600; }
+.nl-key { color: var(--golden-chart-2); font-weight: 600; }
+.nl-warn { color: var(--golden-chart-5); }
+.nl-link { color: var(--golden-chart-4); }
+
+.ai-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 18px 13px;
+  border-top: 1px solid var(--golden-border);
+  background: var(--golden-card);
+}
+
+.ai-meta {
+  min-width: 0;
+  font-size: 8.5px;
+  color: var(--golden-muted-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ---------- Toast ---------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 42px;
+  z-index: 60;
+  padding: 8px 13px;
+  border-radius: 9px;
+  background: var(--golden-primary);
+  color: var(--golden-primary-foreground);
+  font-size: 10.5px;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(8px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  max-width: min(420px, calc(100vw - 32px));
+  text-align: center;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.copy-buffer {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1240px) {
+  .app-shell {
+    grid-template-columns: 236px minmax(0, 1fr) 292px;
+  }
+  .domain-tabs {
+    gap: 0;
+  }
+  .domain-tab {
+    padding: 0 7px;
+  }
+  .domain-card--side .domain-illustration {
+    width: 34%;
+  }
+}
+
+@media (max-width: 1080px) {
+  .app-shell {
+    grid-template-columns: 228px minmax(0, 1fr);
+    grid-template-rows: 54px minmax(0, 1fr) 228px 30px;
+  }
+  .app-inspector {
+    display: none;
+  }
+  .hub-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+  .hub-hero-card {
+    min-height: 0;
+  }
+  .domain-card--lead,
+  .domain-card--side,
+  .domain-card--third {
+    grid-column: span 6;
+  }
+  .domain-illustration {
+    display: none;
+  }
+  .template-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .project-list-head,
+  .project-row {
+    grid-template-columns: minmax(0, 1.6fr) 100px 36px;
+  }
+  .project-list-head > :nth-child(3),
+  .project-row > :nth-child(3) {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 54px minmax(0, 1fr) 30px;
+  }
+  .app-palette,
+  .app-dock {
+    display: none;
+  }
+  .app-canvas {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .project-block,
+  .topbar-divider,
+  .engine-chip {
+    display: none;
+  }
+  .domain-tabs {
+    margin-left: auto;
+  }
+  .hub-nav {
+    display: none;
+  }
+  .hub-main {
+    width: calc(100% - 28px);
+    padding-top: 28px;
+  }
+  .hub-topbar {
+    height: 58px;
+    padding: 0 14px;
+    gap: 12px;
+  }
+  .hero-title {
+    font-size: clamp(34px, 8vw, 52px);
+    max-width: 16ch;
+  }
+  .hero-sub {
+    font-size: 12.5px;
+  }
+  .hub-hero::before {
+    display: none;
+  }
+  .domain-card--lead,
+  .domain-card--side,
+  .domain-card--third {
+    grid-column: span 12;
+    min-height: 0;
+  }
+  .domain-illustration {
+    display: none;
+  }
+  .template-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .section-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .section-side {
+    text-align: left;
+  }
+  .project-list-head {
+    display: none;
+  }
+  .project-row {
+    grid-template-columns: minmax(0, 1fr) 34px;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .project-row > :nth-child(2),
+  .project-row > :nth-child(3) {
+    display: none;
+  }
+  .hub-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .status-center {
+    display: none;
+  }
+  .canvas-hint {
+    display: none;
+  }
+  .canvas-status {
+    display: none;
+  }
+  .ai-drawer {
+    top: 6px;
+    right: 6px;
+    bottom: 6px;
+    width: calc(100vw - 12px);
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hub-actions .btn--ghost {
+    display: none;
+  }
+  .hub-brand-copy .gt-label {
+    max-width: 150px;
+  }
+  .topbar-home .brand-word {
+    display: none;
+  }
+  .topbar-actions .btn--primary,
+  .topbar-actions > .icon-btn {
+    display: none;
+  }
+  .domain-tabs {
+    max-width: 100%;
+  }
+  .domain-tab {
+    font-size: 9px;
+    padding: 0 5px;
+  }
+  .hero-actions .btn {
+    height: 34px;
+  }
+  .hero-facts {
+    gap: 10px;
+  }
+  .status-right span:nth-child(2) {
+    display: none;
+  }
+  .ai-head {
+    padding: 13px 14px 10px;
+  }
+  .ai-body {
+    padding: 10px 14px;
+  }
+  .ai-foot {
+    padding: 9px 14px 12px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ai-actions {
+    justify-content: flex-end;
+  }
+}
+
+/* ---------- Motion ---------- */
+
+@keyframes gt-blink {
+  0%, 45% { opacity: 1; }
+  46%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--golden-background);
+    --color-foreground: var(--golden-foreground);
+    --color-card: var(--golden-card);
+    --color-card-foreground: var(--golden-card-foreground);
+    --color-popover: var(--golden-popover);
+    --color-popover-foreground: var(--golden-popover-foreground);
+    --color-primary: var(--golden-primary);
+    --color-primary-foreground: var(--golden-primary-foreground);
+    --color-secondary: var(--golden-secondary);
+    --color-secondary-foreground: var(--golden-secondary-foreground);
+    --color-muted: var(--golden-muted);
+    --color-muted-foreground: var(--golden-muted-foreground);
+    --color-accent: var(--golden-accent);
+    --color-accent-foreground: var(--golden-accent-foreground);
+    --color-destructive: var(--golden-destructive);
+    --color-destructive-foreground: var(--golden-destructive-foreground);
+    --color-border: var(--golden-border);
+    --color-input: var(--golden-input);
+    --color-ring: var(--golden-ring);
+    --color-chart-1: var(--golden-chart-1);
+    --color-chart-2: var(--golden-chart-2);
+    --color-chart-3: var(--golden-chart-3);
+    --color-chart-4: var(--golden-chart-4);
+    --color-chart-5: var(--golden-chart-5);
+    --color-sidebar: var(--golden-sidebar);
+    --color-sidebar-foreground: var(--golden-sidebar-foreground);
+    --color-sidebar-primary: var(--golden-sidebar-primary);
+    --color-sidebar-primary-foreground: var(--golden-sidebar-primary-foreground);
+    --color-sidebar-accent: var(--golden-sidebar-accent);
+    --color-sidebar-accent-foreground: var(--golden-sidebar-accent-foreground);
+    --radius-sm: var(--golden-radius-sm);
+    --radius-md: var(--golden-radius-md);
+    --radius-lg: var(--golden-radius-lg);
+  }
+  @layer base {
+    body { background: var(--golden-background); color: var(--golden-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--golden-background); }
+      .text-background { color: var(--golden-background); }
+      .border-background { border-color: var(--golden-background); }
+      .ring-background { --tw-ring-color: var(--golden-background); }
+      .bg-foreground { background-color: var(--golden-foreground); }
+      .text-foreground { color: var(--golden-foreground); }
+      .border-foreground { border-color: var(--golden-foreground); }
+      .ring-foreground { --tw-ring-color: var(--golden-foreground); }
+      .bg-card { background-color: var(--golden-card); }
+      .text-card { color: var(--golden-card); }
+      .border-card { border-color: var(--golden-card); }
+      .ring-card { --tw-ring-color: var(--golden-card); }
+      .bg-card-foreground { background-color: var(--golden-card-foreground); }
+      .text-card-foreground { color: var(--golden-card-foreground); }
+      .border-card-foreground { border-color: var(--golden-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--golden-card-foreground); }
+      .bg-popover { background-color: var(--golden-popover); }
+      .text-popover { color: var(--golden-popover); }
+      .border-popover { border-color: var(--golden-popover); }
+      .ring-popover { --tw-ring-color: var(--golden-popover); }
+      .bg-popover-foreground { background-color: var(--golden-popover-foreground); }
+      .text-popover-foreground { color: var(--golden-popover-foreground); }
+      .border-popover-foreground { border-color: var(--golden-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--golden-popover-foreground); }
+      .bg-primary { background-color: var(--golden-primary); }
+      .text-primary { color: var(--golden-primary); }
+      .border-primary { border-color: var(--golden-primary); }
+      .ring-primary { --tw-ring-color: var(--golden-primary); }
+      .bg-primary-foreground { background-color: var(--golden-primary-foreground); }
+      .text-primary-foreground { color: var(--golden-primary-foreground); }
+      .border-primary-foreground { border-color: var(--golden-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--golden-primary-foreground); }
+      .bg-secondary { background-color: var(--golden-secondary); }
+      .text-secondary { color: var(--golden-secondary); }
+      .border-secondary { border-color: var(--golden-secondary); }
+      .ring-secondary { --tw-ring-color: var(--golden-secondary); }
+      .bg-secondary-foreground { background-color: var(--golden-secondary-foreground); }
+      .text-secondary-foreground { color: var(--golden-secondary-foreground); }
+      .border-secondary-foreground { border-color: var(--golden-secondary-foreground); }
+      .ring-secondary-foreground { --tw-ring-color: var(--golden-secondary-foreground); }
+      .bg-muted { background-color: var(--golden-muted); }
+      .text-muted { color: var(--golden-muted); }
+      .border-muted { border-color: var(--golden-muted); }
+      .ring-muted { --tw-ring-color: var(--golden-muted); }
+      .bg-muted-foreground { background-color: var(--golden-muted-foreground); }
+      .text-muted-foreground { color: var(--golden-muted-foreground); }
+      .border-muted-foreground { border-color: var(--golden-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--golden-muted-foreground); }
+      .bg-accent { background-color: var(--golden-accent); }
+      .text-accent { color: var(--golden-accent); }
+      .border-accent { border-color: var(--golden-accent); }
+      .ring-accent { --tw-ring-color: var(--golden-accent); }
+      .bg-accent-foreground { background-color: var(--golden-accent-foreground); }
+      .text-accent-foreground { color: var(--golden-accent-foreground); }
+      .border-accent-foreground { border-color: var(--golden-accent-foreground); }
+      .ring-accent-foreground { --tw-ring-color: var(--golden-accent-foreground); }
+      .bg-destructive { background-color: var(--golden-destructive); }
+      .text-destructive { color: var(--golden-destructive); }
+      .border-destructive { border-color: var(--golden-destructive); }
+      .ring-destructive { --tw-ring-color: var(--golden-destructive); }
+      .bg-destructive-foreground { background-color: var(--golden-destructive-foreground); }
+      .text-destructive-foreground { color: var(--golden-destructive-foreground); }
+      .border-destructive-foreground { border-color: var(--golden-destructive-foreground); }
+      .ring-destructive-foreground { --tw-ring-color: var(--golden-destructive-foreground); }
+      .bg-border { background-color: var(--golden-border); }
+      .text-border { color: var(--golden-border); }
+      .border-border { border-color: var(--golden-border); }
+      .ring-border { --tw-ring-color: var(--golden-border); }
+      .bg-input { background-color: var(--golden-input); }
+      .text-input { color: var(--golden-input); }
+      .border-input { border-color: var(--golden-input); }
+      .ring-input { --tw-ring-color: var(--golden-input); }
+      .bg-ring { background-color: var(--golden-ring); }
+      .text-ring { color: var(--golden-ring); }
+      .border-ring { border-color: var(--golden-ring); }
+      .ring-ring { --tw-ring-color: var(--golden-ring); }
+      .bg-chart-1 { background-color: var(--golden-chart-1); }
+      .text-chart-1 { color: var(--golden-chart-1); }
+      .border-chart-1 { border-color: var(--golden-chart-1); }
+      .ring-chart-1 { --tw-ring-color: var(--golden-chart-1); }
+      .bg-chart-2 { background-color: var(--golden-chart-2); }
+      .text-chart-2 { color: var(--golden-chart-2); }
+      .border-chart-2 { border-color: var(--golden-chart-2); }
+      .ring-chart-2 { --tw-ring-color: var(--golden-chart-2); }
+      .bg-chart-3 { background-color: var(--golden-chart-3); }
+      .text-chart-3 { color: var(--golden-chart-3); }
+      .border-chart-3 { border-color: var(--golden-chart-3); }
+      .ring-chart-3 { --tw-ring-color: var(--golden-chart-3); }
+      .bg-chart-4 { background-color: var(--golden-chart-4); }
+      .text-chart-4 { color: var(--golden-chart-4); }
+      .border-chart-4 { border-color: var(--golden-chart-4); }
+      .ring-chart-4 { --tw-ring-color: var(--golden-chart-4); }
+      .bg-chart-5 { background-color: var(--golden-chart-5); }
+      .text-chart-5 { color: var(--golden-chart-5); }
+      .border-chart-5 { border-color: var(--golden-chart-5); }
+      .ring-chart-5 { --tw-ring-color: var(--golden-chart-5); }
+      .bg-sidebar { background-color: var(--golden-sidebar); }
+      .text-sidebar { color: var(--golden-sidebar); }
+      .border-sidebar { border-color: var(--golden-sidebar); }
+      .ring-sidebar { --tw-ring-color: var(--golden-sidebar); }
+      .bg-sidebar-foreground { background-color: var(--golden-sidebar-foreground); }
+      .text-sidebar-foreground { color: var(--golden-sidebar-foreground); }
+      .border-sidebar-foreground { border-color: var(--golden-sidebar-foreground); }
+      .ring-sidebar-foreground { --tw-ring-color: var(--golden-sidebar-foreground); }
+      .bg-sidebar-primary { background-color: var(--golden-sidebar-primary); }
+      .text-sidebar-primary { color: var(--golden-sidebar-primary); }
+      .border-sidebar-primary { border-color: var(--golden-sidebar-primary); }
+      .ring-sidebar-primary { --tw-ring-color: var(--golden-sidebar-primary); }
+      .bg-sidebar-primary-foreground { background-color: var(--golden-sidebar-primary-foreground); }
+      .text-sidebar-primary-foreground { color: var(--golden-sidebar-primary-foreground); }
+      .border-sidebar-primary-foreground { border-color: var(--golden-sidebar-primary-foreground); }
+      .ring-sidebar-primary-foreground { --tw-ring-color: var(--golden-sidebar-primary-foreground); }
+      .bg-sidebar-accent { background-color: var(--golden-sidebar-accent); }
+      .text-sidebar-accent { color: var(--golden-sidebar-accent); }
+      .border-sidebar-accent { border-color: var(--golden-sidebar-accent); }
+      .ring-sidebar-accent { --tw-ring-color: var(--golden-sidebar-accent); }
+      .bg-sidebar-accent-foreground { background-color: var(--golden-sidebar-accent-foreground); }
+      .text-sidebar-accent-foreground { color: var(--golden-sidebar-accent-foreground); }
+      .border-sidebar-accent-foreground { border-color: var(--golden-sidebar-accent-foreground); }
+      .ring-sidebar-accent-foreground { --tw-ring-color: var(--golden-sidebar-accent-foreground); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="gt-hub-body">
+<!-- Schematic symbols from schematic-symbols (MIT License, Copyright (c) 2024 tscircuit). https://github.com/tscircuit/schematic-symbols -->
+<!-- Redesigned clean schematic symbols. Original MIT schematic-symbols attribution: Copyright (c) 2024 tscircuit. -->
+<svg class="symbol-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="sym-resistor-right" viewBox="-0.564 -0.27994641999999936 1.128 0.47989283999999877" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.47-0.04H-0.21L-0.18-0.14L-0.11 0.05L-0.04-0.14L0.03 0.05L0.10-0.14L0.17 0.05L0.21-0.04H0.47"/></symbol>
+<symbol id="sym-resistor-down" viewBox="-0.16167320999999968 -0.604 0.32334641999999936 1.128" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M0-0.51V-0.25L-0.10-0.20L0.10-0.12L-0.10-0.04L0.10 0.04L-0.10 0.12L0 0.17V0.43"/></symbol>
+<symbol id="sym-capacitor-right" viewBox="-0.36 -0.39 0.72 0.78" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.3 0H-0.06M0.06 0H0.3M-0.06-0.16V0.16M0.06-0.16V0.16"/></symbol>
+<symbol id="sym-capacitor-down" viewBox="-0.54 -0.36 1.08 0.72" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M0-0.3V-0.06M0 0.06V0.3M-0.16-0.06H0.16M-0.16 0.06H0.16"/></symbol>
+<symbol id="sym-capacitor-polarized-down" viewBox="-0.66 -0.36000000000000004 1.32 0.7200000000000001" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M0-0.3V0M0 0.06V0.3M-0.16 0H0.16M-0.16 0.08Q0 0.01 0.16 0.08M-0.23-0.12H-0.15M-0.19-0.16V-0.08"/></symbol>
+<symbol id="sym-inductor-right" viewBox="-0.6333116999999998 -0.25207166990664176 1.2666233999999996 0.5519367489890639" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.56-0.04H-0.42C-0.42-0.22-0.28-0.22-0.28-0.04C-0.28-0.22-0.14-0.22-0.14-0.04C-0.14-0.22 0-0.22 0-0.04C0-0.22 0.14-0.22 0.14-0.04C0.14-0.22 0.28-0.22 0.28-0.04H0.56"/></symbol>
+<symbol id="sym-diode-right" viewBox="-0.624 -0.364 1.248 0.648" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.52-0.04H-0.13M0.14-0.04H0.52M-0.13-0.17V0.09L0.14-0.04ZM0.14-0.17V0.09"/></symbol>
+<symbol id="sym-diode-down" viewBox="-0.324 -0.664 0.648 1.248" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M0-0.56V-0.16M0 0.10V0.48M-0.13-0.16H0.14L0 0.10ZM-0.13 0.10H0.14"/></symbol>
+<symbol id="sym-led-right" viewBox="-0.6779999999999999 -0.39 1.3559999999999999 0.78" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.54 0H-0.13M0.14 0H0.54M-0.13-0.13V0.13L0.14 0ZM0.14-0.13V0.13M-0.08-0.17L0.02-0.29M0.02-0.17L0.12-0.29M0.02-0.29L-0.01-0.25M0.02-0.29L-0.02-0.32M0.12-0.29L0.09-0.25M0.12-0.29L0.08-0.32"/></symbol>
+<symbol id="sym-npn-down" viewBox="-0.498 -0.66 0.996 1.32" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><circle cx="0.14" cy="0" r="0.29"/><path d="M-0.4 0H0.07M0.07-0.27V0.28M0.08-0.11L0.29-0.25V-0.55M0.09 0.11L0.29 0.25V0.55M0.18 0.17L0.25 0.23M0.25 0.23L0.18 0.23M0.25 0.23L0.24 0.16"/></symbol>
+<symbol id="sym-pnp-down" viewBox="-0.498 -0.66 0.996 1.32" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><circle cx="0.14" cy="0" r="0.29"/><path d="M-0.4 0H0.07M0.07-0.27V0.28M0.08-0.11L0.29-0.25V-0.55M0.09 0.11L0.29 0.25V0.55M0.25 0.23L0.16 0.15M0.16 0.15L0.17 0.22M0.16 0.15L0.23 0.14"/></symbol>
+<symbol id="sym-nmos" viewBox="-0.504 -0.66 1.008 1.32" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><circle cx="0.16" cy="0" r="0.29"/><path d="M-0.42 0.1H0.05M0.05-0.11V0.11M0.09-0.15V-0.07M0.09-0.03V0.04M0.09 0.08V0.15M0.09-0.11H0.30V-0.55M0.09 0.10H0.31V0.55M0.09 0H0.27M0.27 0L0.19-0.04M0.27 0L0.19 0.04"/></symbol>
+<symbol id="sym-pmos" viewBox="-0.504 -0.66 1.008 1.32" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><circle cx="0.16" cy="0" r="0.29"/><path d="M-0.42 0.1H0.05M0.05-0.11V0.11M0.09-0.15V-0.07M0.09-0.03V0.04M0.09 0.08V0.15M0.09-0.11H0.30V-0.55M0.09 0.10H0.31V0.55M0.09 0H0.27M0.19 0L0.27-0.04M0.19 0L0.27 0.04"/></symbol>
+<symbol id="sym-opamp-right" viewBox="-0.6699999999999999 -0.482 1.2 0.864" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.57-0.18H-0.32M-0.57 0.09H-0.32M-0.32-0.31V0.21L0.14-0.04ZM0.14-0.04H0.43M-0.27-0.18H-0.19M-0.23-0.22V-0.14M-0.27 0.09H-0.19"/></symbol>
+<symbol id="sym-scr-horz" viewBox="-0.624 -0.45599999999999996 1.248 0.9119999999999999" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.52-0.04H-0.17M0.18-0.05H0.52M-0.17-0.25V0.15L0.18-0.05ZM0.18-0.25V0.15M0.19 0L0.35 0.14V0.35"/></symbol>
+<symbol id="sym-igbt-horz" viewBox="-0.498 -0.672 0.996 1.344" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><circle cx="0.14" cy="0" r="0.29"/><path d="M-0.4 0H0.01M0.01-0.14V0.12M0.07-0.19V0.18M0.07-0.11L0.28-0.26V-0.56M0.08 0.09L0.28 0.25V0.56M0.19 0.16L0.25 0.22M0.25 0.22L0.18 0.22M0.25 0.22L0.24 0.15"/></symbol>
+<symbol id="sym-ground-down" viewBox="-0.264 -0.36 0.528 0.72" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M0-0.29V0.04M-0.22 0.04H0.22M-0.15 0.12H0.15M-0.06 0.20H0.06"/></symbol>
+<symbol id="sym-battery-right" viewBox="-0.6 -0.42000000000000004 1.2 0.78" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.5-0.03H-0.06M0.02-0.03H0.5M-0.06-0.19V0.12M0.02-0.13V0.06M-0.24-0.23V-0.15M-0.28-0.19H-0.20M0.12-0.19H0.20"/></symbol>
+<symbol id="sym-button-right" viewBox="-0.564 -0.3813464199999994 1.128 0.8626928399999988" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.47 0.05H-0.15M0.17 0.05H0.47M-0.16-0.04H0.18M-0.05-0.04V-0.10H0.07V-0.04"/><circle cx="-0.14" cy="0.05" r="0.025"/><circle cx="0.17" cy="0.05" r="0.025"/></symbol>
+<symbol id="sym-pot-vert" viewBox="-0.624 -0.624 1.248 1.248" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M0-0.52V-0.38L-0.10-0.30L0.10-0.20L-0.10-0.10L0.10 0L-0.10 0.10L0.10 0.20L-0.10 0.30L0 0.38V0.52M0.52 0H0.25L0.10-0.10M0.10-0.10L0.18-0.10M0.10-0.10L0.14-0.02"/></symbol>
+<symbol id="sym-zener-down" viewBox="-0.19695324000000036 -0.6685578600000003 0.3939064800000005 1.2482989199999996" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M0-0.56V-0.16M0 0.10V0.48M-0.13-0.16H0.14L0 0.10ZM-0.13 0.10H0.14M-0.13 0.10V0.04M0.14 0.10V0.16"/></symbol>
+<symbol id="sym-crystal-down" viewBox="-0.3536732099999997 -0.65 0.7073464199999994 1.32" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M0-0.54V-0.13M0 0.14V0.56M-0.27-0.13H0.27M-0.27 0.14H0.27M-0.27-0.07V0.08H0.27V-0.07"/></symbol>
+<symbol id="sym-spst-right" viewBox="-0.45599999999999996 -0.3 0.9119999999999999 0.6" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.38 0H-0.12M0.12 0H0.38M-0.08-0.01L0.10-0.15"/><circle cx="-0.10" cy="0" r="0.025"/><circle cx="0.10" cy="0" r="0.025"/></symbol>
+<symbol id="sym-fuse-horz" viewBox="-0.6779999999999999 -0.282 1.3559999999999999 0.564" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.53-0.04H0.53M-0.26-0.17H0.27V0.10H-0.26Z"/></symbol>
+<symbol id="sym-speaker-right" viewBox="-0.48 -0.72 0.9599999999999999 1.4400000000000002" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.4-0.2H-0.2M-0.4 0.2H-0.2M-0.2-0.2H0V0.2H-0.2ZM0-0.2L0.4-0.4V0.4L0 0.2M0.16-0.12Q0.28 0 0.16 0.12"/></symbol>
+<symbol id="sym-square-wave-right" viewBox="-0.5349609599999999 -0.3142417600000003 1.0699219199999999 0.5744155200000013" fill="none" stroke="currentColor" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round"><path d="M-0.446-0.027H-0.25M0.25-0.027H0.446M-0.25 0.10V-0.16H-0.08V0.10H0.08V-0.16H0.25V0.10"/></symbol>
+</defs></svg>
+
+  <main class="hub-shell">
+    <header class="hub-topbar">
+      <a class="hub-brand" href="project-hub.html" aria-label="返回项目工作台">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 13.5h3.8l2-6.2 3.7 12 2.7-8.4 1.8 4.6h3"/><circle cx="3.5" cy="13.5" r="1.35" fill="currentColor" stroke="none"/><circle cx="20.5" cy="15.5" r="1.35" fill="currentColor" stroke="none"/><path d="M14.5 4.5h3.5l2.5 2.5v3.5"/></svg>
+        </span>
+        <span class="hub-brand-copy">
+          <span class="brand-word">电子课程设计仿真工作台</span>
+          <span class="gt-label">ELECTRONIC COURSE DESIGN SIMULATION WORKBENCH</span>
+        </span>
+      </a>
+
+      <nav class="hub-nav" aria-label="主导航">
+        <a href="project-hub.html" class="is-active">工作台</a>
+        <a href="#templates">模板库</a>
+        <a href="#domains">器件库</a>
+        <a href="#recent">帮助</a>
+      </nav>
+
+      <div class="hub-actions">
+        <button class="btn btn--ghost" type="button" data-toast="导入工程将在下一阶段接入">
+          <i data-lucide="upload" class="icon"></i>
+          导入工程
+        </button>
+        <button class="btn btn--primary" type="button" data-toast="新建工程将在下一阶段接入">
+          <i data-lucide="plus" class="icon"></i>
+          新建工程
+        </button>
+      </div>
+    </header>
+
+    <div class="hub-main">
+      <section class="hub-hero" aria-labelledby="hero-title">
+        <div class="hub-hero-copy">
+          <h1 class="hero-title" id="hero-title">把课设电路，<br>放进<span class="soft">浏览器里。</span></h1>
+          <p class="hero-sub">
+            数电、模电、电力电子、51 与 STM32，在同一张工作台上完成连线、仿真、固件烧录与 AI 排查。打开浏览器就能开始，不用安装任何软件。
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn--primary" href="workspace-digital.html">
+              从数电开始
+              <i data-lucide="arrow-up-right" class="icon"></i>
+            </a>
+            <a class="btn" href="#templates">
+              <i data-lucide="grid-3x3" class="icon"></i>
+              浏览全部模板
+            </a>
+          </div>
+          <div class="hero-facts" aria-label="平台特性">
+            <span><i class="dot"></i>五个仿真域</span>
+            <span><i class="dot"></i>本地优先，不上传数据</span>
+            <span><i class="dot"></i>一键 AI 网表</span>
+          </div>
+        </div>
+
+        <aside class="hub-hero-card" aria-label="示例电路预览">
+          <div class="hero-card-head">
+            <div class="hero-card-title">
+              <span class="dot dot--warn"></span>
+              74LS161 · 计数实验
+            </div>
+            <div class="hero-card-live">EXAMPLE CIRCUIT</div>
+          </div>
+
+          <svg class="hero-schematic" viewBox="0 0 420 236" role="img" aria-label="74LS161 计数器与七段数码管接线示意">
+            <rect x="14" y="14" width="392" height="208" rx="18" fill="var(--golden-muted)" stroke="var(--golden-border)"></rect>
+            <path class="sch-wire sch-wire--power" d="M34 40H386"></path>
+            <path class="sch-wire" d="M34 198H386"></path>
+            <text x="38" y="34" class="sch-netlabel">VCC 5V</text>
+            <text x="38" y="212" class="sch-netlabel">GND</text>
+
+            <rect class="sch-chip sch-chip--selected" x="64" y="72" width="108" height="104" rx="6"></rect>
+            <path d="M104 72 A10 10 0 0 1 124 72" fill="var(--golden-muted)" stroke="var(--golden-chart-2)" stroke-width="1.2"></path>
+            <circle cx="70" cy="164" r="1.8" fill="var(--golden-chart-2)"></circle>
+            <text x="78" y="90" class="sch-label sch-label--bold">U1</text>
+            <text x="78" y="102" class="sch-label sch-label--tiny sch-label--muted">74LS161</text>
+
+            <path class="sch-pin" d="M64 88H44"></path>
+            <path class="sch-pin" d="M64 108H44"></path>
+            <path class="sch-pin" d="M64 128H44"></path>
+            <path class="sch-pin" d="M64 148H44"></path>
+            <path class="sch-pin" d="M172 88H192"></path>
+            <path class="sch-pin" d="M172 108H192"></path>
+            <path class="sch-pin" d="M172 128H192"></path>
+            <path class="sch-pin" d="M172 148H192"></path>
+            <text x="48" y="86" class="sch-label sch-label--tiny">CLR</text>
+            <text x="48" y="106" class="sch-label sch-label--tiny">CLK</text>
+            <text x="48" y="126" class="sch-label sch-label--tiny">ENP</text>
+            <text x="48" y="146" class="sch-label sch-label--tiny">LOAD</text>
+            <text x="150" y="86" class="sch-label sch-label--tiny">QA</text>
+            <text x="150" y="106" class="sch-label sch-label--tiny">QB</text>
+            <text x="150" y="126" class="sch-label sch-label--tiny">QC</text>
+            <text x="150" y="146" class="sch-label sch-label--tiny">QD</text>
+
+            <rect class="sch-chip" x="236" y="72" width="96" height="104" rx="6"></rect>
+            <path d="M268 72 A10 10 0 0 1 288 72" fill="var(--golden-muted)" stroke="var(--golden-chart-2)" stroke-width="1.2"></path>
+            <circle cx="242" cy="164" r="1.8" fill="var(--golden-chart-2)"></circle>
+            <text x="250" y="90" class="sch-label sch-label--bold">U2</text>
+            <text x="250" y="102" class="sch-label sch-label--tiny sch-label--muted">74LS47</text>
+            <text x="250" y="124" class="sch-label sch-label--tiny">A B C D</text>
+            <text x="250" y="140" class="sch-label sch-label--tiny sch-label--muted">BCD → 7SEG</text>
+
+            <path class="sch-wire" d="M192 88H214V92H236"></path>
+            <path class="sch-wire" d="M192 108H214V116H236"></path>
+            <path class="sch-wire" d="M192 128H214V140H236"></path>
+            <path class="sch-wire" d="M192 148H214V164H236"></path>
+            <circle class="sch-junction" cx="214" cy="92" r="2.4"></circle>
+            <circle class="sch-junction" cx="214" cy="116" r="2.4"></circle>
+            <circle class="sch-junction" cx="214" cy="140" r="2.4"></circle>
+            <circle class="sch-junction" cx="214" cy="164" r="2.4"></circle>
+
+            <rect class="sch-chip sch-chip--soft" x="338" y="70" width="54" height="108" rx="9"></rect>
+            <rect x="344" y="76" width="42" height="96" rx="6" fill="var(--golden-background)" stroke="var(--golden-border)" stroke-width="1"></rect>
+            <path class="sch-seg-on" d="M354 92H376"></path>
+            <path class="sch-seg-off" d="M378 96V118"></path>
+            <path class="sch-seg-on" d="M352 96V118"></path>
+            <path class="sch-seg-on" d="M354 122H376"></path>
+            <path class="sch-seg-off" d="M352 126V148"></path>
+            <path class="sch-seg-on" d="M378 126V148"></path>
+            <path class="sch-seg-on" d="M354 152H376"></path>
+            <circle cx="382" cy="154" r="2.2" fill="var(--golden-chart-5)"></circle>
+            <text x="345" y="194" class="sch-label sch-label--tiny sch-label--muted">7-SEG</text>
+
+            <path class="sch-wire sch-wire--power" d="M106 72V54H284V40"></path>
+            <path class="sch-wire" d="M106 176V188"></path>
+            <path class="sch-wire" d="M284 176V188"></path>
+            <path class="sch-wire" d="M365 178V198"></path>
+            <circle class="sch-junction" cx="106" cy="54" r="2.4"></circle>
+            <circle class="sch-junction" cx="284" cy="54" r="2.4"></circle>
+
+            <circle cx="28" cy="132" r="15" fill="var(--golden-card)" stroke="var(--golden-chart-4)" stroke-width="1.4"></circle>
+            <path class="sch-wire sch-wire--power" d="M22 132V126H28V138H34V132H40"></path>
+            <path class="sch-wire" d="M43 132V108H44"></path>
+            <text x="12" y="160" class="sch-label sch-label--tiny">CLK</text>
+            <text x="10" y="172" class="sch-label sch-label--tiny sch-label--muted">1 Hz</text>
+
+            <rect x="286" y="180" width="46" height="18" rx="5" fill="var(--golden-chart-5-soft)" stroke="var(--golden-chart-5)" stroke-width="1"></rect>
+            <text x="293" y="192" class="sch-label sch-label--tiny" style="fill: var(--golden-chart-2);">QD=1</text>
+          </svg>
+
+          <div class="hero-card-foot">
+            <div class="hero-metric">
+              <div class="hero-metric-value">05</div>
+              <div class="hero-metric-label">仿真工作台</div>
+            </div>
+            <div class="hero-metric">
+              <div class="hero-metric-value">55+</div>
+              <div class="hero-metric-label">数电芯片</div>
+            </div>
+            <div class="hero-metric">
+              <div class="hero-metric-value">18</div>
+              <div class="hero-metric-label">可选外设</div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="hub-section" id="domains" aria-labelledby="domains-title">
+        <div class="section-head">
+          <h2 class="section-title" id="domains-title">五个工作台，一套操作习惯</h2>
+          <p class="section-side">从门电路到 STM32，连线方式、器件面板、检查器与 AI 网表保持一致，换领域不用重新学习工具。</p>
+        </div>
+
+        <div class="domain-grid">
+          <a class="domain-card domain-card--lead" href="workspace-digital.html" data-dom-id="open-digital">
+            <div class="domain-card-top">
+              <span class="domain-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 7h4l3 10h4L17 7h4"></path>
+                  <path d="M6 17v3M18 4v3"></path>
+                </svg>
+              </span>
+              <span class="domain-arrow" aria-hidden="true"><i data-lucide="arrow-up-right" class="icon"></i></span>
+            </div>
+            <div class="domain-copy">
+              <h3 class="domain-title">数字电路</h3>
+              <p class="domain-desc">74LS 系列、CD4000 系列、时序与组合逻辑。计数器、译码器、数码管和逻辑分析仪都准备好了。</p>
+            </div>
+            <div class="domain-meta">
+              <span class="chip chip--muted">55+ 芯片</span>
+              <span class="chip chip--muted">逻辑分析仪</span>
+              <span class="chip chip--muted">真值表联动</span>
+            </div>
+            <svg class="domain-illustration" viewBox="0 0 240 120" aria-hidden="true">
+              <path class="sch-wire" d="M14 30H74"></path>
+              <path class="sch-wire" d="M14 60H44V74H74"></path>
+              <path class="sch-wire" d="M14 90H44V74"></path>
+              <rect class="sch-chip" x="74" y="22" width="72" height="70" rx="5"></rect>
+              <text x="86" y="40" class="sch-label sch-label--tiny sch-label--bold">74LS00</text>
+              <path class="sch-pin" d="M146 36H170"></path>
+              <path class="sch-pin" d="M146 58H170"></path>
+              <path class="sch-pin" d="M146 80H170"></path>
+              <circle class="sch-junction" cx="190" cy="36" r="2"></circle>
+              <path class="sch-wire sch-wire--power" d="M190 36V20H222"></path>
+              <path class="sch-wire" d="M190 58V102H222"></path>
+              <path class="sch-wire" d="M190 80V70H222"></path>
+              <text x="168" y="112" class="sch-label sch-label--tiny sch-label--muted">Y = ¬(A · B)</text>
+            </svg>
+          </a>
+
+          <a class="domain-card domain-card--side" href="workspace-analog.html" data-dom-id="open-analog">
+            <div class="domain-card-top">
+              <span class="domain-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 14c4 0 4-8 8-8s4 8 8 8h2"></path>
+                  <path d="M3 18h18"></path>
+                  <circle cx="12" cy="12" r="9"></circle>
+                </svg>
+              </span>
+              <span class="domain-arrow" aria-hidden="true"><i data-lucide="arrow-up-right" class="icon"></i></span>
+            </div>
+            <div class="domain-copy">
+              <h3 class="domain-title">模拟电路</h3>
+              <p class="domain-desc">从共射放大到运放滤波，配合双通道示波器、万用表和节点探针观察每一处电压变化。</p>
+            </div>
+            <div class="domain-meta">
+              <span class="chip chip--muted">26+ 器件</span>
+              <span class="chip chip--muted">双通道示波器</span>
+              <span class="chip chip--muted">收敛提示</span>
+            </div>
+            <svg class="domain-illustration" viewBox="0 0 240 120" aria-hidden="true">
+              <path class="sch-wire" d="M14 62H54"></path>
+              <path class="sch-wire" d="M54 62L78 34L102 90L126 34L150 90H186"></path>
+              <path class="sch-wire sch-wire--muted" d="M54 62H186"></path>
+              <text x="14" y="48" class="sch-label sch-label--tiny sch-label--muted">IN</text>
+              <text x="180" y="104" class="sch-label sch-label--tiny sch-label--muted">OUT</text>
+              <rect x="186" y="40" width="38" height="44" rx="4" fill="var(--golden-card)" stroke="var(--golden-chart-4)" stroke-width="1.2"></rect>
+              <text x="194" y="58" class="sch-label sch-label--tiny">LM358</text>
+              <text x="194" y="70" class="sch-label sch-label--tiny sch-label--muted">×10</text>
+            </svg>
+          </a>
+
+          <a class="domain-card domain-card--third" href="workspace-analog.html" data-dom-id="open-power">
+            <div class="domain-card-top">
+              <span class="domain-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 17h4V7h4v10h4V7h4v10h2"></path>
+                  <path d="M7 7L3 4M17 17l4 3"></path>
+                </svg>
+              </span>
+              <span class="domain-arrow" aria-hidden="true"><i data-lucide="arrow-up-right" class="icon"></i></span>
+            </div>
+            <div class="domain-copy">
+              <h3 class="domain-title">电力电子</h3>
+              <p class="domain-desc">Buck、Boost、整流与逆变，用示波器直接看开关节点和纹波。</p>
+            </div>
+            <div class="domain-meta">
+              <span class="chip chip--muted">14 种功率器件</span>
+              <span class="chip chip--muted">5 个拓扑</span>
+            </div>
+            <svg class="domain-illustration" viewBox="0 0 160 90" aria-hidden="true">
+              <path class="sch-wire sch-wire--analog" d="M8 20h20v18h18v18h18v-18h18v18h18v-18h18v18h16"></path>
+              <path class="sch-wire sch-wire--muted" d="M8 72h136"></path>
+            </svg>
+          </a>
+
+          <a class="domain-card domain-card--third" href="workspace-mcu51.html" data-dom-id="open-mcu51">
+            <div class="domain-card-top">
+              <span class="domain-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="7" y="7" width="10" height="10" rx="1.5"></rect>
+                  <path d="M9 3v4M12 3v4M15 3v4M9 17v4M12 17v4M15 17v4M3 9h4M3 12h4M3 15h4M17 9h4M17 12h4M17 15h4"></path>
+                </svg>
+              </span>
+              <span class="domain-arrow" aria-hidden="true"><i data-lucide="arrow-up-right" class="icon"></i></span>
+            </div>
+            <div class="domain-copy">
+              <h3 class="domain-title">51 单片机</h3>
+              <p class="domain-desc">上传 Intel HEX，观察 P0–P3、定时器、串口与中断。</p>
+            </div>
+            <div class="domain-meta">
+              <span class="chip chip--muted">HEX 烧录</span>
+              <span class="chip chip--muted">SFR 监视</span>
+            </div>
+            <svg class="domain-illustration" viewBox="0 0 160 90" aria-hidden="true">
+              <rect x="24" y="10" width="84" height="70" rx="4" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1.4"></rect>
+              <path d="M56 10 A12 12 0 0 1 76 10" fill="var(--golden-muted)" stroke="var(--golden-chart-2)" stroke-width="1.2"></path>
+              <circle cx="30" cy="74" r="1.6" fill="var(--golden-chart-2)"></circle>
+              <path class="sch-pin" d="M24 20H14M24 30H14M24 40H14M24 50H14M24 60H14M24 70H14M108 20H118M108 30H118M108 40H118M108 50H118M108 60H118M108 70H118"></path>
+              <text x="66" y="42" text-anchor="middle" class="sch-label" style="font-size:8px;">STC89C52RC</text>
+              <text x="66" y="55" text-anchor="middle" class="sch-label sch-label--muted" style="font-size:6px;">8051 · DIP-40</text>
+              <path class="sch-wire" d="M118 40H126"></path>
+              <use href="#sym-led-right" x="126" y="32" width="26" height="16" color="var(--golden-chart-5)"></use>
+              <text x="118" y="26" class="sch-label sch-label--tiny sch-label--muted">P1.0</text>
+              <path class="sch-wire" d="M152 40V50H145"></path>
+              <use href="#sym-ground-down" x="138" y="50" width="14" height="18" color="var(--golden-chart-2)"></use>
+            </svg>
+          </a>
+
+          <a class="domain-card domain-card--third" href="workspace-mcu-stm32.html" data-dom-id="open-stm32">
+            <div class="domain-card-top">
+              <span class="domain-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+                  <path d="M9 9h6v6H9zM9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"></path>
+                </svg>
+              </span>
+              <span class="domain-arrow" aria-hidden="true"><i data-lucide="arrow-up-right" class="icon"></i></span>
+            </div>
+            <div class="domain-copy">
+              <h3 class="domain-title">STM32</h3>
+              <p class="domain-desc">STM32F103C8T6 固件在线烧录，GPIO 与 USART 实时联动。</p>
+            </div>
+            <div class="domain-meta">
+              <span class="chip chip--muted">Cortex-M3</span>
+              <span class="chip chip--muted">串口终端</span>
+            </div>
+            <svg class="domain-illustration" viewBox="0 0 160 90" aria-hidden="true">
+              <rect x="30" y="30" width="100" height="30" rx="4" fill="var(--golden-muted)" stroke="var(--golden-chart-2)" stroke-width="1.2"></rect>
+              <rect x="36" y="36" width="26" height="18" rx="2" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1"></rect>
+              <circle cx="114" cy="45" r="3" fill="var(--golden-chart-5)"></circle>
+              <path class="sch-pin" d="M30 38H22M30 52H22M130 38H138M130 52H138"></path>
+              <text x="68" y="51" class="sch-label sch-label--tiny sch-label--bold">Blue Pill</text>
+            </svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="hub-section" id="templates" aria-labelledby="templates-title">
+        <div class="section-head">
+          <h2 class="section-title" id="templates-title">从示例开始</h2>
+          <p class="section-side">每个模板都带一份可读的接线说明。先看懂结构，再改造成自己的课设。</p>
+        </div>
+
+        <div class="template-grid">
+          <a class="template-card" href="workspace-digital.html" data-dom-id="open-template-digital">
+            <div class="template-thumb">
+              <svg viewBox="0 0 320 170" aria-hidden="true">
+                <path class="sch-wire" d="M24 40H80"></path>
+                <path class="sch-wire" d="M24 70H52V86H80"></path>
+                <path class="sch-wire" d="M24 100H52V86"></path>
+                <rect class="sch-chip" x="80" y="28" width="64" height="70" rx="5"></rect>
+                <text x="92" y="48" class="sch-label sch-label--tiny sch-label--bold">74LS161</text>
+                <path class="sch-pin" d="M144 44H176"></path>
+                <path class="sch-pin" d="M144 64H176"></path>
+                <path class="sch-pin" d="M144 84H176"></path>
+                <path class="sch-wire" d="M176 44H204V52H228"></path>
+                <path class="sch-wire" d="M176 64H204V74H228"></path>
+                <path class="sch-wire" d="M176 84H204V96H228"></path>
+                <rect class="sch-chip" x="228" y="38" width="62" height="70" rx="5"></rect>
+                <text x="239" y="56" class="sch-label sch-label--tiny sch-label--bold">74LS47</text>
+                <path class="sch-seg-on" d="M270 124H292"></path>
+                <path class="sch-seg-off" d="M292 128V152"></path>
+                <path class="sch-seg-off" d="M266 128V152"></path>
+                <rect class="sch-chip sch-chip--soft" x="256" y="112" width="48" height="46" rx="6"></rect>
+                <text x="266" y="168" class="sch-label sch-label--tiny sch-label--muted">7-SEG</text>
+                <text x="24" y="122" class="sch-label sch-label--tiny sch-label--muted">CLK 1Hz</text>
+              </svg>
+            </div>
+            <div class="template-body">
+              <div class="min-w-0">
+                <h3 class="template-title">74LS161 四位计数器</h3>
+                <div class="template-meta">
+                  <span class="chip chip--muted">数电</span>
+                  <span>6 个器件</span>
+                </div>
+              </div>
+              <span class="template-arrow" aria-hidden="true"><i data-lucide="arrow-up-right" class="icon"></i></span>
+            </div>
+          </a>
+
+          <a class="template-card" href="workspace-power.html" data-dom-id="open-template-power">
+            <div class="template-thumb">
+              <svg viewBox="0 0 320 170" aria-hidden="true">
+                <path class="sch-wire sch-wire--power" d="M26 40H64"></path>
+                <rect x="26" y="26" width="28" height="28" rx="5" fill="var(--golden-card)" stroke="var(--golden-chart-4)" stroke-width="1.2"></rect>
+                <text x="31" y="44" class="sch-label sch-label--tiny">12V</text>
+                <path class="sch-wire" d="M64 40H92"></path>
+                <rect x="92" y="32" width="30" height="22" rx="4" fill="var(--golden-card)" stroke="var(--golden-chart-5)" stroke-width="1.2"></rect>
+                <text x="94" y="47" class="sch-label sch-label--tiny">Q1</text>
+                <path class="sch-wire sch-wire--analog" d="M122 40H158"></path>
+                <path class="sch-wire" d="M158 40V54M158 40H190"></path>
+                <path class="sch-wire" d="M158 54L170 64L158 74"></path>
+                <path class="sch-wire" d="M158 74V92"></path>
+                <path class="sch-wire" d="M190 40H224"></path>
+                <path class="sch-wire" d="M224 40V70"></path>
+                <path class="sch-wire" d="M224 70H248"></path>
+                <path class="sch-wire" d="M248 70V96M248 96H206M206 96V118"></path>
+                <path class="sch-wire" d="M206 118H180"></path>
+                <rect x="224" y="46" width="18" height="24" rx="3" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1"></rect>
+                <text x="228" y="61" class="sch-label sch-label--tiny">L</text>
+                <path class="sch-wire" d="M248 70V118H268"></path>
+                <rect x="268" y="108" width="24" height="22" rx="3" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1"></rect>
+                <text x="272" y="122" class="sch-label sch-label--tiny">RL</text>
+                <text x="188" y="146" class="sch-label sch-label--tiny sch-label--muted">Vout 5.02V</text>
+                <path class="sch-wire sch-wire--muted" d="M26 146H292"></path>
+              </svg>
+            </div>
+            <div class="template-body">
+              <div class="min-w-0">
+                <h3 class="template-title">Buck 12V → 5V</h3>
+                <div class="template-meta">
+                  <span class="chip chip--muted">电力电子</span>
+                  <span>100 kHz · 50%</span>
+                </div>
+              </div>
+              <span class="template-arrow" aria-hidden="true"><i data-lucide="arrow-up-right" class="icon"></i></span>
+            </div>
+          </a>
+
+          <a class="template-card" href="workspace-mcu-stm32.html" data-dom-id="open-template-stm32">
+            <div class="template-thumb">
+              <svg viewBox="0 0 320 170" aria-hidden="true">
+                <rect x="46" y="46" width="128" height="58" rx="7" fill="var(--golden-muted)" stroke="var(--golden-chart-2)" stroke-width="1.3"></rect>
+                <rect x="56" y="56" width="36" height="38" rx="3" fill="var(--golden-card)" stroke="var(--golden-chart-2)" stroke-width="1"></rect>
+                <text x="62" y="79" class="sch-label sch-label--tiny sch-label--bold">MCU</text>
+                <path class="sch-pin" d="M174 60H198M174 76H198M174 92H198"></path>
+                <path class="sch-wire" d="M198 60H232V78H256"></path>
+                <circle cx="244" cy="78" r="6" fill="var(--golden-chart-5)"></circle>
+                <text x="254" y="102" class="sch-label sch-label--tiny">PC13</text>
+                <path class="sch-wire sch-wire--power" d="M46 60H26V36"></path>
+                <path class="sch-wire" d="M46 92H26V118"></path>
+                <rect x="210" y="108" width="54" height="24" rx="4" fill="var(--golden-card)" stroke="var(--golden-chart-4)" stroke-width="1"></rect>
+                <text x="218" y="123" class="sch-label sch-label--tiny">USART1</text>
+                <text x="60" y="128" class="sch-label sch-label--tiny sch-label--muted">STM32F103C8T6</text>
+              </svg>
+            </div>
+            <div class="template-body">
+              <div class="min-w-0">
+                <h3 class="template-title">STM32 PC13 闪烁</h3>
+                <div class="template-meta">
+                  <span class="chip chip--muted">STM32</span>
+                  <span>blink_stm32.hex</span>
+                </div>
+              </div>
+              <span class="template-arrow" aria-hidden="true"><i data-lucide="arrow-up-right" class="icon"></i></span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section class="hub-section" id="recent" aria-labelledby="recent-title">
+        <div class="section-head">
+          <h2 class="section-title" id="recent-title">最近工程</h2>
+          <p class="section-side">工程自动保存在本机浏览器，刷新页面不会丢失，也不会上传到服务器。</p>
+        </div>
+
+        <div class="project-list" role="table" aria-label="最近工程">
+          <div class="project-list-head" role="row">
+            <span role="columnheader">工程</span>
+            <span role="columnheader">仿真域</span>
+            <span role="columnheader">最近编辑</span>
+            <span></span>
+          </div>
+
+          <div class="project-row" role="row">
+            <div class="project-name" role="cell">
+              <span class="project-glyph" aria-hidden="true"><i data-lucide="activity" class="icon"></i></span>
+              <div class="project-name-copy">
+                <div class="project-title">74LS161 四位计数器</div>
+                <div class="project-sub">示例工程 · 7 个器件 · 14 个网络</div>
+              </div>
+            </div>
+            <div role="cell"><span class="chip chip--muted">数电</span></div>
+            <div class="project-time" role="cell">今天 14:32</div>
+            <div role="cell"><span class="project-state"><i class="dot dot--high"></i>已保存</span></div>
+          </div>
+
+          <div class="project-row" role="row">
+            <div class="project-name" role="cell">
+              <span class="project-glyph" aria-hidden="true"><i data-lucide="waves" class="icon"></i></span>
+              <div class="project-name-copy">
+                <div class="project-title">Buck 12V → 5V 变换器</div>
+                <div class="project-sub">电力电子 · 9 个器件 · 2 路示波器</div>
+              </div>
+            </div>
+            <div role="cell"><span class="chip chip--muted">电力电子</span></div>
+            <div class="project-time" role="cell">昨天 21:08</div>
+            <div role="cell"><span class="project-state"><i class="dot dot--high"></i>已保存</span></div>
+          </div>
+
+          <div class="project-row" role="row">
+            <div class="project-name" role="cell">
+              <span class="project-glyph" aria-hidden="true"><i data-lucide="cpu" class="icon"></i></span>
+              <div class="project-name-copy">
+                <div class="project-title">P1 口流水灯</div>
+                <div class="project-sub">51 单片机 · blink51.hex · 4 个器件</div>
+              </div>
+            </div>
+            <div role="cell"><span class="chip chip--muted">51</span></div>
+            <div class="project-time" role="cell">11 月 22 日</div>
+            <div role="cell"><span class="project-state"><i class="dot dot--warn"></i>草稿</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="hub-footer">
+      <div class="hub-footer-inner">
+        <span>电子课程设计仿真工作台 · 基于 Golden Time 设计系统 · 界面原型 v0.1</span>
+        <div class="hub-footer-links">
+          <a href="#domains">器件清单</a>
+          <a href="#templates">模板库</a>
+          <a href="#recent" data-toast="使用说明将在下一阶段接入">使用说明</a>
+          <a href="#recent" data-toast="第三方许可见项目 LICENSE 与依赖说明">第三方许可</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>if (window.lucide) { lucide.createIcons(); }</script>
+  <script>
+    (function () {
+      var toast = document.getElementById('toast');
+      var timer;
+      function showToast(message) {
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('is-visible');
+        clearTimeout(timer);
+        timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 2200);
+      }
+      document.querySelectorAll('[data-toast]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          showToast(el.getAttribute('data-toast'));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

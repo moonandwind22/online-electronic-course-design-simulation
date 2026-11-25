@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" width="96" height="60" fill="none" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision" role="img" aria-labelledby="title-speaker-8r desc-speaker-8r" data-component="speaker-8r">
+  <title id="title-speaker-8r">Speaker 8 Ω · 小型扬声器</title>
+  <desc id="desc-speaker-8r">小型扬声器，Speaker 8 Ω，8 Ω · 0.5 W。统一 EDA 封装风格，可编辑矢量。</desc>
+  <g id="speaker" ><circle cx="42" cy="30" r="26" fill="var(--eda-metal,#D7DEE7)" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><circle cx="42" cy="30" r="20" fill="var(--eda-package,#334155)" stroke="var(--eda-ink,currentColor)" stroke-width="1.5" /><circle cx="42" cy="30" r="9" fill="var(--eda-speaker-cone,#64748B)" stroke="var(--eda-package-ink,#F8FAFC)" stroke-width="1.2" /></g><g id="sound-waves" ><path d="M72 20Q82 30 72 40M77 14Q92 30 77 46" fill="none" stroke="var(--eda-accent,#F59E0B)" stroke-width="2" /></g><g id="terminals" ><path d="M28 53L28 59" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><path d="M38 55L38 60" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /></g>
+</svg>

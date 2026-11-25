@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" width="96" height="60" fill="none" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision" role="img" aria-labelledby="title-ir-receiver desc-ir-receiver" data-component="ir-receiver">
+  <title id="title-ir-receiver">IR Receiver · 红外接收管</title>
+  <desc id="desc-ir-receiver">红外接收管，IR Receiver，38 kHz · 3 Pin。统一 EDA 封装风格，可编辑矢量。</desc>
+  <g id="package" ><path d="M30 43V25C30 12 38 5 48 5S66 12 66 25V43Z" fill="var(--eda-package,#334155)" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><path d="M38 27C38 17 43 13 48 13S58 17 58 27Z" fill="var(--eda-ir-lens,#1E293B)" stroke="var(--eda-package-ink,#F8FAFC)" stroke-width="1.2" /></g><g id="pins" ><path d="M37 43L37 58" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><path d="M48 43L48 58" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><path d="M59 43L59 58" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /></g>
+</svg>

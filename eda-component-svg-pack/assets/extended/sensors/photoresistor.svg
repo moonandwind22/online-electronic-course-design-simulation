@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" width="96" height="60" fill="none" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision" role="img" aria-labelledby="title-photoresistor desc-photoresistor" data-component="photoresistor">
+  <title id="title-photoresistor">LDR · 光敏电阻</title>
+  <desc id="desc-photoresistor">光敏电阻，LDR，CdS · 模拟量。统一 EDA 封装风格，可编辑矢量。</desc>
+  <g id="leads" ><path d="M39 39L34 58" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><path d="M57 39L62 58" fill="none" stroke="var(--eda-ink,currentColor)" stroke-width="2" /></g><g id="package" ><circle cx="48" cy="25" r="21" fill="var(--eda-ldr,#D6B98C)" stroke="var(--eda-ink,currentColor)" stroke-width="2" /><path d="M33 17H43L37 25H47L41 33H53L47 17H57L51 25H63" fill="none" stroke="var(--eda-ldr-trace,#78350F)" stroke-width="2" /></g><g id="light" ><path d="M73 7L66 14M82 15L73 20M71 1L68 9" fill="none" stroke="var(--eda-accent,#F59E0B)" stroke-width="2" /></g>
+</svg>

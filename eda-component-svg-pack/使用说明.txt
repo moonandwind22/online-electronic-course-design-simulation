@@ -1,0 +1,51 @@
+电子课程设计仿真工作台 · EDA 器件 SVG 资产包
+版本 1.0.0
+
+一、内容
+1. assets/current/
+   当前 design 中使用的 43 枚芯片、板卡、外设、仪器与无源器件。
+2. assets/extended/
+   后续可扩展的 49 枚器件，包含 MCU、开发板、传感器、电源、显示、执行器与连接器。
+3. assets/current/ui/
+   品牌图标 1 枚，以及数电、模电、电力电子、8051、STM32 五个领域图标。
+4. assets/schematic/
+   schematic-symbols.svg 保留项目原有 26 个 symbol id；individual/ 为可单独使用的符号文件。
+5. redesigned-design/
+   已替换器件缩略图、共享原理图符号、品牌图标和领域图标的完整 design 副本。
+6. preview/
+   index.html 为器件总览；ui-icons.html 为品牌与五个领域图标总览。
+7. manifest.json 与 validation.json
+   资产清单、来源映射与自动校验结果。
+
+二、直接替换
+将 redesigned-design/design/electronic-lab/ 覆盖到项目相应目录即可。
+- 6 个页面内联的 sprite 已同步更新，不能只替换 partials/schematic-symbols.svg。
+- 所有原 symbol id 均保持不变，主原理图的 <use> 不需要改。
+- 五张领域图标的 CSS mask data URI 已同步写入 colors_and_type.css 和 7 个 HTML。
+
+三、颜色
+器件缩略图通过以下变量适配主题，未定义时使用内置默认色：
+--eda-ink            主描边
+--eda-package        封装体
+--eda-package-ink    封装体文字
+--eda-pcb            PCB 绿色
+--eda-pcb-edge       PCB 边缘
+--eda-pin            金属引脚
+--eda-screen         显示屏
+--eda-accent         1 脚标识与状态强调
+
+四、尺寸与状态
+- 统一 viewBox：0 0 96 60。
+- 推荐缩略图尺寸：44、48、64、96 px；小于 40 px 时优先显示封装轮廓。
+- 默认态使用当前主题色；悬停只提高外框对比；选中态增加外框，不改变引脚和极性颜色；禁用态整体不透明度 40%。
+
+五、命名
+器件使用“型号或器件-封装/关键特征”小写短横线，例如：
+74ls161-dip16.svg
+stm32f103c8t6-lqfp48.svg
+electrolytic-capacitor.svg
+domain-8051.svg
+
+六、说明
+品牌型号仅用于器件识别，资产中未绘制厂商商标。通用兼容开发板使用示意轮廓，不代表官方产品外观复刻。
+原理图符号基于 tscircuit schematic-symbols 的 MIT 许可语义重绘，原有版权归属保留在文件注释中。

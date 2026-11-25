@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "standalone_component_assets": 92,
+  "current_assets": 43,
+  "extended_assets": 49,
+  "schematic_symbols": 26,
+  "svg_files_validated": 125,
+  "xml_errors": [],
+  "external_raster_or_script": false,
+  "viewBox_components": "0 0 96 60",
+  "html_thumbnail_replacements": 58,
+  "ui_icons": 6,
+  "brand_icons_replaced_in_pages": 7,
+  "domain_icon_css_replacements": 40,
+  "schematic_semantic_fix_groups": 30,
+  "html_pages": 7
+}

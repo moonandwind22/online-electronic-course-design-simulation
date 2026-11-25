@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" role="img" aria-labelledby="title-domain-power desc-domain-power">
+  <title id="title-domain-power">电力电子</title>
+  <desc id="desc-domain-power">能量脉冲与两侧功率端子。</desc>
+  <path d="M13 3.5 7.5 13h4l-1.2 7.5L17 10.5h-4z"/><path d="M3.5 12h4M16.5 12h4"/><circle cx="3.5" cy="12" r="1.15" fill="currentColor" stroke="none"/><circle cx="20.5" cy="12" r="1.15" fill="currentColor" stroke="none"/>
+</svg>

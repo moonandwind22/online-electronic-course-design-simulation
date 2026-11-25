@@ -80,18 +80,18 @@
   },
   "projectFileHashes": {
     "electronic-lab.design": "05ca5c1d2107eb4ecbba1c251f708660740500882022a70cdcfa8b9c0686e417",
-    "colors_and_type.css": "cde71995276d0846b6e0f2b78a96dea24846754fc88ea8a06e0ec369e6b88c32",
+    "colors_and_type.css": "951ab5bdbdb6d32262978e23b6abf80c876de3e91b779f515e5e409371052082",
     "runtime-orchestration-summary.json": "df7fc9653f5398e763bb5799050d66c2c66e77d7b627d13bac089d6f43b63b22",
-    "pages/ai-netlist.html": "4e82c32ea484bbc20d9d00abbfb14707597e355d8f63f1a5cd0ce6971325ed40",
-    "pages/project-hub.html": "14a14c9b94224e95b8bf54cff2dcbf8e524ceef4dcd6d5a4a913c94fb583922f",
-    "pages/workspace-analog.html": "a7d998244e020c79ad2ee813293f6ac58f0627e1c92a15c999c746fb1da66fef",
-    "pages/workspace-digital.html": "c976759122d887143276837abc13e04b5896591801959b7caf0d18090d52edeb",
-    "pages/workspace-mcu-stm32.html": "0b5501e057afc237e244416771decd7f17659f189b628100058c95af9caab067",
-    "pages/workspace-mcu51.html": "5e8b7a4fc98c232dea61444a1bd814de21e3988a5ad67e9626644023efc39bdd",
-    "pages/workspace-power.html": "9213bf749208dbd9639a77283dde1468c8c2c0571ef07dfe3bbf5712bb0fda98"
+    "pages/ai-netlist.html": "073f7578a2e73356765cf733914e3eab5d215f8db185ea93f4cbd40e1b48230d",
+    "pages/project-hub.html": "39b0793132969bbcaa221ee0bcf2b6456ca4a2214a95bd9bb1cee47e0caa9568",
+    "pages/workspace-analog.html": "c1632d4cae5b816b44cbde11ee6557ee7743fcd1cba0a0b19acbb3b218ffa15e",
+    "pages/workspace-digital.html": "79d97a3dae9bb6e30b514f3e6d0b666ec232f5c1dbd14041a1a021d8a1d58b3c",
+    "pages/workspace-mcu-stm32.html": "0708ef0b6a2b642049df143de1c21a4d88aecb20e628f79d5039b78beed19fbb",
+    "pages/workspace-mcu51.html": "50aabccf5c06705e8d4a2f037bcda618729924f203e9c2ed8c89b78c56d1d8af",
+    "pages/workspace-power.html": "5c5bc35ec5f3ae71a60445d655dabe1f16d1283db43af1a32f0d1c9639f24041"
   },
   "designDir": "/workspace/design/electronic-lab",
   "expectedPages": 7,
   "requireInteractions": "open-digital:project-hub.html,open-power:project-hub.html,open-ai-netlist:workspace-digital.html,nav-hub:workspace-mcu51.html,ai-close:ai-netlist.html",
-  "checkedAt": "2026-11-25T12:45:14.985Z"
+  "checkedAt": "2026-11-25T13:19:26.725Z"
 }

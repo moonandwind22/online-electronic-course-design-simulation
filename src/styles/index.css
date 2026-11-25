@@ -609,3 +609,48 @@ select.param-input {
     display: none;
   }
 }
+
+.buzzer-body {
+  fill: var(--golden-card);
+  stroke: var(--golden-border-strong);
+  stroke-width: 1.2;
+}
+
+.buzzer-wave {
+  fill: none;
+  stroke: var(--golden-muted-foreground);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.buzzer-wave.is-on {
+  stroke: var(--golden-chart-5);
+}
+
+.probe-body {
+  fill: var(--golden-card);
+  stroke: var(--golden-border-strong);
+  stroke-width: 1.2;
+}
+
+.probe-dot {
+  fill: var(--golden-muted);
+}
+
+.probe-dot--high {
+  fill: var(--golden-chart-5);
+}
+
+.probe-dot--low {
+  fill: var(--golden-chart-2);
+}
+
+.probe-dot--float {
+  fill: var(--golden-accent);
+}
+
+.probe-value {
+  fill: var(--golden-muted-foreground);
+  font-family: var(--golden-font-mono);
+  font-size: 7.5px;
+}

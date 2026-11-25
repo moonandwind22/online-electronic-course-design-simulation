@@ -14,6 +14,8 @@ export type PartSymbol =
   | 'switch'
   | 'clock'
   | 'nand'
+  | 'buzzer'
+  | 'probe'
   | 'board';
 
 export type PinDir = 'left' | 'right' | 'up' | 'down';

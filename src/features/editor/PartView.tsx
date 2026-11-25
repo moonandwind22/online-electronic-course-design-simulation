@@ -279,18 +279,46 @@ function renderBody(comp: Component, part: PartDef, pinLevels: Record<string, Lo
           </text>
         </>
       );
-    case 'switch':
+    case 'switch': {
+      const closed = comp.type === 'BUTTON' ? Boolean(comp.state?.pressed) : Boolean(comp.state?.closed);
+      const label = comp.type === 'BUTTON' ? (closed ? '按下' : '松开') : closed ? '1 / 闭合' : '0 / 断开';
       return (
         <>
           <path d="M0 20 H22 M58 20 H84" className="passive-lead" />
           <circle cx={22} cy={20} r={3} className="passive-joint" />
           <circle cx={58} cy={20} r={3} className="passive-joint" />
-          <path d="M22 20 L52 6" className="passive-body" />
+          <path d={closed ? 'M22 20 L58 20' : 'M22 20 L52 6'} className="passive-body" />
           <text className="part-value" x={42} y={38} textAnchor="middle">
-            {comp.state?.closed ? '闭合' : '断开'}
+            {label}
           </text>
         </>
       );
+    }
+    case 'buzzer': {
+      const sounding = lv('IN') === 1;
+      return (
+        <>
+          <circle cx={38} cy={34} r={17} className="buzzer-body" />
+          <path d="M22 24 Q14 34 22 44" className={sounding ? 'buzzer-wave is-on' : 'buzzer-wave'} />
+          <path d="M54 24 Q62 34 54 44" className={sounding ? 'buzzer-wave is-on' : 'buzzer-wave'} />
+          <text className="part-value" x={38} y={56} textAnchor="middle">
+            {sounding ? '发声' : '静音'}
+          </text>
+        </>
+      );
+    }
+    case 'probe': {
+      const level = String(lv('IN') ?? 'z').toUpperCase();
+      return (
+        <>
+          <path d="M16 27 L34 13 L52 27 L34 41 Z" className="probe-body" />
+          <circle cx={34} cy={27} r={4} className={`probe-dot probe-dot--${level === '1' ? 'high' : level === '0' ? 'low' : 'float'}`} />
+          <text className="probe-value" x={34} y={52} textAnchor="middle">
+            {level === 'Z' ? '高阻' : level}
+          </text>
+        </>
+      );
+    }
     case 'clock':
       return (
         <>

@@ -1,5 +1,6 @@
 import type { Domain } from '../model/types';
 import type { ParamDef, PartDef, PinDef, PinDir, PinKind, PartSymbol } from './types';
+import { DIGITAL_CHIPS, type DigitalChipSpec } from './digitalChips';
 
 // ---------- 构建辅助 ----------
 
@@ -12,28 +13,6 @@ const pin = (
   kind: PinKind = 'passive',
   number?: string,
 ): PinDef => ({ id, name, x, y, dir, kind, number });
-
-const chipPin = (num: number, name: string, kind: PinKind, x: number, y: number, dir: PinDir): PinDef =>
-  pin(name, name, x, y, dir, kind, String(num));
-
-interface ChipPinSpec {
-  number: number;
-  name: string;
-  kind: PinKind;
-}
-
-function dipPins(left: ChipPinSpec[], right: ChipPinSpec[], width = 150, top = 40, pitch = 24): PinDef[] {
-  const pins: PinDef[] = [];
-  left.forEach((spec, i) => {
-    pins.push(chipPin(spec.number, spec.name, spec.kind, 0, top + i * pitch, 'left'));
-  });
-  right.forEach((spec, i) => {
-    pins.push(chipPin(spec.number, spec.name, spec.kind, width, top + i * pitch, 'right'));
-  });
-  return pins;
-}
-
-const dipHeight = (pitch = 24, top = 40, perSide = 8) => top + (perSide - 1) * pitch + 24;
 
 const numberParam = (key: string, label: string, unit: string, min: number, step: number): ParamDef => ({
   key,
@@ -63,84 +42,62 @@ const PASSIVE = (symbol: PartSymbol, type: string, name: string, subtitle: strin
     description,
   });
 
+// ---------- 数字 IC 转换 ----------
+
+export function chipToPart(spec: DigitalChipSpec): PartDef {
+  const n = spec.left.length + spec.right.length;
+  const perSide = Math.max(spec.left.length, spec.right.length);
+  const width = 150;
+  const top = 40;
+  const pitch = 24;
+  const pins: PinDef[] = [];
+  spec.left.forEach((pin, i) => {
+    pins.push({
+      id: pin.id,
+      name: pin.name,
+      number: String(i + 1),
+      x: 0,
+      y: top + i * pitch,
+      dir: 'left',
+      kind: pin.kind,
+    });
+  });
+  spec.right.forEach((pin, i) => {
+    pins.push({
+      id: pin.id,
+      name: pin.name,
+      number: String(n - i),
+      x: width,
+      y: top + i * pitch,
+      dir: 'right',
+      kind: pin.kind,
+    });
+  });
+  return {
+    type: spec.type,
+    name: spec.name,
+    subtitle: spec.subtitle,
+    category: spec.category,
+    domains: spec.domains ?? ['digital', 'mcs51', 'stm32'],
+    symbol: 'chip',
+    width,
+    height: top + (perSide - 1) * pitch + 24,
+    pins,
+    params: [],
+    defaults: {},
+    prefix: 'U',
+    description: spec.description,
+    tags: spec.tags,
+  };
+}
+
+export const CHIP_PARTS: PartDef[] = DIGITAL_CHIPS.map(chipToPart);
+
 // ---------- 器件定义 ----------
 
 export const PARTS: PartDef[] = [
-  // —— 数字 IC ——
-  def({
-    type: '74LS161',
-    name: '74LS161',
-    subtitle: '同步四位二进制计数器',
-    category: '计数器',
-    domains: ['digital', 'mcs51'],
-    symbol: 'chip',
-    width: 150,
-    height: dipHeight(),
-    pins: dipPins(
-      [
-        { number: 1, name: 'CLR', kind: 'input' },
-        { number: 2, name: 'CLK', kind: 'input' },
-        { number: 3, name: 'A', kind: 'input' },
-        { number: 4, name: 'B', kind: 'input' },
-        { number: 5, name: 'C', kind: 'input' },
-        { number: 6, name: 'D', kind: 'input' },
-        { number: 7, name: 'ENP', kind: 'input' },
-        { number: 8, name: 'GND', kind: 'power' },
-      ],
-      [
-        { number: 16, name: 'VCC', kind: 'power' },
-        { number: 15, name: 'RCO', kind: 'output' },
-        { number: 14, name: 'QD', kind: 'output' },
-        { number: 13, name: 'QC', kind: 'output' },
-        { number: 12, name: 'QB', kind: 'output' },
-        { number: 11, name: 'QA', kind: 'output' },
-        { number: 10, name: 'ENT', kind: 'input' },
-        { number: 9, name: 'LOAD', kind: 'input' },
-      ],
-    ),
-    params: [],
-    defaults: {},
-    prefix: 'U',
-    description: '4 位同步二进制计数器，异步清零 / 同步置数，QA 为最低位。',
-    tags: ['counter', '74ls', '同步'],
-  }),
-  def({
-    type: '74LS47',
-    name: '74LS47',
-    subtitle: 'BCD-七段译码驱动器',
-    category: '译码器',
-    domains: ['digital', 'mcs51'],
-    symbol: 'chip',
-    width: 150,
-    height: dipHeight(),
-    pins: dipPins(
-      [
-        { number: 1, name: 'B', kind: 'input' },
-        { number: 2, name: 'C', kind: 'input' },
-        { number: 3, name: 'LT', kind: 'input' },
-        { number: 4, name: 'BI', kind: 'input' },
-        { number: 5, name: 'RBI', kind: 'input' },
-        { number: 6, name: 'D', kind: 'input' },
-        { number: 7, name: 'A', kind: 'input' },
-        { number: 8, name: 'GND', kind: 'power' },
-      ],
-      [
-        { number: 16, name: 'VCC', kind: 'power' },
-        { number: 15, name: 'f', kind: 'output' },
-        { number: 14, name: 'g', kind: 'output' },
-        { number: 13, name: 'a', kind: 'output' },
-        { number: 12, name: 'b', kind: 'output' },
-        { number: 11, name: 'c', kind: 'output' },
-        { number: 10, name: 'd', kind: 'output' },
-        { number: 9, name: 'e', kind: 'output' },
-      ],
-    ),
-    params: [],
-    defaults: {},
-    prefix: 'U',
-    description: 'BCD 到七段译码器，输出低有效，可直接驱动共阳数码管。',
-    tags: ['decoder', '74ls', '七段'],
-  }),
+  ...CHIP_PARTS,
+  // —— 通用门 ——
   def({
     type: 'NAND2',
     name: 'NAND2',
@@ -219,6 +176,71 @@ export const PARTS: PartDef[] = [
     prefix: 'LED',
     description: '发光二极管，阳极高于阴极时点亮，需串联限流电阻。',
     tags: ['led', '指示'],
+  }),
+
+  def({
+    type: 'LOGIC_SWITCH',
+    name: '逻辑开关',
+    subtitle: '单刀单掷（0/1）',
+    category: '基础器件',
+    domains: 'all',
+    symbol: 'switch',
+    width: 84,
+    height: 40,
+    pins: [pin('OUT', 'OUT', 84, 20, 'right', 'output'), pin('GND', 'GND', 42, 40, 'down', 'power')],
+    params: [],
+    defaults: {},
+    prefix: 'SW',
+    description: '拨动开关，双击切换 0/1，输出直接驱动数字网络。',
+    tags: ['switch', 'input', '逻辑开关'],
+  }),
+  def({
+    type: 'BUTTON',
+    name: '按键',
+    subtitle: '轻触按键（低有效）',
+    category: '基础器件',
+    domains: 'all',
+    symbol: 'switch',
+    width: 84,
+    height: 40,
+    pins: [pin('OUT', 'OUT', 84, 20, 'right', 'output'), pin('GND', 'GND', 42, 40, 'down', 'power')],
+    params: [],
+    defaults: {},
+    prefix: 'SW',
+    description: '轻触按键，按下输出低电平，松开输出高电平（内置上拉）。',
+    tags: ['button', 'key', '按键'],
+  }),
+  def({
+    type: 'BUZZER',
+    name: '蜂鸣器',
+    subtitle: '有源蜂鸣器',
+    category: '显示与指示',
+    domains: 'all',
+    symbol: 'buzzer',
+    width: 80,
+    height: 62,
+    pins: [pin('IN', 'IN', 0, 30, 'left', 'input'), pin('GND', 'GND', 40, 62, 'down', 'power')],
+    params: [],
+    defaults: {},
+    prefix: 'BZ',
+    description: '有源蜂鸣器，IN 为高电平时发声（界面动画提示）。',
+    tags: ['buzzer', 'sound', '蜂鸣器'],
+  }),
+  def({
+    type: 'PROBE',
+    name: '逻辑探针',
+    subtitle: '0/1/高阻指示',
+    category: '显示与指示',
+    domains: 'all',
+    symbol: 'probe',
+    width: 64,
+    height: 54,
+    pins: [pin('IN', 'IN', 0, 27, 'left', 'input')],
+    params: [],
+    defaults: {},
+    prefix: 'TP',
+    description: '逻辑探针，显示被测网络的高低电平或高阻状态。',
+    tags: ['probe', 'logic', '探针'],
   }),
 
   // —— 电源与地 ——
@@ -420,6 +442,18 @@ export const allParts = (): PartDef[] => PARTS;
 export const partsForDomain = (domain: Domain): PartDef[] =>
   PARTS.filter((p) => p.domains === 'all' || p.domains.includes(domain));
 
-export const CATEGORY_ORDER = ['逻辑门', '计数器', '译码器', '显示与指示', '基础器件', '信号源', '电源与地', '单片机'];
+export const CATEGORY_ORDER = [
+  '逻辑门',
+  '触发器',
+  '计数器',
+  '移位寄存器',
+  '译码与选择',
+  '运算与比较',
+  '显示与指示',
+  '基础器件',
+  '信号源',
+  '电源与地',
+  '单片机',
+];
 
 export const PARTS_BY_TYPE = byType;

@@ -211,8 +211,12 @@ export function Canvas({ netlist }: CanvasProps) {
   const handlePartPointerDown = (e: ReactPointerEvent, comp: Component) => {
     if (e.button !== 0) return;
     e.stopPropagation();
-    if (comp.type === 'SWITCH' && e.detail >= 2) {
+    if ((comp.type === 'SWITCH' || comp.type === 'LOGIC_SWITCH') && e.detail >= 2) {
       toggleState(comp.id, 'closed');
+      return;
+    }
+    if (comp.type === 'BUTTON' && e.detail >= 2) {
+      toggleState(comp.id, 'pressed');
       return;
     }
     if (tool === 'wire') {

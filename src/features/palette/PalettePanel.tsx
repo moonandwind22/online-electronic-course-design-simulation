@@ -216,6 +216,20 @@ function PartThumb({ symbol }: { symbol: PartSymbol }) {
           <path d="M22 3v8M10 11h24M14 17h16M18 23h8" fill="none" stroke="currentColor" strokeWidth="1.5" />
         </svg>
       );
+    case 'buzzer':
+      return (
+        <svg viewBox="0 0 44 28" aria-hidden="true">
+          <circle cx="20" cy="14" r="8" fill="none" stroke="currentColor" strokeWidth="1.4" />
+          <path d="M10 6Q4 14 10 22M30 6Q36 14 30 22" fill="none" stroke="currentColor" strokeWidth="1.2" />
+        </svg>
+      );
+    case 'probe':
+      return (
+        <svg viewBox="0 0 44 28" aria-hidden="true">
+          <path d="M22 3v8M10 11h24M14 17h16M18 23h8" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          <circle cx="22" cy="11" r="2.4" fill="currentColor" />
+        </svg>
+      );
     default:
       return null;
   }

@@ -1,15 +1,22 @@
-import type { CircuitDoc, LogicLevel, NetlistResult } from '../../model/types';
+import type { CircuitDoc, Component, LogicLevel, NetlistResult } from '../../model/types';
 import type { PartDef } from '../../parts/types';
 import { buildNetlist } from '../../lib/netlist';
 import { getPart } from '../../parts/registry';
-
-interface CounterState {
-  value: number;
-  clkPrev: LogicLevel;
-}
+import { DIGITAL_CHIPS } from '../../parts/digitalChips';
+import { createModel, type ModelFn } from './models';
+import { resolveDrivers, type Driver, type Strength } from './resolver';
 
 interface ClockState {
-  phase: number;
+  level: 0 | 1;
+  half: number;
+  nextEdge: number;
+}
+
+interface DeviceRuntime {
+  comp: Component;
+  part: PartDef;
+  state: Record<string, any>;
+  model: ModelFn | null;
 }
 
 interface EngineSnapshot {
@@ -20,219 +27,249 @@ interface EngineSnapshot {
   events: number;
 }
 
-const truthy = (level: LogicLevel | undefined): 0 | 1 => (level === 0 ? 0 : 1);
+const MODEL_BY_TYPE = new Map<string, ModelFn>();
+for (const spec of DIGITAL_CHIPS) {
+  MODEL_BY_TYPE.set(spec.type, createModel(spec.model));
+}
+MODEL_BY_TYPE.set(
+  'NAND2',
+  createModel({
+    kind: 'gates',
+    gates: [{ op: 'nand', inputs: ['A', 'B'], output: 'Y' }],
+  }),
+);
 
-const SEGMENT_TABLE: Record<number, string[]> = {
-  0: ['a', 'b', 'c', 'd', 'e', 'f'],
-  1: ['b', 'c'],
-  2: ['a', 'b', 'd', 'e', 'g'],
-  3: ['a', 'b', 'c', 'd', 'g'],
-  4: ['b', 'c', 'f', 'g'],
-  5: ['a', 'c', 'd', 'f', 'g'],
-  6: ['a', 'c', 'd', 'e', 'f', 'g'],
-  7: ['a', 'b', 'c'],
-  8: ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
-  9: ['a', 'b', 'c', 'd', 'f', 'g'],
-};
+const MAX_SETTLE_PASSES = 80;
+const MAX_EVENTS_PER_TICK = 20000;
+
+const key = (componentId: string, pinId: string) => `${componentId}:${pinId}`;
+
+const TTL = (level: LogicLevel | undefined): 0 | 1 => (level === 0 ? 0 : 1);
 
 export class DigitalEngine {
-  private doc: CircuitDoc;
   private netlist: NetlistResult;
-  private partMap = new Map<string, PartDef>();
-  private pinNetName = new Map<string, string>();
-  private counters = new Map<string, CounterState>();
+  private devices = new Map<string, DeviceRuntime>();
   private clocks = new Map<string, ClockState>();
-  private drives = new Map<string, LogicLevel>();
+  private pinNetName = new Map<string, string>();
+  private netComponents = new Map<string, Set<string>>();
+  private drives = new Map<string, Driver>();
+  private compDrives = new Map<string, Set<string>>();
   private netLevels = new Map<string, LogicLevel>();
   private pinLevels: Record<string, LogicLevel> = {};
+  private dirty = new Set<string>();
   private time = 0;
   private events = 0;
-  private lastTickLevels = new Map<string, LogicLevel>();
+  private warnings: string[] = [];
 
   constructor(doc: CircuitDoc) {
-    this.doc = doc;
     this.netlist = buildNetlist(doc, getPart);
     for (const net of this.netlist.nets) {
-      for (const pin of net.pins) this.pinNetName.set(`${pin.componentId}:${pin.pinId}`, net.name);
+      const comps = new Set<string>();
+      for (const pin of net.pins) {
+        this.pinNetName.set(key(pin.componentId, pin.pinId), net.name);
+        comps.add(pin.componentId);
+      }
+      this.netComponents.set(net.name, comps);
     }
     for (const comp of doc.components) {
       const part = getPart(comp.type);
       if (!part) continue;
-      this.partMap.set(comp.id, part);
-      if (comp.type === '74LS161') this.counters.set(comp.id, { value: 0, clkPrev: 'z' });
-      if (comp.type === 'CLOCK') this.clocks.set(comp.id, { phase: 0 });
+      this.devices.set(comp.id, {
+        comp,
+        part,
+        state: {},
+        model: MODEL_BY_TYPE.get(comp.type) ?? null,
+      });
+      if (comp.type === 'CLOCK') {
+        const freq = Math.max(0.01, Number(comp.params.freq ?? 1));
+        const half = 0.5 / freq;
+        this.clocks.set(comp.id, { level: 0, half, nextEdge: half });
+      }
     }
-    this.resolveAll();
+    this.markAllDirty();
+    this.settle();
+    this.events = 0;
   }
 
   reset(): void {
     this.time = 0;
     this.events = 0;
-    for (const state of this.counters.values()) {
-      state.value = 0;
-      state.clkPrev = 'z';
-    }
-    for (const state of this.clocks.values()) state.phase = 0;
+    this.warnings = [];
     this.drives.clear();
+    this.compDrives.clear();
     this.netLevels.clear();
-    this.lastTickLevels.clear();
-    this.resolveAll();
+    for (const rt of this.devices.values()) rt.state = {};
+    for (const [id, clock] of this.clocks) {
+      void id;
+      clock.level = 0;
+      clock.nextEdge = clock.half;
+    }
+    this.markAllDirty();
+    this.settle();
+    this.events = 0;
   }
 
   tick(dt: number): void {
-    this.time += dt;
-    for (const [id, state] of this.clocks) {
-      const comp = this.doc.components.find((c) => c.id === id);
-      const freq = Number(comp?.params.freq ?? 1);
-      state.phase = (state.phase + dt * freq) % 1;
-      this.drives.set(`${id}:OUT`, state.phase < 0.5 ? 1 : 0);
-    }
+    if (dt <= 0) return;
+    const target = this.time + dt;
+    this.markAllDirty();
+    this.settle();
 
-    this.resolveAll();
-
-    for (const [id, state] of this.counters) {
-      const clk = this.levelOf(id, 'CLK');
-      const clr = truthy(this.levelOf(id, 'CLR'));
-      if (clr === 0) {
-        state.value = 0;
-      } else if (state.clkPrev === 0 && clk === 1) {
-        const load = truthy(this.levelOf(id, 'LOAD'));
-        const enp = truthy(this.levelOf(id, 'ENP'));
-        const ent = truthy(this.levelOf(id, 'ENT'));
-        if (load === 0) {
-          const bits = [
-            truthy(this.levelOf(id, 'A')),
-            truthy(this.levelOf(id, 'B')),
-            truthy(this.levelOf(id, 'C')),
-            truthy(this.levelOf(id, 'D')),
-          ];
-          state.value = bits[0] | (bits[1] << 1) | (bits[2] << 2) | (bits[3] << 3);
-        } else if (enp === 1 && ent === 1) {
-          state.value = (state.value + 1) & 15;
+    let guard = 0;
+    while (this.time < target - 1e-12) {
+      const next = this.nextClockEdge(target);
+      if (next === null) {
+        this.time = target;
+        break;
+      }
+      this.time = Math.max(this.time, next);
+      let toggled = false;
+      for (const clock of this.clocks.values()) {
+        if (clock.nextEdge <= this.time + 1e-12) {
+          clock.level = clock.level ? 0 : 1;
+          clock.nextEdge += clock.half;
+          toggled = true;
         }
       }
-      state.clkPrev = clk;
+      if (!toggled) break;
+      this.markAllDirty();
+      this.settle();
+      guard += 1;
+      if (guard > MAX_EVENTS_PER_TICK) {
+        this.warnings.push('时钟事件超出单帧预算，已跳到目标时刻（可能存在高频振荡）');
+        this.time = target;
+        break;
+      }
     }
-
-    this.resolveAll();
-
-    let changes = 0;
-    for (const net of this.netlist.nets) {
-      const level = this.netLevels.get(net.name) ?? 'z';
-      if (this.lastTickLevels.get(net.name) !== level) changes += 1;
-    }
-    this.events += changes;
-    this.lastTickLevels = new Map(this.netLevels);
+    this.time = target;
+    this.buildPinLevels();
   }
 
-  private levelOf(componentId: string, pinId: string): LogicLevel {
-    const netName = this.pinNetName.get(`${componentId}:${pinId}`);
-    return netName ? this.netLevels.get(netName) ?? 'z' : 'z';
+  private nextClockEdge(target: number): number | null {
+    let next: number | null = null;
+    for (const clock of this.clocks.values()) {
+      if (clock.nextEdge <= target + 1e-12 && (next === null || clock.nextEdge < next)) {
+        next = clock.nextEdge;
+      }
+    }
+    return next;
   }
 
-  private resolveAll(): void {
-    // 固定多轮迭代，让组合反馈（计数器 → NAND → CLR → 计数器）在同一 tick 内收敛。
-    for (let pass = 0; pass < 8; pass += 1) {
-      this.computeDrives();
-      this.resolveNets();
-      for (const [id, state] of this.counters) {
-        if (truthy(this.levelOf(id, 'CLR')) === 0 && state.value !== 0) {
-          state.value = 0;
+  private markAllDirty(): void {
+    for (const id of this.devices.keys()) this.dirty.add(id);
+  }
+
+  private settle(): void {
+    let pass = 0;
+    while (this.dirty.size > 0 && pass < MAX_SETTLE_PASSES) {
+      const batch = [...this.dirty];
+      this.dirty.clear();
+      for (const id of batch) this.evaluate(id);
+      const changed = this.syncNets();
+      if (changed.length > 0) {
+        for (const net of changed) {
+          for (const compId of this.netComponents.get(net) ?? []) this.dirty.add(compId);
         }
       }
+      pass += 1;
+    }
+    if (this.dirty.size > 0) {
+      this.warnings.push('组合逻辑在 80 轮 delta 循环内未收敛，可能存在反馈振荡');
+      this.dirty.clear();
     }
     this.buildPinLevels();
   }
 
-  private computeDrives(): void {
-    const drives = new Map<string, LogicLevel>();
+  private evaluate(componentId: string): void {
+    const rt = this.devices.get(componentId);
+    if (!rt) return;
+    const previous = this.compDrives.get(componentId);
+    if (previous) {
+      for (const pinKey of previous) this.drives.delete(pinKey);
+    }
+    this.compDrives.set(componentId, new Set());
 
-    for (const comp of this.doc.components) {
-      if (!this.partMap.has(comp.id)) continue;
-      switch (comp.type) {
-        case 'VCC':
-          drives.set(`${comp.id}:1`, 1);
-          break;
-        case 'GND':
-          drives.set(`${comp.id}:1`, 0);
-          break;
-        case 'CLOCK': {
-          const state = this.clocks.get(comp.id);
-          if (state) drives.set(`${comp.id}:OUT`, state.phase < 0.5 ? 1 : 0);
-          break;
-        }
-        case 'SWITCH': {
-          const closed = Boolean(comp.state?.closed);
-          drives.set(`${comp.id}:1`, closed ? 1 : 'z');
-          drives.set(`${comp.id}:2`, closed ? 1 : 'z');
-          break;
-        }
-        case 'NAND2': {
-          const a = truthy(this.levelOf(comp.id, 'A'));
-          const b = truthy(this.levelOf(comp.id, 'B'));
-          drives.set(`${comp.id}:Y`, a === 1 && b === 1 ? 0 : 1);
-          break;
-        }
-        case '74LS161': {
-          const state = this.counters.get(comp.id);
-          if (!state) break;
-          ['QA', 'QB', 'QC', 'QD'].forEach((pinId, bit) => {
-            drives.set(`${comp.id}:${pinId}`, ((state.value >> bit) & 1) as LogicLevel);
-          });
-          const ent = truthy(this.levelOf(comp.id, 'ENT'));
-          drives.set(`${comp.id}:RCO`, state.value === 15 && ent === 1 ? 1 : 0);
-          break;
-        }
-        case '74LS47': {
-          const lt = truthy(this.levelOf(comp.id, 'LT'));
-          const bi = truthy(this.levelOf(comp.id, 'BI'));
-          const value =
-            truthy(this.levelOf(comp.id, 'A')) |
-            (truthy(this.levelOf(comp.id, 'B')) << 1) |
-            (truthy(this.levelOf(comp.id, 'C')) << 2) |
-            (truthy(this.levelOf(comp.id, 'D')) << 3);
-          const segments =
-            bi === 0 ? [] : lt === 0 ? ['a', 'b', 'c', 'd', 'e', 'f', 'g'] : SEGMENT_TABLE[value] ?? [];
-          ['a', 'b', 'c', 'd', 'e', 'f', 'g'].forEach((seg) => {
-            drives.set(`${comp.id}:${seg}`, segments.includes(seg) ? 0 : 1);
-          });
-          break;
-        }
-        default:
-          break;
+    const drive = (pinId: string, level: LogicLevel, strength: Strength = 'strong') => {
+      this.drives.set(key(componentId, pinId), { level, strength });
+      this.compDrives.get(componentId)?.add(key(componentId, pinId));
+    };
+
+    switch (rt.comp.type) {
+      case 'VCC':
+        drive('1', 1);
+        return;
+      case 'GND':
+        drive('1', 0);
+        return;
+      case 'CLOCK': {
+        const clock = this.clocks.get(componentId);
+        if (clock) drive('OUT', clock.level);
+        return;
       }
+      case 'LOGIC_SWITCH':
+        drive('OUT', rt.comp.state?.closed ? 1 : 0);
+        return;
+      case 'BUTTON':
+        drive('OUT', rt.comp.state?.pressed ? 0 : 1);
+        return;
+      case 'SWITCH': {
+        const closed = Boolean(rt.comp.state?.closed);
+        drive('1', closed ? 1 : 'z');
+        drive('2', closed ? 1 : 'z');
+        return;
+      }
+      case 'BUZZER':
+        rt.state.sounding = TTL(this.levelOf(componentId, 'IN')) === 1;
+        return;
+      case 'PROBE':
+        rt.state.level = this.levelOf(componentId, 'IN');
+        return;
+      default:
+        break;
     }
 
-    this.drives = drives;
+    if (!rt.model) return;
+    rt.model({
+      input: (pinId) => this.levelOf(componentId, pinId),
+      drive,
+      state: rt.state,
+    });
   }
 
-  private resolveNets(): void {
-    const next = new Map<string, LogicLevel>();
+  private levelOf(componentId: string, pinId: string): LogicLevel {
+    const netName = this.pinNetName.get(key(componentId, pinId));
+    return netName ? this.netLevels.get(netName) ?? 'z' : 'z';
+  }
+
+  private syncNets(): string[] {
+    const changed: string[] = [];
     for (const net of this.netlist.nets) {
-      let hasLow = false;
-      let hasHigh = false;
+      const drivers: Driver[] = [];
+      if (net.name === 'VCC' || net.name === '3V3') drivers.push({ level: 1, strength: 'strong' });
+      if (net.name === 'GND') drivers.push({ level: 0, strength: 'strong' });
       for (const pin of net.pins) {
-        const drive = this.drives.get(`${pin.componentId}:${pin.pinId}`);
-        if (drive === 0) hasLow = true;
-        if (drive === 1) hasHigh = true;
+        const driver = this.drives.get(key(pin.componentId, pin.pinId));
+        if (driver) drivers.push(driver);
       }
-      const level: LogicLevel = hasHigh && hasLow ? 'x' : hasHigh ? 1 : hasLow ? 0 : 'z';
-      next.set(net.name, level);
+      const level = resolveDrivers(drivers);
+      if (this.netLevels.get(net.name) !== level) {
+        this.netLevels.set(net.name, level);
+        this.events += 1;
+        changed.push(net.name);
+      }
     }
-    this.netLevels = next;
+    return changed;
   }
 
   private buildPinLevels(): void {
     const pinLevels: Record<string, LogicLevel> = {};
-    for (const [key, netName] of this.pinNetName) {
-      pinLevels[key] = this.netLevels.get(netName) ?? 'z';
+    for (const [pinKey, netName] of this.pinNetName) {
+      pinLevels[pinKey] = this.netLevels.get(netName) ?? 'z';
     }
-    for (const comp of this.doc.components) {
-      const part = this.partMap.get(comp.id);
-      if (!part) continue;
-      for (const pin of part.pins) {
-        const key = `${comp.id}:${pin.id}`;
-        if (!(key in pinLevels)) pinLevels[key] = 'z';
+    for (const [componentId, rt] of this.devices) {
+      for (const pin of rt.part.pins) {
+        const pinKey = key(componentId, pin.id);
+        if (!(pinKey in pinLevels)) pinLevels[pinKey] = 'z';
       }
     }
     this.pinLevels = pinLevels;
@@ -256,11 +293,26 @@ export class DigitalEngine {
 
   signalNets(max = 8): string[] {
     const candidates = this.netlist.nets.filter((n) => !n.isPower).map((n) => n.name);
-    const signal = candidates.filter((name) => (this.lastTickLevels.get(name) ?? 'z') !== 'z');
+    const signal = candidates.filter((name) => (this.netLevels.get(name) ?? 'z') !== 'z');
     return (signal.length > 0 ? signal : candidates).slice(0, max);
   }
 
   netLevelByName(name: string): LogicLevel {
     return this.netLevels.get(name) ?? 'z';
+  }
+
+  getWarnings(): string[] {
+    return [...this.warnings];
+  }
+
+  /** 运行中切换开关/按键，无需重建引擎。 */
+  setControls(components: Component[]): void {
+    for (const comp of components) {
+      const rt = this.devices.get(comp.id);
+      if (!rt) continue;
+      rt.comp = { ...rt.comp, state: comp.state };
+      this.dirty.add(comp.id);
+    }
+    this.settle();
   }
 }

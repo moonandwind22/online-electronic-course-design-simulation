@@ -46,6 +46,9 @@ export function DockPanel({ netlist, checks }: DockProps) {
   const log = useSimStore((s) => s.log);
   const clearLog = useSimStore((s) => s.clearLog);
   const pinLevels = useSimStore((s) => s.pinLevels);
+  const mcu = useSimStore((s) => s.mcu);
+  const serial = useSimStore((s) => s.serial);
+  const clearSerial = useSimStore((s) => s.clearSerial);
   const netLevels = useSimStore((s) => s.netLevels);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -69,7 +72,7 @@ export function DockPanel({ netlist, checks }: DockProps) {
     }
     let size = 0;
     for (const line of text.split(/\r?\n/)) {
-      if (line.startsWith(':') && line.length >= 11) {
+      if (line.startsWith(':') && line.length >= 11 && line.slice(7, 9) === '00') {
         size += parseInt(line.slice(1, 3), 16) || 0;
       }
     }
@@ -187,7 +190,9 @@ export function DockPanel({ netlist, checks }: DockProps) {
         {tab === 'serial' && (
           <>
             <div className="terminal">
-              <div className="terminal-line terminal-dim">[serial] USART1 · 9600 8N1 · 等待固件运行</div>
+              <div className="terminal-line terminal-dim">[serial] USART1 · 9600 8N1 · {doc.firmware ? `${doc.firmware.name} 已载入` : '等待固件'}</div>
+              {serial && <div className="terminal-line terminal-ok" style={{ whiteSpace: 'pre-wrap' }}>{serial}</div>}
+              {!serial && <div className="terminal-line terminal-dim">等待串口数据…</div>}
               {log.slice(-14).map((line, i) => (
                 <div className="terminal-line" key={i}>
                   <span className="terminal-time">[{line.t.toFixed(2)}s]</span>{' '}
@@ -200,11 +205,23 @@ export function DockPanel({ netlist, checks }: DockProps) {
               </div>
             </div>
             <aside className="dock-side">
-              <div className="inspect-label"><span>串口</span><span className="gt-mono">COM1</span></div>
+              <div className="inspect-label">
+                <span>串口</span>
+                <button className="icon-btn" onClick={clearSerial} title="清空串口">
+                  <Trash2 className="icon" />
+                </button>
+              </div>
               <div className="param-row"><span className="param-key">波特率</span><span className="param-val">9600</span></div>
               <div className="param-row"><span className="param-key">数据位</span><span className="param-val">8</span></div>
               <div className="param-row"><span className="param-key">校验</span><span className="param-val">NONE</span></div>
               <div className="param-row"><span className="param-key">停止位</span><span className="param-val">1</span></div>
+              {mcu && (
+                <>
+                  <div className="inspect-label mt-12"><span>MCU</span></div>
+                  <div className="param-row"><span className="param-key">PC</span><span className="param-val">0x{mcu.pc.toString(16).padStart(4, '0').toUpperCase()}</span></div>
+                  <div className="param-row"><span className="param-key">周期</span><span className="param-val">{mcu.cycles}</span></div>
+                </>
+              )}
             </aside>
           </>
         )}
@@ -257,6 +274,14 @@ export function DockPanel({ netlist, checks }: DockProps) {
               <div className="param-row"><span className="param-key">板卡</span><span className="param-val">{doc.domain === 'stm32' ? 'STM32F103C8T6' : doc.domain === 'mcs51' ? 'STC89C52RC' : '—'}</span></div>
               <div className="param-row"><span className="param-key">固件</span><span className="param-val">{doc.firmware ? doc.firmware.name : '未载入'}</span></div>
               <div className="param-row"><span className="param-key">大小</span><span className="param-val">{doc.firmware?.size ?? 0} B</span></div>
+              {mcu && (
+                <>
+                  <div className="inspect-label mt-12"><span>运行状态</span></div>
+                  <div className="param-row"><span className="param-key">PC</span><span className="param-val">0x{mcu.pc.toString(16).padStart(4, '0').toUpperCase()}</span></div>
+                  <div className="param-row"><span className="param-key">周期</span><span className="param-val">{mcu.cycles}</span></div>
+                  <div className="param-row"><span className="param-key">P1 锁存</span><span className="param-val">0x{mcu.latches[1].toString(16).padStart(2, '0').toUpperCase()}</span></div>
+                </>
+              )}
             </aside>
           </>
         )}

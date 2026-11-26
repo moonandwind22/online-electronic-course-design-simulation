@@ -28,6 +28,7 @@ export function InspectorPanel({ netlist, checks }: InspectorProps) {
   const pinLevels = useSimStore((s) => s.pinLevels);
   const netLevels = useSimStore((s) => s.netLevels);
   const running = useSimStore((s) => s.running);
+  const mcu = useSimStore((s) => s.mcu);
   const simTime = useSimStore((s) => s.time);
   const simEvents = useSimStore((s) => s.events);
 
@@ -130,6 +131,44 @@ export function InspectorPanel({ netlist, checks }: InspectorProps) {
                     ))}
                   </div>
                 </section>
+                {(selectedComp.type === 'MCU51' || selectedComp.type === 'STM32') && (
+                  <section className="inspect-section">
+                    <div className="inspect-label">
+                      <span>MCU 状态</span>
+                      <span className="gt-mono">{selectedComp.type}</span>
+                    </div>
+                    {mcu && mcu.componentId === selectedComp.id ? (
+                      <div className="param-list">
+                        <div className="param-row">
+                          <span className="param-key">PC</span>
+                          <span className="param-val">0x{mcu.pc.toString(16).padStart(4, '0').toUpperCase()}</span>
+                        </div>
+                        <div className="param-row">
+                          <span className="param-key">A / B</span>
+                          <span className="param-val">0x{mcu.a.toString(16).padStart(2, '0').toUpperCase()} / 0x{mcu.b.toString(16).padStart(2, '0').toUpperCase()}</span>
+                        </div>
+                        <div className="param-row">
+                          <span className="param-key">DPTR</span>
+                          <span className="param-val">0x{mcu.dptr.toString(16).padStart(4, '0').toUpperCase()}</span>
+                        </div>
+                        <div className="param-row">
+                          <span className="param-key">SP / PSW</span>
+                          <span className="param-val">0x{mcu.sp.toString(16).padStart(2, '0').toUpperCase()} / 0x{mcu.psw.toString(16).padStart(2, '0').toUpperCase()}</span>
+                        </div>
+                        <div className="param-row">
+                          <span className="param-key">P1 锁存 / 引脚</span>
+                          <span className="param-val">0x{mcu.latches[1].toString(16).padStart(2, '0').toUpperCase()} / 0x{mcu.pins[1].toString(16).padStart(2, '0').toUpperCase()}</span>
+                        </div>
+                        <div className="param-row">
+                          <span className="param-key">周期 / 代码</span>
+                          <span className="param-val">{mcu.cycles} / {mcu.codeSize} B</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="inspect-desc">运行后显示 PC、A/B、DPTR、PSW 与端口锁存状态。</p>
+                    )}
+                  </section>
+                )}
                 <section className="inspect-section">
                   <div className="inspect-label">
                     <span>器件说明</span>

@@ -1,5 +1,6 @@
 import type { CircuitDoc, Domain } from '../model/types';
 import { comp, createDoc } from './helpers';
+import { BLINK51_HEX, BLINK51_SIZE, BLINK_STM32_HEX, BLINK_STM32_SIZE } from './firmware';
 
 export function buildDigitalExample(): CircuitDoc {
   return createDoc(
@@ -152,7 +153,7 @@ export function buildPowerExample(): CircuitDoc {
 }
 
 export function buildMcs51Example(): CircuitDoc {
-  return createDoc(
+  const doc = createDoc(
     'demo-mcs51',
     'mcs51',
     '51 单片机 P1.0 流水灯',
@@ -177,10 +178,12 @@ export function buildMcs51Example(): CircuitDoc {
     ],
     { x: 70, y: 30, zoom: 0.9 },
   );
+  doc.firmware = { name: 'blink51.hex', hex: BLINK51_HEX, size: BLINK51_SIZE };
+  return doc;
 }
 
 export function buildStm32Example(): CircuitDoc {
-  return createDoc(
+  const doc = createDoc(
     'demo-stm32',
     'stm32',
     'STM32 PC13 板载 LED',
@@ -205,6 +208,8 @@ export function buildStm32Example(): CircuitDoc {
     ],
     { x: 70, y: 20, zoom: 0.9 },
   );
+  doc.firmware = { name: 'blink_stm32.hex', hex: BLINK_STM32_HEX, size: BLINK_STM32_SIZE };
+  return doc;
 }
 
 export const EXAMPLE_BUILDERS: Record<Domain, () => CircuitDoc> = {

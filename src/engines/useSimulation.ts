@@ -24,6 +24,7 @@ export function useSimulation(): void {
         domain: doc.domain,
         components: doc.components.map((c) => [c.id, c.type, c.params, c.state]),
         wires: doc.wires.map((w) => [w.id, w.from, w.to, w.netLabel]),
+        firmware: doc.firmware?.hex ?? '',
       }),
     [doc],
   );
@@ -47,7 +48,7 @@ export function useSimulation(): void {
       };
     }
 
-    if (doc.domain !== 'digital') {
+    if (doc.domain !== 'digital' && doc.domain !== 'mcs51') {
       kindRef.current = null;
       engineRef.current = null;
       return;
@@ -141,6 +142,28 @@ export function useSimulation(): void {
           pinLevels: snap.pinLevels,
           waves,
         });
+
+        const mcu = digital.mcuSnapshot();
+        if (mcu) {
+          useSimStore.getState().setMcu({
+            componentId: mcu.componentId,
+            pc: mcu.state.pc,
+            a: mcu.state.a,
+            b: mcu.state.b,
+            psw: mcu.state.psw,
+            sp: mcu.state.sp,
+            dptr: mcu.state.dptr,
+            cycles: mcu.state.cycles,
+            latches: mcu.state.latches,
+            pins: mcu.state.pins,
+            codeSize: mcu.state.codeSize,
+            unsupported: mcu.state.unsupported,
+          });
+        }
+        const tx = digital.takeSerial();
+        if (tx.length > 0) {
+          useSimStore.getState().appendSerial(String.fromCharCode(...tx));
+        }
 
         const counter = doc.components.find((c) => c.type === '74LS161');
         if (counter) {

@@ -2,6 +2,7 @@ import type { CircuitDoc, Component, LogicLevel, NetlistResult } from '../../mod
 import type { PartDef } from '../../parts/types';
 import { buildNetlist } from '../../lib/netlist';
 import { getPart } from '../../parts/registry';
+import { Mcs51, type Mcs51Snapshot } from '../mcs51/cpu';
 import { DIGITAL_CHIPS } from '../../parts/digitalChips';
 import { createModel, type ModelFn } from './models';
 import { resolveDrivers, type Driver, type Strength } from './resolver';
@@ -46,10 +47,14 @@ const key = (componentId: string, pinId: string) => `${componentId}:${pinId}`;
 
 const TTL = (level: LogicLevel | undefined): 0 | 1 => (level === 0 ? 0 : 1);
 
+const SOURCE_TYPES = new Set(['VCC', 'GND', 'CLOCK', 'LOGIC_SWITCH', 'BUTTON', 'SWITCH']);
+
 export class DigitalEngine {
+  private doc: CircuitDoc;
   private netlist: NetlistResult;
   private devices = new Map<string, DeviceRuntime>();
   private clocks = new Map<string, ClockState>();
+  private mcus = new Map<string, Mcs51>();
   private pinNetName = new Map<string, string>();
   private netComponents = new Map<string, Set<string>>();
   private drives = new Map<string, Driver>();
@@ -62,6 +67,7 @@ export class DigitalEngine {
   private warnings: string[] = [];
 
   constructor(doc: CircuitDoc) {
+    this.doc = doc;
     this.netlist = buildNetlist(doc, getPart);
     for (const net of this.netlist.nets) {
       const comps = new Set<string>();
@@ -85,7 +91,11 @@ export class DigitalEngine {
         const half = 0.5 / freq;
         this.clocks.set(comp.id, { level: 0, half, nextEdge: half });
       }
+      if (comp.type === 'MCU51') {
+        this.mcus.set(comp.id, new Mcs51(doc.firmware?.hex ?? null));
+      }
     }
+    this.primeSources();
     this.markAllDirty();
     this.settle();
     this.events = 0;
@@ -104,9 +114,19 @@ export class DigitalEngine {
       clock.level = 0;
       clock.nextEdge = clock.half;
     }
+    for (const mcu of this.mcus.values()) mcu.reset();
+    this.primeSources();
     this.markAllDirty();
     this.settle();
     this.events = 0;
+  }
+
+  /** 先让电源/时钟/开关建立网络电平，避免时序器件首次评估时把 Z 当成高电平。 */
+  private primeSources(): void {
+    for (const [id, rt] of this.devices) {
+      if (SOURCE_TYPES.has(rt.comp.type)) this.evaluate(id);
+    }
+    this.syncNets();
   }
 
   tick(dt: number): void {
@@ -142,6 +162,30 @@ export class DigitalEngine {
       }
     }
     this.time = target;
+
+    // MCS-51：12 MHz 下 1 机器周期 = 1 µs；按本帧仿真时间推进 CPU。
+    if (this.mcus.size > 0 && this.doc.firmware?.hex) {
+      const cycles = Math.min(200_000, Math.floor(dt / 1e-6));
+      if (cycles > 0) {
+        for (const [id, mcu] of this.mcus) {
+          const portBits = (prefix: string, count: number): number => {
+            let mask = 0;
+            for (let i = 0; i < count; i += 1) {
+              const level = this.levelOf(id, `${prefix}.${i}`);
+              if (level === 0) mask &= ~(1 << i);
+              else mask |= 1 << i;
+            }
+            return mask;
+          };
+          mcu.setPortPins(0, portBits('P0', 8));
+          mcu.setPortPins(1, portBits('P1', 8));
+          mcu.setPortPins(2, portBits('P2', 2));
+          mcu.run(cycles);
+          this.dirty.add(id);
+        }
+        this.settle();
+      }
+    }
     this.buildPinLevels();
   }
 
@@ -224,6 +268,29 @@ export class DigitalEngine {
       case 'PROBE':
         rt.state.level = this.levelOf(componentId, 'IN');
         return;
+      case 'RESISTOR': {
+        // 数字域把限流/上拉电阻近似为单向弱连接：一侧有驱动、另一侧悬空时传递电平。
+        const a = this.levelExcluding(componentId, '1');
+        const b = this.levelExcluding(componentId, '2');
+        if (a !== 'z' && b === 'z') drive('2', a, 'weak');
+        if (b !== 'z' && a === 'z') drive('1', b, 'weak');
+        return;
+      }
+      case 'MCU51': {
+        const mcu = this.mcus.get(componentId);
+        if (!mcu) return;
+        const p1 = mcu.portLatch(1);
+        const p0 = mcu.portLatch(0);
+        const p2 = mcu.portLatch(2);
+        for (let i = 0; i < 8; i += 1) {
+          drive(`P1.${i}`, ((p1 >> i) & 1) as LogicLevel);
+          drive(`P0.${i}`, ((p0 >> i) & 1) === 1 ? 'z' : 0);
+        }
+        for (let i = 0; i < 2; i += 1) {
+          drive(`P2.${i}`, ((p2 >> i) & 1) as LogicLevel);
+        }
+        return;
+      }
       default:
         break;
     }
@@ -239,6 +306,20 @@ export class DigitalEngine {
   private levelOf(componentId: string, pinId: string): LogicLevel {
     const netName = this.pinNetName.get(key(componentId, pinId));
     return netName ? this.netLevels.get(netName) ?? 'z' : 'z';
+  }
+
+  /** 排除该器件自身驱动后的网络电平，用于电阻等无源器件的双向传递。 */
+  private levelExcluding(componentId: string, pinId: string): LogicLevel {
+    const netName = this.pinNetName.get(key(componentId, pinId));
+    if (!netName) return 'z';
+    const drivers: Driver[] = [];
+    if (netName === 'VCC' || netName === '3V3') drivers.push({ level: 1, strength: 'strong' });
+    if (netName === 'GND') drivers.push({ level: 0, strength: 'strong' });
+    for (const [pinKey, driver] of this.drives) {
+      if (pinKey.startsWith(`${componentId}:`)) continue;
+      if (this.pinNetName.get(pinKey) === netName) drivers.push(driver);
+    }
+    return resolveDrivers(drivers);
   }
 
   private syncNets(): string[] {
@@ -269,7 +350,9 @@ export class DigitalEngine {
     for (const [componentId, rt] of this.devices) {
       for (const pin of rt.part.pins) {
         const pinKey = key(componentId, pin.id);
-        if (!(pinKey in pinLevels)) pinLevels[pinKey] = 'z';
+        if (pinKey in pinLevels) continue;
+        // 未接线的输出引脚也要显示模型驱动电平（便于检查器/测试读取）。
+        pinLevels[pinKey] = this.drives.get(pinKey)?.level ?? 'z';
       }
     }
     this.pinLevels = pinLevels;
@@ -303,6 +386,23 @@ export class DigitalEngine {
 
   getWarnings(): string[] {
     return [...this.warnings];
+  }
+
+  mcuSnapshot(): { componentId: string; state: Mcs51Snapshot } | null {
+    for (const [id, mcu] of this.mcus) {
+      return { componentId: id, state: mcu.snapshot() };
+    }
+    return null;
+  }
+
+  takeSerial(): number[] {
+    const out: number[] = [];
+    for (const mcu of this.mcus.values()) out.push(...mcu.takeTxBytes());
+    return out;
+  }
+
+  receiveSerial(componentId: string, byte: number): void {
+    this.mcus.get(componentId)?.receiveByte(byte);
   }
 
   /** 运行中切换开关/按键，无需重建引擎。 */

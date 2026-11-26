@@ -12,6 +12,21 @@ export interface SimLogLine {
   text: string;
 }
 
+export interface McuView {
+  componentId: string;
+  pc: number;
+  a: number;
+  b: number;
+  psw: number;
+  sp: number;
+  dptr: number;
+  cycles: number;
+  latches: number[];
+  pins: number[];
+  codeSize: number;
+  unsupported: number[];
+}
+
 export interface ScopeState {
   ch1: number[];
   ch2: number[];
@@ -41,6 +56,8 @@ interface SimState {
   pinLevels: Record<string, LogicLevel>;
   waveforms: WaveSample[];
   scope: ScopeState;
+  mcu: McuView | null;
+  serial: string;
   log: SimLogLine[];
   setRunning: (running: boolean) => void;
   toggleRunning: () => void;
@@ -56,6 +73,9 @@ interface SimState {
   }) => void;
   appendScope: (ch1: number[], ch2: number[], vmax: number, labels?: [string, string]) => void;
   advanceTime: (time: number) => void;
+  setMcu: (mcu: McuView | null) => void;
+  appendSerial: (text: string) => void;
+  clearSerial: () => void;
   logLine: (text: string, level?: SimLogLine['level'], t?: number) => void;
   clearLog: () => void;
 }
@@ -71,6 +91,8 @@ export const useSimStore = create<SimState>()((set, get) => ({
   pinLevels: {},
   waveforms: [],
   scope: emptyScope(),
+  mcu: null,
+  serial: '',
   log: [],
 
   setRunning: (running) => set({ running }),
@@ -87,6 +109,8 @@ export const useSimStore = create<SimState>()((set, get) => ({
       pinLevels: {},
       waveforms: [],
       scope: emptyScope(),
+      mcu: null,
+      serial: '',
     })),
 
   applyTick: ({ time, events, nets, netLevels, pinLevels, waves }) => {
@@ -117,6 +141,11 @@ export const useSimStore = create<SimState>()((set, get) => ({
   },
 
   advanceTime: (time) => set({ time }),
+
+  setMcu: (mcu) => set({ mcu }),
+
+  appendSerial: (text) => set((s) => ({ serial: (s.serial + text).slice(-8000) })),
+  clearSerial: () => set({ serial: '' }),
 
   logLine: (text, level = 'info', t) => {
     const time = t ?? get().time;

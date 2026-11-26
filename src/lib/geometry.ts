@@ -120,7 +120,7 @@ export function fitView(
     maxX = Math.max(maxX, b.x + b.width);
     maxY = Math.max(maxY, b.y + b.height);
   }
-  const pad = 60;
+  const pad = 72;
   const zoom = Math.min(
     (viewportSize.width - pad * 2) / Math.max(1, maxX - minX),
     (viewportSize.height - pad * 2) / Math.max(1, maxY - minY),

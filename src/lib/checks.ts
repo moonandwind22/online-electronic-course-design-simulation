@@ -1,5 +1,6 @@
 import type { CircuitDoc, CheckIssue, NetlistResult } from '../model/types';
 import type { PartDef } from '../parts/types';
+import { parseIntelHex } from '../engines/mcs51/hex';
 
 const pinName = (doc: CircuitDoc, getPart: (t: string) => PartDef | undefined, componentId: string, pinId: string): string => {
   const comp = doc.components.find((c) => c.id === componentId);
@@ -95,6 +96,27 @@ export function runChecks(
     if (!net) continue;
     const hasResistor = net.pins.some((p) => doc.components.find((c) => c.id === p.componentId)?.type === 'RESISTOR');
     if (!hasResistor) push('warn', `${comp.label} 缺少限流电阻`, 'LED 直接接电源可能过流，建议串联 220Ω–1kΩ 电阻。', comp.id);
+  }
+
+  const mcu = doc.components.find((c) => c.type === 'MCU51' || c.type === 'STM32');
+  if (mcu) {
+    if (!doc.firmware) {
+      push('warn', `${mcu.label} 未烧录固件`, '在底坞“固件”面板载入 Intel HEX 后运行。', mcu.id);
+    } else if (mcu.type === 'MCU51') {
+      const parsed = parseIntelHex(doc.firmware.hex);
+      if (parsed.errors.length > 0) {
+        push('error', '固件 HEX 校验失败', parsed.errors.slice(0, 2).join('；'), mcu.id);
+      } else {
+        push(
+          'pass',
+          `固件已载入 · ${parsed.size} B`,
+          `${doc.firmware.name} 覆盖 0x${parsed.minAddress.toString(16).toUpperCase()}–0x${parsed.maxAddress.toString(16).toUpperCase()}。`,
+          mcu.id,
+        );
+      }
+    } else {
+      push('info', `STM32 固件已载入`, `${doc.firmware.name} · ${doc.firmware.size} B（WASM 内核将在 Phase 7 接入）`, mcu.id);
+    }
   }
 
   if (doc.wires.length === 0) {

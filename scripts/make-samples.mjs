@@ -146,23 +146,24 @@ function buildBlinkStm32() {
 
 /** STC89C52RC：P1 口流水灯（P1.0 先亮，约 0.2s 移位）。 */
 function buildBlink51() {
-  // MOV P1, #0FEH     75 90 FE
-  // LCALL DELAY       12 00 10 (DELAY 在 0x0010)
-  // MOV A, P1         E5 90
-  // RL A              23
-  // MOV P1, A         F5 90
-  // SJMP 0x0002       80 EC
-  // DELAY at 0x0010:  MOV R7,#2 (7F 02) / D1: MOV R6,#200 (7E C8) / D2: MOV R5,#250 (7D FA) / DJNZ R5,D2 (DD FD) / DJNZ R6,D1 (DE FA) / DJNZ R7,D0? ...
-  // 简化：三层循环
+  // 0000: 75 90 FE      MOV P1,#0FEH   （P1.0 初始为低）
+  // 0003: B2 90         LOOP: CPL P1.0
+  // 0005: 12 00 10      LCALL DELAY
+  // 0008: 80 F9         SJMP LOOP
+  // 0010: 7F 04         DELAY: MOV R7,#4
+  // 0012: 7E FF         D1: MOV R6,#255
+  // 0014: 7D FF         D2: MOV R5,#255
+  // 0016: DD FE         D3: DJNZ R5,D3
+  // 0018: DE FA         DJNZ R6,D2
+  // 001A: DF F6         DJNZ R7,D1
+  // 001C: 22            RET
   const bytes = new Uint8Array(0x30);
   const put = (addr, ...b) => bytes.set(b, addr);
   put(0x0000, 0x75, 0x90, 0xfe); // MOV P1,#0FEH
-  put(0x0003, 0x12, 0x00, 0x10); // LCALL DELAY
-  put(0x0006, 0xe5, 0x90); // MOV A,P1
-  put(0x0008, 0x23); // RL A
-  put(0x0009, 0xf5, 0x90); // MOV P1,A
-  put(0x000b, 0x80, 0xf9); // SJMP 0x0006 (回读 P1)
-  // DELAY 子程序：约 12MHz 下 0.2s（三层嵌套）
+  put(0x0003, 0xb2, 0x90); // LOOP: CPL P1.0
+  put(0x0005, 0x12, 0x00, 0x10); // LCALL DELAY
+  put(0x0008, 0x80, 0xf9); // SJMP LOOP（下一条 PC=0x000A，目标 0x0003）
+  // DELAY 子程序：约 0.8s @12MHz（三层嵌套）
   put(0x0010, 0x7f, 0x04); // MOV R7,#4
   put(0x0012, 0x7e, 0xff); // D1: MOV R6,#255
   put(0x0014, 0x7d, 0xff); // D2: MOV R5,#255
@@ -173,6 +174,22 @@ function buildBlink51() {
   return toIntelHex(0x0000, [...bytes]);
 }
 
-writeFileSync(resolve(outDir, 'blink_stm32.hex'), buildBlinkStm32());
-writeFileSync(resolve(outDir, 'blink51.hex'), buildBlink51());
-console.log('已生成 public/firmware/blink_stm32.hex 与 blink51.hex');
+const blinkStm32 = buildBlinkStm32();
+const blink51 = buildBlink51();
+writeFileSync(resolve(outDir, 'blink_stm32.hex'), blinkStm32);
+writeFileSync(resolve(outDir, 'blink51.hex'), blink51);
+
+// 同步生成供示例工程内嵌的固件常量（避免运行时 fetch public 资源）。
+const dataSize = (hex) =>
+  hex
+    .split(/\r?\n/)
+    .filter((line) => line.startsWith(':') && line.length >= 11 && line.slice(7, 9) === '00')
+    .reduce((sum, line) => sum + parseInt(line.slice(1, 3), 16), 0);
+const firmwareTs = `// 由 scripts/make-samples.mjs 自动生成，请勿手工编辑。
+export const BLINK51_HEX = ${JSON.stringify(blink51)};
+export const BLINK51_SIZE = ${dataSize(blink51)};
+export const BLINK_STM32_HEX = ${JSON.stringify(blinkStm32)};
+export const BLINK_STM32_SIZE = ${dataSize(blinkStm32)};
+`;
+writeFileSync(resolve(root, 'src/examples/firmware.ts'), firmwareTs);
+console.log('已生成 public/firmware/*.hex 与 src/examples/firmware.ts');

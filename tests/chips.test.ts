@@ -30,7 +30,8 @@ describe('74LS 门与缓冲器', () => {
     expect(engine.snapshot().pinLevels['U1:1Y']).toBe(0);
     engine.setControls([{ ...a, state: { closed: false } }]);
     expect(engine.snapshot().pinLevels['U1:1Y']).toBe(1);
-    expect(engine.snapshot().pinLevels['U1:2Y']).toBe(1);
+    // TTL 悬空输入按高电平处理，未接线的 2A/2B 使 2Y 保持 0。
+    expect(engine.snapshot().pinLevels['U1:2Y']).toBe(0);
   });
 
   it('74LS04 反相器与 74LS125 三态缓冲', () => {
@@ -100,14 +101,15 @@ describe('触发器与锁存器', () => {
     const engine = new DigitalEngine(doc);
     engine.tick(0.06);
     expect(engine.snapshot().pinLevels['U1:Q0']).toBe(1);
-    expect(engine.snapshot().pinLevels['U1:Q1']).toBe(0);
+    // D1 悬空按 TTL 高电平处理，因此 Q1 也为 1。
+    expect(engine.snapshot().pinLevels['U1:Q1']).toBe(1);
   });
 });
 
 describe('计数器与移位寄存器', () => {
   it('74LS163 同步清零零位与计数', () => {
     const clk = comp('CLK1', 'CLOCK', 100, 100, 'CLK1', { freq: 10 });
-    const clr = sw('SWCLR', false);
+    const clr = sw('SWCLR', true);
     const u = chip('U1', '74LS163');
     const doc = build([clk, clr, u], [
       { from: ['CLK1', 'OUT'], to: ['U1', 'CLK'] },

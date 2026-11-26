@@ -92,8 +92,8 @@ export default function App() {
 
   const toggleRun = () => {
     const sim = useSimStore.getState();
-    if (doc.domain !== 'digital' && doc.domain !== 'analog') {
-      showToast('该仿真域的引擎将在后续阶段接入（当前支持数电与模电）', 'warn');
+    if (doc.domain !== 'digital' && doc.domain !== 'analog' && doc.domain !== 'mcs51') {
+      showToast('该仿真域的引擎将在后续阶段接入（当前支持数电、模电与 51）', 'warn');
       return;
     }
     if (sim.running) {
@@ -102,7 +102,11 @@ export default function App() {
     } else {
       sim.setRunning(true);
       sim.logLine(
-        doc.domain === 'digital' ? '仿真启动：数字引擎 · 事件驱动' : '仿真启动：brownout · MNA 求解',
+        doc.domain === 'digital'
+          ? '仿真启动：数字引擎 · 事件驱动'
+          : doc.domain === 'analog'
+            ? '仿真启动：brownout · MNA 求解'
+            : '仿真启动：MCS-51 内核 · 12 MHz',
         'ok',
       );
     }

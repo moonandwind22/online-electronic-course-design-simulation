@@ -1,6 +1,7 @@
 import type { PointerEvent as ReactPointerEvent } from 'react';
 import type { Component, LogicLevel } from '../../model/types';
 import type { PartDef } from '../../parts/types';
+import { partSvgAssets, type PartSvgAssets } from '../../parts/svgAssets';
 
 interface PartViewProps {
   comp: Component;
@@ -20,6 +21,50 @@ const LEVEL_CLASS: Record<string, string> = {
 
 const isLabeled = (part: PartDef) => part.symbol === 'chip' || part.symbol === 'board' || part.symbol === 'sevenseg';
 
+interface AssetTransform {
+  sx: number;
+  sy: number;
+  tx: number;
+  ty: number;
+}
+
+/** 把资产包大封装的引脚锚点对齐到画布器件引脚坐标。 */
+function canvasAssetTransform(part: PartDef, asset: PartSvgAssets): AssetTransform | null {
+  if (part.pins.some((p) => p.dir === 'up' || p.dir === 'down')) return null;
+  const appLeft = part.pins.filter((p) => p.dir === 'left').sort((a, b) => a.y - b.y);
+  const appRight = part.pins.filter((p) => p.dir === 'right').sort((a, b) => a.y - b.y);
+  const assetLeft = asset.largePins.filter((p) => p.side === 'left').sort((a, b) => a.y - b.y);
+  const assetRight = asset.largePins.filter((p) => p.side === 'right').sort((a, b) => a.y - b.y);
+  if (!appLeft.length || !appRight.length) return null;
+  if (appLeft.length !== assetLeft.length || appRight.length !== assetRight.length) return null;
+
+  const aLeftX = Math.min(...assetLeft.map((p) => p.x));
+  const aRightX = Math.max(...assetRight.map((p) => p.x));
+  const pLeftX = Math.min(...appLeft.map((p) => p.x));
+  const pRightX = Math.max(...appRight.map((p) => p.x));
+  if (aRightX <= aLeftX || pRightX <= pLeftX) return null;
+
+  const sx = (pRightX - pLeftX) / (aRightX - aLeftX);
+  const tx = pLeftX - aLeftX * sx;
+
+  const vertical = [
+    [appLeft, assetLeft],
+    [appRight, assetRight],
+  ].find(([app]) => app.length >= 2);
+  if (vertical) {
+    const [appPins, assetPins] = vertical;
+    const aFirst = assetPins[0].y;
+    const aLast = assetPins[assetPins.length - 1].y;
+    const pFirst = appPins[0].y;
+    const pLast = appPins[appPins.length - 1].y;
+    if (aLast === aFirst) return null;
+    const sy = (pLast - pFirst) / (aLast - aFirst);
+    return { sx, sy, tx, ty: pFirst - aFirst * sy };
+  }
+
+  return { sx, sy: sx, tx, ty: appLeft[0].y - assetLeft[0].y * sx };
+}
+
 function stubLength(part: PartDef, dir: string): number {
   if (part.symbol === 'chip') return dir === 'left' || dir === 'right' ? 25 : 12;
   if (part.symbol === 'board') return dir === 'left' || dir === 'right' ? 14 : 12;
@@ -34,7 +79,10 @@ export function PartView({ comp, part, selected, pinLevels, onPartPointerDown, o
   if (comp.rot) transform += ` rotate(${comp.rot} ${cx} ${cy})`;
   if (comp.mirror) transform += ` translate(${part.width} 0) scale(-1 1)`;
 
-  const body = renderBody(comp, part, pinLevels);
+  const asset = partSvgAssets(comp.type);
+  const assetTransform = asset ? canvasAssetTransform(part, asset) : null;
+  const useAsset = Boolean(asset && assetTransform);
+  const body = useAsset ? null : renderBody(comp, part, pinLevels);
 
   return (
     <g
@@ -53,7 +101,15 @@ export function PartView({ comp, part, selected, pinLevels, onPartPointerDown, o
           className="part-selected"
         />
       )}
-      {body}
+      {useAsset && asset && assetTransform ? (
+        <g
+          className="part-asset"
+          transform={`translate(${assetTransform.tx} ${assetTransform.ty}) scale(${assetTransform.sx} ${assetTransform.sy})`}
+          dangerouslySetInnerHTML={{ __html: asset.canvasLarge }}
+        />
+      ) : (
+        body
+      )}
       <text className="part-label" x={0} y={-9}>
         {comp.label}
       </text>
@@ -68,9 +124,12 @@ export function PartView({ comp, part, selected, pinLevels, onPartPointerDown, o
         if (pin.dir === 'up') y2 = pin.y + len;
         if (pin.dir === 'down') y2 = pin.y - len;
         const label = isLabeled(part);
+        const showPinGraphics = !useAsset;
         return (
           <g key={pin.id} className="pin">
-            <line x1={pin.x} y1={pin.y} x2={x2} y2={y2} className={`pin-line pin-line--${levelClass}`} />
+            {showPinGraphics && (
+              <line x1={pin.x} y1={pin.y} x2={x2} y2={y2} className={`pin-line pin-line--${levelClass}`} />
+            )}
             <circle
               cx={pin.x}
               cy={pin.y}
@@ -83,7 +142,7 @@ export function PartView({ comp, part, selected, pinLevels, onPartPointerDown, o
             >
               <title>{`${comp.label}.${pin.number ?? pin.id} · ${pin.name} → ${String(level).toUpperCase()}`}</title>
             </circle>
-            {label && pin.number && (
+            {showPinGraphics && label && pin.number && (
               <text
                 className="pin-number"
                 x={pin.dir === 'left' ? pin.x + 9 : pin.x - 9}
@@ -93,7 +152,7 @@ export function PartView({ comp, part, selected, pinLevels, onPartPointerDown, o
                 {pin.number}
               </text>
             )}
-            {label && part.symbol !== 'sevenseg' && (
+            {showPinGraphics && label && part.symbol !== 'sevenseg' && (
               <text
                 className="pin-name"
                 x={pin.dir === 'left' ? pin.x + 20 : pin.x - 20}

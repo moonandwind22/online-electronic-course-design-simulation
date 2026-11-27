@@ -59,6 +59,49 @@ interface SvgAsset {
   large: string;
 }
 
+export interface SvgPinAnchor {
+  side: 'left' | 'right' | 'up' | 'down';
+  x: number;
+  y: number;
+}
+
+interface SvgAssetMeta {
+  canvasLarge: string;
+  largeWidth: number;
+  largeHeight: number;
+  largePins: SvgPinAnchor[];
+}
+
+/** 去掉资产包内固定的参考位号（U1/R1…），画布上使用元件自身的动态位号。 */
+function stripReference(markup: string): string {
+  const start = markup.indexOf('<g id="reference-and-markings"');
+  if (start < 0) return markup;
+  const end = markup.indexOf('<g id="pins"', start);
+  if (end < 0) return markup;
+  const group = markup.slice(start, end).replace(/<text\b[^>]*text-anchor="start"[^>]*>[^<]*<\/text>/, '');
+  return markup.slice(0, start) + group + markup.slice(end);
+}
+
+function parseLargeSvg(markup: string): Omit<SvgAssetMeta, 'canvasLarge'> {
+  const viewBox = /viewBox="([^"]+)"/.exec(markup)?.[1].trim().split(/[\s,]+/).map(Number) ?? [];
+  const largeWidth = viewBox[2] ?? 0;
+  const largeHeight = viewBox[3] ?? 0;
+  const largePins: SvgPinAnchor[] = [];
+  const groupRe = /<g id="((?:pin-[^"]+|port-(?:left|right)-[^"]+))"([^>]*)>([\s\S]*?)<\/g>/g;
+  let match: RegExpExecArray | null;
+  while ((match = groupRe.exec(markup))) {
+    const [, id, attrs, body] = match;
+    const circle = /<circle\s+cx="([\d.]+)"\s+cy="([\d.]+)"/.exec(body);
+    if (!circle) continue;
+    const x = Number(circle[1]);
+    const y = Number(circle[2]);
+    const declared = /data-side="(left|right|up|down)"/.exec(attrs)?.[1] as SvgPinAnchor['side'] | undefined;
+    const side = declared ?? (id.includes('left') ? 'left' : id.includes('right') ? 'right' : x < largeWidth / 2 ? 'left' : 'right');
+    largePins.push({ side, x, y });
+  }
+  return { largeWidth, largeHeight, largePins };
+}
+
 const ASSETS: Record<string, SvgAsset> = {
   '74ls74-dip14': { small: small74ls74, large: large74ls74 },
   '74ls138-dip16': { small: small74ls138, large: large74ls138 },
@@ -119,10 +162,22 @@ export interface PartSvgAssets {
   slug: string;
   small: string;
   large: string;
+  canvasLarge: string;
+  largeWidth: number;
+  largeHeight: number;
+  largePins: SvgPinAnchor[];
 }
+
+const ASSET_META = new Map<string, SvgAssetMeta>(
+  Object.entries(ASSETS).map(([slug, asset]) => [
+    slug,
+    { ...parseLargeSvg(asset.large), canvasLarge: stripReference(asset.large) },
+  ]),
+);
 
 export function partSvgAssets(type: string): PartSvgAssets | undefined {
   const slug = PART_ASSET_SLUG[type];
   const asset = slug ? ASSETS[slug] : undefined;
-  return slug && asset ? { slug, ...asset } : undefined;
+  const meta = slug ? ASSET_META.get(slug) : undefined;
+  return slug && asset && meta ? { slug, ...asset, ...meta } : undefined;
 }

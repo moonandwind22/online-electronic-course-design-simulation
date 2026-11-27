@@ -233,7 +233,7 @@ node "$TRAE_DESIGN_SKILL/shared-runtime/deterministic-tooling/validate-finish-re
 
 - 在线地址：<https://37lx73asijfytn9bpf0.traesite.cn>
 - 重新部署：在 Trae 中使用部署插件，将 `dist/` 作为静态站点的 `public/` 内容上传。
-- 当前访问策略：仅自己可见；需要分享时调整访问策略为“所有人可见”。
+- 当前访问策略：所有人可见。
 
 ## 许可与第三方
 

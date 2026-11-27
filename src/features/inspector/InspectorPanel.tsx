@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Copy, Sparkles, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Copy, Sparkles, Trash2 } from 'lucide-react';
 import type { CheckIssue, NetlistResult } from '../../model/types';
 import type { ParamDef } from '../../parts/types';
 import { getPart } from '../../parts/registry';
@@ -25,6 +25,8 @@ export function InspectorPanel({ netlist, checks }: InspectorProps) {
   const setTab = useUiStore((s) => s.setInspectorTab);
   const setAiOpen = useUiStore((s) => s.setAiOpen);
   const showToast = useUiStore((s) => s.showToast);
+  const collapsed = useUiStore((s) => s.panelCollapsed.inspector);
+  const togglePanel = useUiStore((s) => s.togglePanel);
   const pinLevels = useSimStore((s) => s.pinLevels);
   const netLevels = useSimStore((s) => s.netLevels);
   const running = useSimStore((s) => s.running);
@@ -37,8 +39,8 @@ export function InspectorPanel({ netlist, checks }: InspectorProps) {
   const selectedWire = selection.wires.length === 1 ? doc.wires.find((w) => w.id === selection.wires[0]) : null;
 
   const netOfWire = useMemo(() => {
-    if (!selectedWire?.from) return null;
-    const netId = netlist.pinNet.get(`${selectedWire.from.componentId}:${selectedWire.from.pinId}`);
+    if (!selectedWire) return null;
+    const netId = netlist.wireNet.get(selectedWire.id);
     return netId ? netlist.nets.find((n) => n.id === netId) ?? null : null;
   }, [selectedWire, netlist]);
 
@@ -80,13 +82,33 @@ export function InspectorPanel({ netlist, checks }: InspectorProps) {
       ? 'WIRE'
       : domainMeta(doc.domain).short;
 
+  if (collapsed) {
+    return (
+      <aside className="app-inspector is-collapsed">
+        <button className="panel-rail-btn" onClick={() => togglePanel('inspector', false)} title="展开检查器">
+          <ChevronLeft className="icon" />
+          <span className="panel-rail-label">检查器</span>
+        </button>
+      </aside>
+    );
+  }
+
   return (
     <aside className="app-inspector">
       <div className="inspector-head">
         <div className="inspector-kicker">{kicker}</div>
         <div className="inspector-title-row">
           <span className="inspector-title">{title}</span>
-          <span className="chip chip--muted">{chipText}</span>
+          <span className="panel-head-actions">
+            <span className="chip chip--muted">{chipText}</span>
+            <button
+              className="icon-btn icon-btn--sm"
+              onClick={() => togglePanel('inspector', true)}
+              title="收起检查器"
+            >
+              <ChevronRight className="icon" />
+            </button>
+          </span>
         </div>
       </div>
       <div className="inspector-tabs">
@@ -204,7 +226,13 @@ export function InspectorPanel({ netlist, checks }: InspectorProps) {
                   </div>
                   <div className="param-row">
                     <span className="param-key">导线长度</span>
-                    <span className="param-val">{selectedWire.points.length} 段</span>
+                    <span className="param-val">{Math.max(0, selectedWire.points.length - 1)} 段</span>
+                  </div>
+                  <div className="param-row">
+                    <span className="param-key">接线方式</span>
+                    <span className="param-val">
+                      {selectedWire.join ? 'T 型接导线' : selectedWire.from && selectedWire.to ? '引脚 — 引脚' : '单端导线'}
+                    </span>
                   </div>
                 </div>
                 <button className="btn btn--ghost btn--sm mt-8" onClick={deleteSelection}>

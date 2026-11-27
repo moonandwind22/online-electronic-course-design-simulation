@@ -29,6 +29,8 @@ export interface Wire {
   points: Point[];
   from?: PinRef;
   to?: PinRef;
+  /** T 型接线：这根导线的末端接到另一根导线上，网表将两者合并。 */
+  join?: { wireId: string };
   netLabel?: string;
 }
 
@@ -61,6 +63,8 @@ export interface Net {
 export interface NetlistResult {
   nets: Net[];
   pinNet: Map<string, string>;
+  /** 导线 → 网络（含通过 T 型接点并入的导线）。 */
+  wireNet: Map<string, string>;
   unconnected: PinRef[];
 }
 

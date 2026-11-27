@@ -11,13 +11,28 @@ import {
   ZoomOut,
   CircleDot,
 } from 'lucide-react';
-import type { CircuitDoc, Component, NetlistResult, Point } from '../../model/types';
+import type { CircuitDoc, Component, NetlistResult, Point, Wire } from '../../model/types';
 import { getPart } from '../../parts/registry';
 import { useCircuitStore } from '../../store/useCircuitStore';
 import { useSimStore } from '../../store/useSimStore';
 import { useUiStore } from '../../store/useUiStore';
 import { PartView } from './PartView';
-import { pinWorld, orthoRoute, pointsToPath, boundsOf, rectsIntersect, fitView, snap } from '../../lib/geometry';
+import {
+  pinWorld,
+  orthoRoute,
+  pointsToPath,
+  boundsOf,
+  rectsIntersect,
+  fitView,
+  snap,
+  nearestPointOnPolyline,
+} from '../../lib/geometry';
+import {
+  doglegWirePoints,
+  isSegmentMovable,
+  normalizeWirePoints,
+  translateWireSegment,
+} from '../../lib/wires';
 
 interface CanvasProps {
   netlist: NetlistResult;
@@ -49,6 +64,8 @@ export function Canvas({ netlist }: CanvasProps) {
   const moveComponents = useCircuitStore((s) => s.moveComponents);
   const beginHistory = useCircuitStore((s) => s.beginHistory);
   const addWire = useCircuitStore((s) => s.addWire);
+  const addWireToWire = useCircuitStore((s) => s.addWireToWire);
+  const updateWirePoints = useCircuitStore((s) => s.updateWirePoints);
   const deleteSelection = useCircuitStore((s) => s.deleteSelection);
   const rotateSelection = useCircuitStore((s) => s.rotateSelection);
   const mirrorSelection = useCircuitStore((s) => s.mirrorSelection);
@@ -66,22 +83,37 @@ export function Canvas({ netlist }: CanvasProps) {
   const [cursor, setCursor] = useState<Point | null>(null);
   const [wireStart, setWireStart] = useState<{ componentId: string; pinId: string; point: Point } | null>(null);
   const [marquee, setMarquee] = useState<{ start: Point; current: Point } | null>(null);
+  const [hoverWireId, setHoverWireId] = useState<string | null>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
+  const wireDragRef = useRef<{
+    mode: 'segment' | 'straight';
+    wireId: string;
+    segmentIndex: number;
+    startDoc: Point;
+    originalPoints: Point[];
+    moved: boolean;
+    historyStarted: boolean;
+  } | null>(null);
   const lastFitRef = useRef('');
 
   const vp = doc.viewport;
   const partMap = useMemo(() => new Map(doc.components.map((c) => [c.id, getPart(c.type)])), [doc.components]);
 
+  useEffect(() => {
+    if (tool !== 'wire') {
+      setWireStart(null);
+      setHoverWireId(null);
+    }
+  }, [tool]);
+
   const wireNet = useMemo(() => {
     const map = new Map<string, string>();
-    for (const wire of doc.wires) {
-      if (!wire.from) continue;
-      const netId = netlist.pinNet.get(`${wire.from.componentId}:${wire.from.pinId}`);
-      const net = netId ? netlist.nets.find((n) => n.id === netId) : undefined;
-      if (net) map.set(wire.id, net.name);
+    for (const [wireId, netId] of netlist.wireNet) {
+      const net = netlist.nets.find((n) => n.id === netId);
+      if (net) map.set(wireId, net.name);
     }
     return map;
-  }, [doc.wires, netlist]);
+  }, [netlist]);
 
   const toDoc = useCallback(
     (clientX: number, clientY: number): Point => {
@@ -164,9 +196,18 @@ export function Canvas({ netlist }: CanvasProps) {
         spaceRef.current = true;
       }
       if (e.key === 'Escape') {
-        setWireStart(null);
-        setMarquee(null);
-        dragRef.current = null;
+        if (wireStart) {
+          e.preventDefault();
+          setWireStart(null);
+          setHoverWireId(null);
+        } else {
+          setWireStart(null);
+          setHoverWireId(null);
+          setMarquee(null);
+          dragRef.current = null;
+          wireDragRef.current = null;
+          if (tool === 'wire') setTool('select');
+        }
       }
       if (e.key.toLowerCase() === 'f') window.dispatchEvent(new Event('ecs:fit'));
     };
@@ -179,7 +220,7 @@ export function Canvas({ netlist }: CanvasProps) {
       window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('keyup', onKeyUp);
     };
-  }, []);
+  }, [tool, wireStart, setTool]);
 
   const zoomBy = (factor: number) => {
     const el = containerRef.current;
@@ -274,6 +315,61 @@ export function Canvas({ netlist }: CanvasProps) {
     showToast(`已连接 ${wireStart.componentId} → ${comp.label}.${pinId}`, 'ok');
   };
 
+  const handleWirePointerDown = (e: ReactPointerEvent, wire: Wire) => {
+    if (e.button !== 0) return;
+    e.stopPropagation();
+    const point = toDoc(e.clientX, e.clientY);
+
+    if (tool === 'wire') {
+      if (!wireStart) {
+        selectWire(wire.id, e.shiftKey);
+        return;
+      }
+      const hit = nearestPointOnPolyline(wire.points, point);
+      if (!hit) return;
+      const startComp = doc.components.find((c) => c.id === wireStart.componentId);
+      const startPart = startComp ? partMap.get(startComp.id) : undefined;
+      const startWorld = startComp && startPart ? pinWorld(startComp, startPart, wireStart.pinId) : wireStart.point;
+      if (!startWorld) return;
+      addWireToWire(
+        { componentId: wireStart.componentId, pinId: wireStart.pinId },
+        wire.id,
+        orthoRoute(startWorld, hit.point),
+      );
+      setWireStart(null);
+      setHoverWireId(null);
+      showToast('已连接到导线上', 'ok');
+      return;
+    }
+
+    selectWire(wire.id, e.shiftKey);
+    if (e.shiftKey) return;
+    const hit = nearestPointOnPolyline(wire.points, point);
+    if (!hit) return;
+    if (wire.points.length === 2) {
+      wireDragRef.current = {
+        mode: 'straight',
+        wireId: wire.id,
+        segmentIndex: 0,
+        startDoc: point,
+        originalPoints: wire.points.map((p) => ({ ...p })),
+        moved: false,
+        historyStarted: false,
+      };
+      return;
+    }
+    if (!isSegmentMovable(wire, hit.segmentIndex)) return;
+    wireDragRef.current = {
+      mode: 'segment',
+      wireId: wire.id,
+      segmentIndex: hit.segmentIndex,
+      startDoc: point,
+      originalPoints: wire.points.map((p) => ({ ...p })),
+      moved: false,
+      historyStarted: false,
+    };
+  };
+
   const handleBackgroundDown = (e: ReactPointerEvent) => {
     if (e.button === 1 || spaceRef.current) {
       e.preventDefault();
@@ -303,6 +399,34 @@ export function Canvas({ netlist }: CanvasProps) {
   const handlePointerMove = (e: ReactPointerEvent) => {
     const point = toDoc(e.clientX, e.clientY);
     setCursor(point);
+    const wireDrag = wireDragRef.current;
+    if (wireDrag) {
+      const dx = point.x - wireDrag.startDoc.x;
+      const dy = point.y - wireDrag.startDoc.y;
+      if (!wireDrag.moved && Math.abs(dx) + Math.abs(dy) > 1.5) wireDrag.moved = true;
+      if (wireDrag.moved) {
+        if (!wireDrag.historyStarted) {
+          beginHistory();
+          wireDrag.historyStarted = true;
+        }
+        const next =
+          wireDrag.mode === 'straight'
+            ? doglegWirePoints(
+                wireDrag.originalPoints[0],
+                wireDrag.originalPoints[1],
+                Math.round(dx),
+                Math.round(dy),
+              )
+            : translateWireSegment(
+                wireDrag.originalPoints,
+                wireDrag.segmentIndex,
+                Math.round(dx),
+                Math.round(dy),
+              );
+        updateWirePoints(wireDrag.wireId, next);
+      }
+      return;
+    }
     const drag = dragRef.current;
     if (!drag) return;
     if (drag.mode === 'pan') {
@@ -334,6 +458,13 @@ export function Canvas({ netlist }: CanvasProps) {
   };
 
   const handlePointerUp = () => {
+    const wireDrag = wireDragRef.current;
+    wireDragRef.current = null;
+    if (wireDrag?.moved) {
+      const live = useCircuitStore.getState().doc.wires.find((w) => w.id === wireDrag.wireId);
+      if (live) updateWirePoints(live.id, normalizeWirePoints(live.points));
+      touch();
+    }
     const drag = dragRef.current;
     dragRef.current = null;
     if (!drag) return;
@@ -390,17 +521,30 @@ export function Canvas({ netlist }: CanvasProps) {
               const path = pointsToPath(wire.points);
               const mid = wire.points[Math.max(0, Math.floor((wire.points.length - 1) / 2))];
               const nxt = wire.points[Math.min(wire.points.length - 1, Math.floor((wire.points.length - 1) / 2) + 1)] ?? mid;
+              const endpoint = wire.points[wire.points.length - 1];
+              const connectable = tool === 'wire' && Boolean(wireStart);
               return (
-                <g key={wire.id} className={`wire-group ${isSelected ? 'is-selected' : ''}`}>
+                <g
+                  key={wire.id}
+                  className={`wire-group ${isSelected ? 'is-selected' : ''} ${
+                    hoverWireId === wire.id ? 'is-wire-target' : ''
+                  }`}
+                >
                   <path
                     d={path}
-                    className={`wire-hit`}
-                    onPointerDown={(e) => {
-                      e.stopPropagation();
-                      selectWire(wire.id, e.shiftKey);
+                    className={`wire-hit ${connectable ? 'is-connectable' : ''}`}
+                    onPointerDown={(e) => handleWirePointerDown(e, wire)}
+                    onPointerEnter={() => {
+                      if (connectable) setHoverWireId(wire.id);
+                    }}
+                    onPointerLeave={() => {
+                      if (hoverWireId === wire.id) setHoverWireId(null);
                     }}
                   />
                   <path d={path} className={`wire wire--${levelClass}`} />
+                  {wire.join && endpoint && (
+                    <circle className="wire-junction" cx={endpoint.x} cy={endpoint.y} r={2.8} />
+                  )}
                   {wire.netLabel && (
                     <text className="wire-label" x={(mid.x + nxt.x) / 2} y={(mid.y + nxt.y) / 2 - 4} textAnchor="middle">
                       {wire.netLabel}
@@ -484,7 +628,9 @@ export function Canvas({ netlist }: CanvasProps) {
       </div>
 
       <div className="canvas-hint">
-        {wireStart ? '点击另一个引脚完成连线，Esc 取消' : '点击引脚连线 · 拖拽器件移动 · 空格拖拽平移 · 滚轮缩放'}
+        {wireStart
+          ? '点击引脚或导线完成连线，Esc 取消'
+          : '点击引脚连线 · 拖动导线中段调整走线 · 空格拖拽平移 · 滚轮缩放'}
       </div>
 
       <div className="zoom-box">

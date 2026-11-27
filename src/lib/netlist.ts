@@ -73,14 +73,34 @@ export function buildNetlist(doc: CircuitDoc, getPart: (type: string) => PartDef
     }
   }
 
+  const wireKeys = new Map<string, string>();
   for (const wire of doc.wires) {
-    if (!wire.from || !wire.to) continue;
-    const fromKey = pinKey(wire.from.componentId, wire.from.pinId);
-    const toKey = pinKey(wire.to.componentId, wire.to.pinId);
-    dsu.union(fromKey, toKey);
-    connected.add(fromKey);
-    connected.add(toKey);
-    if (wire.netLabel) labelledWires.push({ key: fromKey, label: wire.netLabel });
+    const wireKey = `__wire_${wire.id}`;
+    wireKeys.set(wire.id, wireKey);
+    dsu.add(wireKey);
+    if (wire.from) {
+      const key = pinKey(wire.from.componentId, wire.from.pinId);
+      dsu.union(wireKey, key);
+      connected.add(key);
+    }
+    if (wire.to) {
+      const key = pinKey(wire.to.componentId, wire.to.pinId);
+      dsu.union(wireKey, key);
+      connected.add(key);
+    }
+    const labelKey = wire.from
+      ? pinKey(wire.from.componentId, wire.from.pinId)
+      : wire.to
+        ? pinKey(wire.to.componentId, wire.to.pinId)
+        : null;
+    if (wire.netLabel && labelKey) labelledWires.push({ key: labelKey, label: wire.netLabel });
+  }
+
+  for (const wire of doc.wires) {
+    if (!wire.join) continue;
+    const own = wireKeys.get(wire.id);
+    const target = wireKeys.get(wire.join.wireId);
+    if (own && target) dsu.union(own, target);
   }
 
   const labels = new Map<string, string>();
@@ -100,7 +120,7 @@ export function buildNetlist(doc: CircuitDoc, getPart: (type: string) => PartDef
 
   const groups = new Map<string, PinRef[]>();
   for (const key of dsu.keys()) {
-    if (key.startsWith('__power_')) continue;
+    if (key.startsWith('__power_') || key.startsWith('__wire_')) continue;
     if (!connected.has(key)) continue;
     const root = dsu.find(key);
     if (!groups.has(root)) groups.set(root, []);
@@ -129,6 +149,7 @@ export function buildNetlist(doc: CircuitDoc, getPart: (type: string) => PartDef
   };
 
   const pinNet = new Map<string, string>();
+  const netByRoot = new Map<string, Net>();
   let autoIndex = 0;
 
   const supplyOf = (pins: PinRef[]): string | null => {
@@ -176,7 +197,14 @@ export function buildNetlist(doc: CircuitDoc, getPart: (type: string) => PartDef
 
     const net: Net = { id: `net_${name}`, name, pins, isPower, label };
     nets.push(net);
+    netByRoot.set(root, net);
     for (const p of pins) pinNet.set(pinKey(p.componentId, p.pinId), net.id);
+  }
+
+  const wireNet = new Map<string, string>();
+  for (const [wireId, wireKey] of wireKeys) {
+    const net = netByRoot.get(dsu.find(wireKey));
+    if (net) wireNet.set(wireId, net.id);
   }
 
   const unconnected: PinRef[] = [];
@@ -188,7 +216,7 @@ export function buildNetlist(doc: CircuitDoc, getPart: (type: string) => PartDef
     }
   }
 
-  return { nets, pinNet, unconnected };
+  return { nets, pinNet, wireNet, unconnected };
 }
 
 export function netKey(componentId: string, pinId: string): string {

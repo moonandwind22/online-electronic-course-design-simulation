@@ -96,6 +96,34 @@ export function rectsIntersect(
   return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 }
 
+export interface NearestPoint {
+  point: Point;
+  segmentIndex: number;
+  distance: number;
+  t: number;
+}
+
+export function nearestPointOnSegment(a: Point, b: Point, p: Point): NearestPoint {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const lengthSq = dx * dx + dy * dy;
+  const t = lengthSq === 0 ? 0 : Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / lengthSq));
+  const point = { x: a.x + dx * t, y: a.y + dy * t };
+  return { point, segmentIndex: 0, distance: distance(point, p), t };
+}
+
+/** 找到折线上距离目标点最近的位置（用于导线—导线 T 型接点）。 */
+export function nearestPointOnPolyline(points: Point[], p: Point): NearestPoint | null {
+  if (points.length === 0) return null;
+  if (points.length === 1) return { point: { ...points[0] }, segmentIndex: 0, distance: distance(points[0], p), t: 0 };
+  let best: NearestPoint | null = null;
+  for (let i = 0; i < points.length - 1; i += 1) {
+    const hit = nearestPointOnSegment(points[i], points[i + 1], p);
+    if (!best || hit.distance < best.distance) best = { ...hit, segmentIndex: i };
+  }
+  return best;
+}
+
 export function segmentMidpoint(points: Point[]): Point {
   if (points.length === 0) return { x: 0, y: 0 };
   if (points.length === 1) return points[0];

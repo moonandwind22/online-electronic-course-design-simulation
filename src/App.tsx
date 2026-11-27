@@ -1,6 +1,8 @@
 import { useEffect, useMemo } from 'react';
+import type { CSSProperties } from 'react';
 import {
   CircuitBoard,
+  Home,
   Keyboard,
   Moon,
   Pause,
@@ -24,12 +26,28 @@ import { DockPanel } from './features/dock/DockPanel';
 import { AiNetlistDrawer } from './features/ai/AiNetlistDrawer';
 import { ToastHost } from './components/Toast';
 import { ShortcutsModal } from './components/ShortcutsModal';
+import { PanelResizeHandles } from './features/layout/PanelResizeHandles';
 
 const SPEEDS = [0.1, 0.5, 1, 4];
+
+/** 首页跳转参数只在模块初始化时读取一次，避免 StrictMode 二次执行时丢失 domain。 */
+const BOOT_ROUTE = (() => {
+  if (typeof window === 'undefined') return { domain: undefined, blank: false, hasParams: false };
+  const params = new URLSearchParams(window.location.search);
+  const requested = params.get('domain');
+  return {
+    domain: DOMAINS.find((d) => d.id === requested)?.id,
+    blank: params.get('blank') === '1',
+    hasParams: params.has('domain') || params.has('blank'),
+  };
+})();
+
+let bootLoaded = false;
 
 export default function App() {
   const doc = useCircuitStore((s) => s.doc);
   const loadDomain = useCircuitStore((s) => s.loadDomain);
+  const createBlank = useCircuitStore((s) => s.createBlank);
   const renameProject = useCircuitStore((s) => s.renameProject);
   const running = useSimStore((s) => s.running);
   const speed = useSimStore((s) => s.speed);
@@ -38,6 +56,8 @@ export default function App() {
   const setAiOpen = useUiStore((s) => s.setAiOpen);
   const setShortcutsOpen = useUiStore((s) => s.setShortcutsOpen);
   const showToast = useUiStore((s) => s.showToast);
+  const panelSizes = useUiStore((s) => s.panelSizes);
+  const panelCollapsed = useUiStore((s) => s.panelCollapsed);
 
   useSimulation();
 
@@ -51,7 +71,16 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
-    loadDomain('digital');
+    if (bootLoaded) return;
+    bootLoaded = true;
+    if (BOOT_ROUTE.blank) createBlank(BOOT_ROUTE.domain ?? 'digital');
+    else loadDomain(BOOT_ROUTE.domain ?? 'digital');
+    if (BOOT_ROUTE.hasParams) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('domain');
+      url.searchParams.delete('blank');
+      window.history.replaceState({}, '', url);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -126,15 +155,30 @@ export default function App() {
     showToast(`已切换到${domainMeta(domain).label}`, 'info');
   };
 
+  const shellClass = [
+    'app-shell',
+    panelCollapsed.palette ? 'is-palette-collapsed' : '',
+    panelCollapsed.inspector ? 'is-inspector-collapsed' : '',
+    panelCollapsed.dock ? 'is-dock-collapsed' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const shellStyle = {
+    '--palette-w': `${panelSizes.palette}px`,
+    '--inspector-w': `${panelSizes.inspector}px`,
+    '--dock-h': `${panelSizes.dock}px`,
+  } as CSSProperties;
+
   return (
-    <main className="app-shell">
+    <main className={shellClass} style={shellStyle}>
       <header className="app-topbar">
-        <div className="topbar-home">
+        <a className="topbar-home" href="./hub.html" title="返回课设工作台主页">
           <span className="brand-mark">
             <CircuitBoard className="icon" />
           </span>
           <span className="brand-word">课设工作台</span>
-        </div>
+        </a>
         <span className="topbar-divider" />
         <div className="project-block">
           <input
@@ -194,6 +238,10 @@ export default function App() {
           <button className="icon-btn" onClick={() => setShortcutsOpen(true)} title="快捷键">
             <Keyboard className="icon" />
           </button>
+          <a className="btn btn--ghost btn--sm topbar-home-link" href="./hub.html" title="返回课设工作台主页">
+            <Home className="icon" />
+            <span className="topbar-home-label">课设工作台</span>
+          </a>
         </div>
       </header>
 
@@ -203,6 +251,7 @@ export default function App() {
       </section>
       <InspectorPanel netlist={netlist} checks={checks} />
       <DockPanel netlist={netlist} checks={checks} />
+      <PanelResizeHandles />
 
       <footer className="app-statusbar">
         <div className="status-left">

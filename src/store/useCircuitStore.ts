@@ -4,6 +4,7 @@ import { getPart } from '../parts/registry';
 import { uid } from '../lib/id';
 import { loadLastDoc, scheduleSave } from '../lib/storage';
 import { EXAMPLE_BUILDERS, blankDoc } from '../examples';
+import { forceWireEndpoints, reanchorWires, syncJoinedWires } from '../lib/wires';
 
 export type Tool = 'select' | 'wire';
 
@@ -38,6 +39,8 @@ interface CircuitState {
   mirrorSelection: () => void;
   deleteSelection: () => void;
   addWire: (from: PinRef, to: PinRef, points: Point[], netLabel?: string) => void;
+  addWireToWire: (from: PinRef, targetWireId: string, points: Point[], netLabel?: string) => void;
+  updateWirePoints: (id: string, points: Point[]) => void;
   setTool: (tool: Tool) => void;
   selectComponent: (id: string, additive?: boolean) => void;
   selectWire: (id: string, additive?: boolean) => void;
@@ -199,11 +202,15 @@ export const useCircuitStore = create<CircuitState>()((set, get) => ({
   moveComponents: (ids, dx, dy) => {
     if (ids.length === 0 || (dx === 0 && dy === 0)) return;
     const { doc } = get();
+    const moved = new Set(ids);
+    const components = doc.components.map((c) =>
+      moved.has(c.id) ? { ...c, x: Math.round(c.x + dx), y: Math.round(c.y + dy) } : c,
+    );
+    const wires = syncJoinedWires(reanchorWires(doc.wires, components, moved));
     const next = {
       ...doc,
-      components: doc.components.map((c) =>
-        ids.includes(c.id) ? { ...c, x: Math.round(c.x + dx), y: Math.round(c.y + dy) } : c,
-      ),
+      components,
+      wires,
       updatedAt: Date.now(),
     };
     set({ doc: next });
@@ -213,13 +220,16 @@ export const useCircuitStore = create<CircuitState>()((set, get) => ({
   rotateSelection: () => {
     const { doc, selection } = get();
     if (selection.components.length === 0) return;
+    const moved = new Set(selection.components);
+    const components = doc.components.map((c) =>
+      moved.has(c.id)
+        ? { ...c, rot: (((c.rot + 90) % 360) as CircuitDoc['components'][number]['rot']) }
+        : c,
+    );
     const next = {
       ...doc,
-      components: doc.components.map((c) =>
-        selection.components.includes(c.id)
-          ? { ...c, rot: (((c.rot + 90) % 360) as CircuitDoc['components'][number]['rot']) }
-          : c,
-      ),
+      components,
+      wires: syncJoinedWires(reanchorWires(doc.wires, components, moved)),
       updatedAt: Date.now(),
     };
     set({ doc: next, past: [...get().past, clone(doc)].slice(-HISTORY_LIMIT), future: [] });
@@ -229,11 +239,14 @@ export const useCircuitStore = create<CircuitState>()((set, get) => ({
   mirrorSelection: () => {
     const { doc, selection } = get();
     if (selection.components.length === 0) return;
+    const moved = new Set(selection.components);
+    const components = doc.components.map((c) =>
+      moved.has(c.id) ? { ...c, mirror: !c.mirror } : c,
+    );
     const next = {
       ...doc,
-      components: doc.components.map((c) =>
-        selection.components.includes(c.id) ? { ...c, mirror: !c.mirror } : c,
-      ),
+      components,
+      wires: syncJoinedWires(reanchorWires(doc.wires, components, moved)),
       updatedAt: Date.now(),
     };
     set({ doc: next, past: [...get().past, clone(doc)].slice(-HISTORY_LIMIT), future: [] });
@@ -244,16 +257,23 @@ export const useCircuitStore = create<CircuitState>()((set, get) => ({
     const { doc, selection } = get();
     if (selection.components.length === 0 && selection.wires.length === 0) return;
     const comps = new Set(selection.components);
-    const wires = new Set(selection.wires);
+    const selectedWires = new Set(selection.wires);
+    const removedWires = new Set(
+      doc.wires
+        .filter(
+          (w) =>
+            selectedWires.has(w.id) ||
+            (w.from && comps.has(w.from.componentId)) ||
+            (w.to && comps.has(w.to.componentId)),
+        )
+        .map((w) => w.id),
+    );
     const next: CircuitDoc = {
       ...doc,
       components: doc.components.filter((c) => !comps.has(c.id)),
-      wires: doc.wires.filter(
-        (w) =>
-          !wires.has(w.id) &&
-          !(w.from && comps.has(w.from.componentId)) &&
-          !(w.to && comps.has(w.to.componentId)),
-      ),
+      wires: doc.wires
+        .filter((w) => !removedWires.has(w.id))
+        .map((w) => (w.join && removedWires.has(w.join.wireId) ? { ...w, join: undefined } : w)),
       updatedAt: Date.now(),
     };
     set({
@@ -290,6 +310,55 @@ export const useCircuitStore = create<CircuitState>()((set, get) => ({
       future: [],
       selection: { components: [], wires: [wire.id] },
     });
+    scheduleSave(next);
+  },
+
+  addWireToWire: (from, targetWireId, points, netLabel) => {
+    const { doc } = get();
+    const target = doc.wires.find((w) => w.id === targetWireId);
+    if (!target || points.length < 2) return;
+    const exists = doc.wires.some(
+      (w) =>
+        w.join?.wireId === targetWireId &&
+        w.from?.componentId === from.componentId &&
+        w.from?.pinId === from.pinId,
+    );
+    if (exists) return;
+    const draft: Wire = {
+      id: '__new',
+      points: points.map((p) => ({ ...p })),
+      from,
+      join: { wireId: targetWireId },
+      netLabel,
+    };
+    const snapped = syncJoinedWires([...doc.wires, draft]).find((w) => w.id === '__new') ?? draft;
+    const wire: Wire = {
+      ...snapped,
+      id: uid('wire'),
+      points: forceWireEndpoints([snapped], doc.components)[0].points,
+    };
+    const next = { ...doc, wires: [...doc.wires, wire], updatedAt: Date.now() };
+    set({
+      doc: next,
+      past: [...get().past, clone(doc)].slice(-HISTORY_LIMIT),
+      future: [],
+      selection: { components: [], wires: [wire.id] },
+    });
+    scheduleSave(next);
+  },
+
+  updateWirePoints: (id, points) => {
+    const { doc } = get();
+    const wire = doc.wires.find((w) => w.id === id);
+    if (!wire || points.length < 2) return;
+    const updated = forceWireEndpoints(
+      [{ ...wire, points: points.map((p) => ({ ...p })) }],
+      doc.components,
+    )[0];
+    let wires = syncJoinedWires(doc.wires.map((w) => (w.id === id ? updated : w)));
+    wires = forceWireEndpoints(wires, doc.components);
+    const next = { ...doc, wires, updatedAt: Date.now() };
+    set({ doc: next });
     scheduleSave(next);
   },
 

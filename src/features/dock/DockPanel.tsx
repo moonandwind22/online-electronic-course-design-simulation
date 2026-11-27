@@ -9,6 +9,8 @@ import {
   Upload,
   Trash2,
   Play,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import type { CheckIssue, NetlistResult } from '../../model/types';
 import { useCircuitStore } from '../../store/useCircuitStore';
@@ -38,6 +40,8 @@ export function DockPanel({ netlist, checks }: DockProps) {
   const setTab = useUiStore((s) => s.setDockTab);
   const setAiOpen = useUiStore((s) => s.setAiOpen);
   const showToast = useUiStore((s) => s.showToast);
+  const collapsed = useUiStore((s) => s.panelCollapsed.dock);
+  const togglePanel = useUiStore((s) => s.togglePanel);
   const running = useSimStore((s) => s.running);
   const time = useSimStore((s) => s.time);
   const events = useSimStore((s) => s.events);
@@ -83,14 +87,17 @@ export function DockPanel({ netlist, checks }: DockProps) {
   };
 
   return (
-    <section className="app-dock">
+    <section className={`app-dock ${collapsed ? 'is-collapsed' : ''}`}>
       <div className="dock-head">
         <div className="dock-tabs">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               className={`dock-tab ${tab === id ? 'is-active' : ''}`}
-              onClick={() => setTab(id)}
+              onClick={() => {
+                setTab(id);
+                if (collapsed) togglePanel('dock', false);
+              }}
             >
               <Icon className="icon" /> {label}
             </button>
@@ -100,11 +107,18 @@ export function DockPanel({ netlist, checks }: DockProps) {
           <span className={`chip ${running ? 'chip--accent' : 'chip--muted'}`}>
             {running ? 'RUNNING' : 'PAUSED'}
           </span>
-          {tab === 'log' && (
+          {tab === 'log' && !collapsed && (
             <button className="icon-btn" onClick={clearLog} title="清空日志">
               <Trash2 className="icon" />
             </button>
           )}
+          <button
+            className="icon-btn icon-btn--sm"
+            onClick={() => togglePanel('dock')}
+            title={collapsed ? '展开底部面板' : '收起底部面板'}
+          >
+            {collapsed ? <ChevronUp className="icon" /> : <ChevronDown className="icon" />}
+          </button>
         </div>
       </div>
 

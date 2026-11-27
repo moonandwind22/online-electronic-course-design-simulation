@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useCircuitStore } from '../../store/useCircuitStore';
 import { useUiStore } from '../../store/useUiStore';
 import { CATEGORY_ORDER, partsForDomain } from '../../parts/registry';
@@ -14,6 +14,8 @@ export function PalettePanel() {
   const setCategory = useUiStore((s) => s.setPaletteCategory);
   const canvasSize = useUiStore((s) => s.canvasSize);
   const showToast = useUiStore((s) => s.showToast);
+  const collapsed = useUiStore((s) => s.panelCollapsed.palette);
+  const togglePanel = useUiStore((s) => s.togglePanel);
 
   const parts = useMemo(() => partsForDomain(doc.domain), [doc.domain]);
   const categories = useMemo(() => {
@@ -57,12 +59,32 @@ export function PalettePanel() {
     if (id) showToast(`已放置 ${part.name}`, 'ok');
   };
 
+  if (collapsed) {
+    return (
+      <aside className="app-palette is-collapsed">
+        <button className="panel-rail-btn" onClick={() => togglePanel('palette', false)} title="展开器件库">
+          <ChevronRight className="icon" />
+          <span className="panel-rail-label">器件库</span>
+        </button>
+      </aside>
+    );
+  }
+
   return (
     <aside className="app-palette">
       <div className="palette-head">
         <div className="palette-title-row">
           <span className="palette-title">器件库</span>
-          <span className="palette-count">{filtered.length} / {parts.length}</span>
+          <span className="panel-head-actions">
+            <span className="palette-count">{filtered.length} / {parts.length}</span>
+            <button
+              className="icon-btn icon-btn--sm"
+              onClick={() => togglePanel('palette', true)}
+              title="收起器件库"
+            >
+              <ChevronLeft className="icon" />
+            </button>
+          </span>
         </div>
         <label className="palette-search">
           <Search className="icon" />

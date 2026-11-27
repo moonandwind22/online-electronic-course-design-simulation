@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 export type DockTab = 'logic' | 'scope' | 'serial' | 'firmware' | 'log' | 'netlist';
 export type Theme = 'light' | 'dark';
+export type PanelKey = 'palette' | 'inspector' | 'dock';
 
 interface Toast {
   id: number;
@@ -19,6 +20,8 @@ interface UiState {
   toast: Toast | null;
   shortcutsOpen: boolean;
   canvasSize: { width: number; height: number };
+  panelSizes: Record<PanelKey, number>;
+  panelCollapsed: Record<PanelKey, boolean>;
   toggleTheme: () => void;
   setTheme: (theme: Theme) => void;
   setPaletteQuery: (q: string) => void;
@@ -29,6 +32,8 @@ interface UiState {
   showToast: (message: string, level?: Toast['level']) => void;
   setShortcutsOpen: (open: boolean) => void;
   setCanvasSize: (size: { width: number; height: number }) => void;
+  setPanelSize: (panel: PanelKey, size: number) => void;
+  togglePanel: (panel: PanelKey, collapsed?: boolean) => void;
 }
 
 let toastSeq = 0;
@@ -43,6 +48,8 @@ export const useUiStore = create<UiState>()((set) => ({
   toast: null,
   shortcutsOpen: false,
   canvasSize: { width: 900, height: 560 },
+  panelSizes: { palette: 264, inspector: 316, dock: 236 },
+  panelCollapsed: { palette: false, inspector: false, dock: false },
 
   toggleTheme: () =>
     set((s) => {
@@ -59,6 +66,17 @@ export const useUiStore = create<UiState>()((set) => ({
   setAiOpen: (aiOpen) => set({ aiOpen }),
   setShortcutsOpen: (shortcutsOpen) => set({ shortcutsOpen }),
   setCanvasSize: (canvasSize) => set({ canvasSize }),
+
+  setPanelSize: (panel, size) =>
+    set((s) => ({ panelSizes: { ...s.panelSizes, [panel]: size } })),
+
+  togglePanel: (panel, collapsed) =>
+    set((s) => ({
+      panelCollapsed: {
+        ...s.panelCollapsed,
+        [panel]: collapsed === undefined ? !s.panelCollapsed[panel] : collapsed,
+      },
+    })),
 
   showToast: (message, level = 'info') => {
     toastSeq += 1;

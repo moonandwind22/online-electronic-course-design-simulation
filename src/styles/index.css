@@ -404,8 +404,18 @@ select {
   fill: none;
   stroke: transparent;
   stroke-width: 10;
-  cursor: pointer;
+  cursor: grab;
   pointer-events: stroke;
+}
+
+.wire-hit.is-connectable,
+.wire-group.is-wire-target .wire-hit {
+  cursor: crosshair;
+}
+
+.wire-group.is-wire-target .wire {
+  stroke: var(--golden-chart-5);
+  stroke-width: 2.4;
 }
 
 .wire-label {
@@ -653,4 +663,222 @@ select.param-input {
   fill: var(--golden-muted-foreground);
   font-family: var(--golden-font-mono);
   font-size: 7.5px;
+}
+
+/* ---------- Resizable / collapsible workspace panels ---------- */
+
+.app-shell {
+  --palette-w: 264px;
+  --inspector-w: 316px;
+  --dock-h: 236px;
+  --palette-track: var(--palette-w);
+  --inspector-track: var(--inspector-w);
+  --dock-track: var(--dock-h);
+  grid-template-columns: var(--palette-track) minmax(0, 1fr) var(--inspector-track);
+  grid-template-rows: 54px minmax(0, 1fr) var(--dock-track) 30px;
+}
+
+.app-shell.is-palette-collapsed { --palette-track: 34px; }
+.app-shell.is-inspector-collapsed { --inspector-track: 34px; }
+.app-shell.is-dock-collapsed { --dock-track: 38px; }
+
+.topbar-home {
+  color: var(--golden-foreground);
+}
+
+.topbar-home:hover .brand-word {
+  color: var(--golden-chart-2);
+}
+
+.topbar-home-link {
+  gap: 5px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topbar-home-label {
+  font-size: 10px;
+}
+
+.panel-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.icon-btn--sm {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-btn--sm .icon {
+  width: 13px;
+  height: 13px;
+}
+
+.app-palette.is-collapsed,
+.app-inspector.is-collapsed {
+  padding: 0;
+}
+
+.panel-rail-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  padding: 14px 0;
+  color: var(--golden-muted-foreground);
+}
+
+.panel-rail-btn:hover {
+  background: var(--golden-muted);
+  color: var(--golden-foreground);
+}
+
+.panel-rail-btn .icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.panel-rail-label {
+  writing-mode: vertical-rl;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+}
+
+.app-dock.is-collapsed .dock-body {
+  display: none;
+}
+
+.resize-handle {
+  position: absolute;
+  z-index: 25;
+  touch-action: none;
+}
+
+.resize-handle::after {
+  content: "";
+  position: absolute;
+  background: transparent;
+  transition: background 150ms ease, opacity 150ms ease;
+}
+
+.resize-handle:hover::after {
+  background: var(--golden-chart-5);
+  opacity: 0.55;
+}
+
+.resize-handle--palette {
+  top: 54px;
+  bottom: 30px;
+  left: calc(var(--palette-track) - 4px);
+  width: 9px;
+  cursor: col-resize;
+}
+
+.resize-handle--palette::after {
+  top: 0;
+  bottom: 0;
+  left: 4px;
+  width: 1px;
+}
+
+.resize-handle--inspector {
+  top: 54px;
+  bottom: 30px;
+  right: calc(var(--inspector-track) - 5px);
+  width: 9px;
+  cursor: col-resize;
+}
+
+.resize-handle--inspector::after {
+  top: 0;
+  bottom: 0;
+  left: 4px;
+  width: 1px;
+}
+
+.resize-handle--dock {
+  left: var(--palette-track);
+  right: var(--inspector-track);
+  bottom: calc(30px + var(--dock-track) - 4px);
+  height: 9px;
+  cursor: row-resize;
+}
+
+.resize-handle--dock::after {
+  left: 0;
+  right: 0;
+  top: 4px;
+  height: 1px;
+}
+
+body.is-resizing-panels {
+  user-select: none;
+}
+
+body.is-resizing-panels * {
+  user-select: none !important;
+}
+
+body.is-resizing-cols,
+body.is-resizing-cols * {
+  cursor: col-resize !important;
+}
+
+body.is-resizing-rows,
+body.is-resizing-rows * {
+  cursor: row-resize !important;
+}
+
+@media (max-width: 1240px) {
+  .topbar-home-label {
+    display: none;
+  }
+}
+
+@media (max-width: 1080px) {
+  .app-shell {
+    grid-template-columns: var(--palette-track) minmax(0, 1fr);
+  }
+
+  .app-inspector {
+    display: none;
+  }
+
+  .resize-handle--inspector {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 54px minmax(0, 1fr) 30px;
+  }
+
+  .app-palette,
+  .app-dock {
+    display: none;
+  }
+
+  .app-canvas {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .resize-handle {
+    display: none;
+  }
+}
+
+.wire-junction {
+  fill: var(--golden-chart-2);
+  stroke: var(--golden-background);
+  stroke-width: 1;
+  pointer-events: none;
 }

@@ -24,6 +24,7 @@ ASSETS = [
     asset("74ls00-nand", "四路 2 输入与非门", "74LS00", "芯片与逻辑", "NAND", "nand", sources=["workspace-digital.html", "ai-netlist.html"]),
     asset("74ls08-and", "四路 2 输入与门", "74LS08", "芯片与逻辑", "AND", "and", sources=["workspace-digital.html", "ai-netlist.html"]),
     asset("74ls32-or", "四路 2 输入或门", "74LS32", "芯片与逻辑", "OR", "or", sources=["workspace-digital.html"]),
+    asset("74ls32-dip14-schematic", "四路 2 输入或门大符号", "74LS32", "芯片与逻辑", "DIP-14 · 原理图", "dip14-schematic", "74LS32", "QUAD 2-INPUT OR", scope="extended", detail="180×250 大符号网格；完整 14 脚编号、功能名与电气类型元数据。"),
     asset("74ls86-xor", "四路 2 输入异或门", "74LS86", "芯片与逻辑", "XOR", "xor", sources=["workspace-digital.html"]),
     asset("74ls74-dip14", "双 D 触发器", "74LS74", "芯片与逻辑", "DIP-14", "dip", "74LS74", "D FF", sources=["workspace-digital.html"]),
     asset("74ls138-dip16", "3-8 线译码器", "74LS138", "芯片与逻辑", "DIP-16", "dip", "74LS138", "3 TO 8", sources=["workspace-digital.html"]),

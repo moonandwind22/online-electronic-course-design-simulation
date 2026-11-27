@@ -882,3 +882,70 @@ body.is-resizing-rows * {
   stroke-width: 1;
   pointer-events: none;
 }
+
+/* ---------- EDA SVG 资产预览（小封装 / 大封装） ---------- */
+
+.part-symbol--asset {
+  height: 34px;
+}
+
+.part-symbol--asset .part-symbol-svg,
+.part-symbol--asset .part-symbol-svg svg {
+  display: block;
+  width: 52px;
+  height: 32px;
+}
+
+.package-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.package-preview-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border: 1px solid var(--golden-border);
+  border-radius: 11px;
+  background: var(--golden-card);
+}
+
+.package-preview-thumb svg {
+  width: 168px;
+  height: auto;
+}
+
+.package-preview-large summary {
+  padding: 6px 9px;
+  border: 1px solid var(--golden-border);
+  border-radius: 9px;
+  background: var(--golden-card);
+  font-size: 10.5px;
+  color: var(--golden-muted-foreground);
+  cursor: pointer;
+}
+
+.package-preview-large[open] summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.package-preview-scroll {
+  max-height: 380px;
+  padding: 10px;
+  overflow: auto;
+  border: 1px solid var(--golden-border);
+  border-top: 0;
+  border-bottom-left-radius: 9px;
+  border-bottom-right-radius: 9px;
+  background: var(--golden-card);
+  scrollbar-width: thin;
+}
+
+.package-preview-scroll svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}

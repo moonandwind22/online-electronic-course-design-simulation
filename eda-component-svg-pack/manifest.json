@@ -3,6 +3,7 @@
   "source_project": "https://github.com/moonandwind22/online-electronic-course-design-simulation",
   "version": "1.0.0",
   "component_viewBox": "0 0 96 60",
+  "large_schematic_viewBox": "dynamic · 23-unit pin pitch",
   "style": {
     "stroke": 2,
     "corner_radius": "2–6 units",
@@ -95,6 +96,20 @@
       ],
       "detail": "",
       "file": "assets/current/chips/74ls32-or.svg"
+    },
+    {
+      "slug": "74ls32-dip14-schematic",
+      "name": "四路 2 输入或门大符号",
+      "model": "74LS32",
+      "category": "芯片与逻辑",
+      "package": "DIP-14 · 原理图",
+      "kind": "dip14-schematic",
+      "label": "74LS32",
+      "sub": "QUAD 2-INPUT OR",
+      "scope": "extended",
+      "sources": [],
+      "detail": "180×250 大符号网格；完整 14 脚编号、功能名与电气类型元数据。",
+      "file": "assets/extended/chips/74ls32-dip14-schematic.svg"
     },
     {
       "slug": "74ls86-xor",
@@ -1460,6 +1475,836 @@
       "slug": "domain-stm32",
       "name": "STM32",
       "file": "assets/current/ui/domain-stm32.svg"
+    }
+  ],
+  "large_schematics": [
+    {
+      "source": "74ls161-dip16",
+      "model": "74LS161",
+      "name": "四位二进制计数器大符号",
+      "file": "assets/large-schematic/chips/74ls161-dip16-schematic.svg",
+      "viewBox": "0 0 215 281",
+      "pin_count": 16,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "74ls47-dip16",
+      "model": "74LS47",
+      "name": "BCD 七段译码器大符号",
+      "file": "assets/large-schematic/chips/74ls47-dip16-schematic.svg",
+      "viewBox": "0 0 222 281",
+      "pin_count": 16,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "74ls00-nand",
+      "model": "74LS00",
+      "name": "四路 2 输入与非门大符号",
+      "file": "assets/large-schematic/chips/74ls00-nand-schematic.svg",
+      "viewBox": "0 0 208 258",
+      "pin_count": 14,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "74ls08-and",
+      "model": "74LS08",
+      "name": "四路 2 输入与门大符号",
+      "file": "assets/large-schematic/chips/74ls08-and-schematic.svg",
+      "viewBox": "0 0 208 258",
+      "pin_count": 14,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "74ls32-or",
+      "model": "74LS32",
+      "name": "四路 2 输入或门大符号",
+      "file": "assets/extended/chips/74ls32-dip14-schematic.svg",
+      "viewBox": "0 0 180 250",
+      "pin_count": 14,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "74ls86-xor",
+      "model": "74LS86",
+      "name": "四路 2 输入异或门大符号",
+      "file": "assets/large-schematic/chips/74ls86-xor-schematic.svg",
+      "viewBox": "0 0 208 258",
+      "pin_count": 14,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "74ls74-dip14",
+      "model": "74LS74",
+      "name": "双 D 触发器大符号",
+      "file": "assets/large-schematic/chips/74ls74-dip14-schematic.svg",
+      "viewBox": "0 0 215 258",
+      "pin_count": 14,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "74ls138-dip16",
+      "model": "74LS138",
+      "name": "3-8 线译码器大符号",
+      "file": "assets/large-schematic/chips/74ls138-dip16-schematic.svg",
+      "viewBox": "0 0 208 281",
+      "pin_count": 16,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "74ls373-dip20",
+      "model": "74LS373",
+      "name": "八路透明锁存器大符号",
+      "file": "assets/large-schematic/chips/74ls373-dip20-schematic.svg",
+      "viewBox": "0 0 208 327",
+      "pin_count": 20,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "74hc595-dip16",
+      "model": "74HC595",
+      "name": "八位移位寄存器大符号",
+      "file": "assets/large-schematic/chips/74hc595-dip16-schematic.svg",
+      "viewBox": "0 0 222 281",
+      "pin_count": 16,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "stc89c52rc-dip40",
+      "model": "STC89C52RC",
+      "name": "8051 最小系统大符号",
+      "file": "assets/large-schematic/chips/stc89c52rc-dip40-schematic.svg",
+      "viewBox": "0 0 243 557",
+      "pin_count": 40,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "stm32f103c8t6-lqfp48",
+      "model": "STM32F103C8T6",
+      "name": "ARM Cortex-M3 微控制器大符号",
+      "file": "assets/large-schematic/chips/stm32f103c8t6-lqfp48-schematic.svg",
+      "viewBox": "0 0 278 649",
+      "pin_count": 48,
+      "symbol_type": "qfp"
+    },
+    {
+      "source": "seven-segment-1digit",
+      "model": "7-SEG-1",
+      "name": "一位七段数码管大符号",
+      "file": "assets/large-schematic/displays/seven-segment-1digit-schematic.svg",
+      "viewBox": "0 0 208 212",
+      "pin_count": 10,
+      "symbol_type": "module"
+    },
+    {
+      "source": "seven-segment-4digit",
+      "model": "7-SEG-4",
+      "name": "四位七段数码管大符号",
+      "file": "assets/large-schematic/displays/seven-segment-4digit-schematic.svg",
+      "viewBox": "0 0 208 235",
+      "pin_count": 12,
+      "symbol_type": "module"
+    },
+    {
+      "source": "lcd1602",
+      "model": "LCD1602",
+      "name": "字符液晶模块大符号",
+      "file": "assets/large-schematic/displays/lcd1602-schematic.svg",
+      "viewBox": "0 0 215 281",
+      "pin_count": 16,
+      "symbol_type": "module"
+    },
+    {
+      "source": "oled-096-i2c",
+      "model": "OLED 0.96\"",
+      "name": "OLED 显示模块大符号",
+      "file": "assets/large-schematic/displays/oled-096-i2c-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "led-5mm-red",
+      "model": "LED 5 mm",
+      "name": "发光二极管大符号",
+      "file": "assets/large-schematic/displays/led-5mm-red-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "tactile-button-6mm",
+      "model": "6×6 mm",
+      "name": "轻触按键大符号",
+      "file": "assets/large-schematic/inputs/tactile-button-6mm-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "keypad-4x4",
+      "model": "4×4 Keypad",
+      "name": "矩阵键盘大符号",
+      "file": "assets/large-schematic/inputs/keypad-4x4-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 8,
+      "symbol_type": "module"
+    },
+    {
+      "source": "potentiometer",
+      "model": "Potentiometer",
+      "name": "电位器大符号",
+      "file": "assets/large-schematic/inputs/potentiometer-schematic.svg",
+      "viewBox": "0 0 215 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "usb-ttl-ch340",
+      "model": "CH340 USB-TTL",
+      "name": "USB 转串口模块大符号",
+      "file": "assets/large-schematic/interfaces/usb-ttl-ch340-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "logic-analyzer",
+      "model": "Logic Analyzer",
+      "name": "逻辑分析仪大符号",
+      "file": "assets/large-schematic/instruments/logic-analyzer-schematic.svg",
+      "viewBox": "0 0 208 212",
+      "pin_count": 10,
+      "symbol_type": "module"
+    },
+    {
+      "source": "serial-terminal",
+      "model": "UART Terminal",
+      "name": "串口终端大符号",
+      "file": "assets/large-schematic/instruments/serial-terminal-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "oscilloscope",
+      "model": "Oscilloscope",
+      "name": "双通道示波器大符号",
+      "file": "assets/large-schematic/instruments/oscilloscope-schematic.svg",
+      "viewBox": "0 0 236 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "signal-source-sine",
+      "model": "Sine Source",
+      "name": "正弦信号源大符号",
+      "file": "assets/large-schematic/instruments/signal-source-sine-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 2,
+      "symbol_type": "module"
+    },
+    {
+      "source": "clock-source-square",
+      "model": "Clock Source",
+      "name": "方波时钟源大符号",
+      "file": "assets/large-schematic/instruments/clock-source-square-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 2,
+      "symbol_type": "module"
+    },
+    {
+      "source": "pwm-driver",
+      "model": "PWM Driver",
+      "name": "PWM 功率驱动模块大符号",
+      "file": "assets/large-schematic/instruments/pwm-driver-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 7,
+      "symbol_type": "module"
+    },
+    {
+      "source": "active-buzzer",
+      "model": "Active Buzzer",
+      "name": "有源蜂鸣器大符号",
+      "file": "assets/large-schematic/actuators/active-buzzer-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "servo-sg90",
+      "model": "SG90",
+      "name": "微型舵机大符号",
+      "file": "assets/large-schematic/actuators/servo-sg90-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "stepper-28byj48",
+      "model": "28BYJ-48",
+      "name": "五线步进电机大符号",
+      "file": "assets/large-schematic/actuators/stepper-28byj48-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 5,
+      "symbol_type": "module"
+    },
+    {
+      "source": "2n2222-to92",
+      "model": "2N2222",
+      "name": "NPN 三极管大符号",
+      "file": "assets/large-schematic/semiconductors/2n2222-to92-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "lm358-dip8",
+      "model": "LM358",
+      "name": "双运算放大器大符号",
+      "file": "assets/large-schematic/chips/lm358-dip8-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 8,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "irf540n-to220",
+      "model": "IRF540N",
+      "name": "N 沟道 MOSFET大符号",
+      "file": "assets/large-schematic/semiconductors/irf540n-to220-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "irf9540n-to220",
+      "model": "IRF9540N",
+      "name": "P 沟道 MOSFET大符号",
+      "file": "assets/large-schematic/semiconductors/irf9540n-to220-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "fga25n120-to247",
+      "model": "FGA25N120",
+      "name": "绝缘栅双极晶体管大符号",
+      "file": "assets/large-schematic/semiconductors/fga25n120-to247-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "bt151-to220",
+      "model": "BT151",
+      "name": "晶闸管大符号",
+      "file": "assets/large-schematic/semiconductors/bt151-to220-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "resistor-axial",
+      "model": "Resistor",
+      "name": "轴向电阻大符号",
+      "file": "assets/large-schematic/passives/resistor-axial-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "capacitor-ceramic",
+      "model": "Ceramic Capacitor",
+      "name": "瓷片电容大符号",
+      "file": "assets/large-schematic/passives/capacitor-ceramic-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "electrolytic-capacitor",
+      "model": "Electrolytic",
+      "name": "铝电解电容大符号",
+      "file": "assets/large-schematic/passives/electrolytic-capacitor-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "inductor-shielded",
+      "model": "Inductor",
+      "name": "功率电感大符号",
+      "file": "assets/large-schematic/passives/inductor-shielded-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "1n4148-axial",
+      "model": "1N4148",
+      "name": "开关二极管大符号",
+      "file": "assets/large-schematic/semiconductors/1n4148-axial-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "ss34-sma",
+      "model": "SS34",
+      "name": "肖特基二极管大符号",
+      "file": "assets/large-schematic/semiconductors/ss34-sma-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "spst-rocker",
+      "model": "SPST",
+      "name": "单刀单掷开关大符号",
+      "file": "assets/large-schematic/inputs/spst-rocker-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "atmega328p-dip28",
+      "model": "ATmega328P",
+      "name": "8 位 AVR 微控制器大符号",
+      "file": "assets/large-schematic/chips/atmega328p-dip28-schematic.svg",
+      "viewBox": "0 0 264 419",
+      "pin_count": 28,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "blue-pill-stm32",
+      "model": "Blue Pill",
+      "name": "STM32 核心开发板大符号",
+      "file": "assets/large-schematic/boards/blue-pill-stm32-schematic.svg",
+      "viewBox": "0 0 215 465",
+      "pin_count": 32,
+      "symbol_type": "module"
+    },
+    {
+      "source": "esp32-devkit",
+      "model": "ESP32 DevKit",
+      "name": "Wi-Fi / 蓝牙开发板大符号",
+      "file": "assets/large-schematic/boards/esp32-devkit-schematic.svg",
+      "viewBox": "0 0 243 488",
+      "pin_count": 33,
+      "symbol_type": "module"
+    },
+    {
+      "source": "esp8266-nodemcu",
+      "model": "NodeMCU ESP8266",
+      "name": "Wi-Fi 开发板大符号",
+      "file": "assets/large-schematic/boards/esp8266-nodemcu-schematic.svg",
+      "viewBox": "0 0 222 304",
+      "pin_count": 17,
+      "symbol_type": "module"
+    },
+    {
+      "source": "raspberry-pi-pico",
+      "model": "Pico RP2040",
+      "name": "RP2040 微控制器板大符号",
+      "file": "assets/large-schematic/boards/raspberry-pi-pico-schematic.svg",
+      "viewBox": "0 0 236 557",
+      "pin_count": 40,
+      "symbol_type": "module"
+    },
+    {
+      "source": "arduino-uno-r3",
+      "model": "UNO R3 Compatible",
+      "name": "ATmega328P 学习板大符号",
+      "file": "assets/large-schematic/boards/arduino-uno-r3-schematic.svg",
+      "viewBox": "0 0 236 419",
+      "pin_count": 27,
+      "symbol_type": "module"
+    },
+    {
+      "source": "ne555-dip8",
+      "model": "NE555",
+      "name": "定时器大符号",
+      "file": "assets/large-schematic/chips/ne555-dip8-schematic.svg",
+      "viewBox": "0 0 222 190",
+      "pin_count": 8,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "uln2003-dip16",
+      "model": "ULN2003",
+      "name": "七路达林顿驱动大符号",
+      "file": "assets/large-schematic/chips/uln2003-dip16-schematic.svg",
+      "viewBox": "0 0 208 281",
+      "pin_count": 16,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "l293d-dip16",
+      "model": "L293D",
+      "name": "双 H 桥电机驱动大符号",
+      "file": "assets/large-schematic/chips/l293d-dip16-schematic.svg",
+      "viewBox": "0 0 208 281",
+      "pin_count": 16,
+      "symbol_type": "dip"
+    },
+    {
+      "source": "max3232-soic16",
+      "model": "MAX3232",
+      "name": "RS-232 电平转换大符号",
+      "file": "assets/large-schematic/interfaces/max3232-soic16-schematic.svg",
+      "viewBox": "0 0 215 281",
+      "pin_count": 16,
+      "symbol_type": "soic"
+    },
+    {
+      "source": "mcp2551-soic8",
+      "model": "MCP2551",
+      "name": "CAN 总线收发器大符号",
+      "file": "assets/large-schematic/interfaces/mcp2551-soic8-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 8,
+      "symbol_type": "soic"
+    },
+    {
+      "source": "pcf8574-soic16",
+      "model": "PCF8574",
+      "name": "I²C 八路 IO 扩展大符号",
+      "file": "assets/large-schematic/chips/pcf8574-soic16-schematic.svg",
+      "viewBox": "0 0 208 281",
+      "pin_count": 16,
+      "symbol_type": "soic"
+    },
+    {
+      "source": "at24c02-soic8",
+      "model": "AT24C02",
+      "name": "I²C EEPROM大符号",
+      "file": "assets/large-schematic/chips/at24c02-soic8-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 8,
+      "symbol_type": "soic"
+    },
+    {
+      "source": "w25q64-soic8",
+      "model": "W25Q64",
+      "name": "SPI NOR Flash大符号",
+      "file": "assets/large-schematic/chips/w25q64-soic8-schematic.svg",
+      "viewBox": "0 0 243 190",
+      "pin_count": 8,
+      "symbol_type": "soic"
+    },
+    {
+      "source": "ads1115-msop10",
+      "model": "ADS1115",
+      "name": "16 位四通道 ADC大符号",
+      "file": "assets/large-schematic/chips/ads1115-msop10-schematic.svg",
+      "viewBox": "0 0 243 212",
+      "pin_count": 10,
+      "symbol_type": "soic"
+    },
+    {
+      "source": "hx711-module",
+      "model": "HX711",
+      "name": "24 位称重 ADC 模块大符号",
+      "file": "assets/large-schematic/sensors/hx711-module-schematic.svg",
+      "viewBox": "0 0 208 212",
+      "pin_count": 10,
+      "symbol_type": "module"
+    },
+    {
+      "source": "ds3231-rtc-module",
+      "model": "DS3231 RTC",
+      "name": "实时时钟模块大符号",
+      "file": "assets/large-schematic/chips/ds3231-rtc-module-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 6,
+      "symbol_type": "module"
+    },
+    {
+      "source": "lm7805-to220",
+      "model": "LM7805",
+      "name": "三端线性稳压器大符号",
+      "file": "assets/large-schematic/power/lm7805-to220-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "ams1117-sot223",
+      "model": "AMS1117-3.3",
+      "name": "低压差线性稳压器大符号",
+      "file": "assets/large-schematic/power/ams1117-sot223-schematic.svg",
+      "viewBox": "0 0 236 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "buck-lm2596",
+      "model": "LM2596 Buck",
+      "name": "降压电源模块大符号",
+      "file": "assets/large-schematic/power/buck-lm2596-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "boost-mt3608",
+      "model": "MT3608 Boost",
+      "name": "升压电源模块大符号",
+      "file": "assets/large-schematic/power/boost-mt3608-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "battery-18650",
+      "model": "18650 Li-ion",
+      "name": "锂离子电芯大符号",
+      "file": "assets/large-schematic/power/battery-18650-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 2,
+      "symbol_type": "module"
+    },
+    {
+      "source": "crystal-hc49",
+      "model": "HC-49S",
+      "name": "无源晶振大符号",
+      "file": "assets/large-schematic/passives/crystal-hc49-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 2,
+      "symbol_type": "module"
+    },
+    {
+      "source": "transformer",
+      "model": "Transformer",
+      "name": "低频变压器大符号",
+      "file": "assets/large-schematic/power/transformer-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "mpu6050-module",
+      "model": "MPU6050",
+      "name": "六轴姿态传感器大符号",
+      "file": "assets/large-schematic/sensors/mpu6050-module-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 8,
+      "symbol_type": "module"
+    },
+    {
+      "source": "dht11-module",
+      "model": "DHT11",
+      "name": "温湿度传感器大符号",
+      "file": "assets/large-schematic/sensors/dht11-module-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "ds18b20-to92",
+      "model": "DS18B20",
+      "name": "数字温度传感器大符号",
+      "file": "assets/large-schematic/sensors/ds18b20-to92-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "bme280-module",
+      "model": "BME280",
+      "name": "温湿度气压传感器大符号",
+      "file": "assets/large-schematic/sensors/bme280-module-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 6,
+      "symbol_type": "module"
+    },
+    {
+      "source": "bh1750-module",
+      "model": "BH1750",
+      "name": "数字光照传感器大符号",
+      "file": "assets/large-schematic/sensors/bh1750-module-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 5,
+      "symbol_type": "module"
+    },
+    {
+      "source": "hc-sr04",
+      "model": "HC-SR04",
+      "name": "超声波测距模块大符号",
+      "file": "assets/large-schematic/sensors/hc-sr04-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "hc-sr501-pir",
+      "model": "HC-SR501",
+      "name": "人体红外感应模块大符号",
+      "file": "assets/large-schematic/sensors/hc-sr501-pir-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "ir-receiver",
+      "model": "IR Receiver",
+      "name": "红外接收管大符号",
+      "file": "assets/large-schematic/sensors/ir-receiver-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
+    },
+    {
+      "source": "photoresistor",
+      "model": "LDR",
+      "name": "光敏电阻大符号",
+      "file": "assets/large-schematic/sensors/photoresistor-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "reed-switch",
+      "model": "Reed Switch",
+      "name": "干簧管大符号",
+      "file": "assets/large-schematic/sensors/reed-switch-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "microphone-module",
+      "model": "Microphone",
+      "name": "声音传感器模块大符号",
+      "file": "assets/large-schematic/sensors/microphone-module-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "sd-card-module",
+      "model": "TF Card",
+      "name": "Micro SD 存储模块大符号",
+      "file": "assets/large-schematic/interfaces/sd-card-module-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 6,
+      "symbol_type": "module"
+    },
+    {
+      "source": "tft-18-spi",
+      "model": "1.8\" TFT",
+      "name": "彩色 TFT 显示模块大符号",
+      "file": "assets/large-schematic/displays/tft-18-spi-schematic.svg",
+      "viewBox": "0 0 215 190",
+      "pin_count": 8,
+      "symbol_type": "module"
+    },
+    {
+      "source": "led-matrix-8x8",
+      "model": "8×8 Matrix",
+      "name": "LED 点阵模块大符号",
+      "file": "assets/large-schematic/displays/led-matrix-8x8-schematic.svg",
+      "viewBox": "0 0 208 281",
+      "pin_count": 16,
+      "symbol_type": "module"
+    },
+    {
+      "source": "rgb-led-5mm",
+      "model": "RGB LED",
+      "name": "全彩发光二极管大符号",
+      "file": "assets/large-schematic/displays/rgb-led-5mm-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "ws2812-5050",
+      "model": "WS2812",
+      "name": "可寻址 RGB LED大符号",
+      "file": "assets/large-schematic/displays/ws2812-5050-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 4,
+      "symbol_type": "module"
+    },
+    {
+      "source": "rotary-encoder",
+      "model": "EC11",
+      "name": "增量式旋转编码器大符号",
+      "file": "assets/large-schematic/inputs/rotary-encoder-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 5,
+      "symbol_type": "module"
+    },
+    {
+      "source": "dual-axis-joystick",
+      "model": "Joystick",
+      "name": "双轴摇杆模块大符号",
+      "file": "assets/large-schematic/inputs/dual-axis-joystick-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 5,
+      "symbol_type": "module"
+    },
+    {
+      "source": "relay-srd05",
+      "model": "SRD-05VDC",
+      "name": "电磁继电器大符号",
+      "file": "assets/large-schematic/actuators/relay-srd05-schematic.svg",
+      "viewBox": "0 0 215 190",
+      "pin_count": 5,
+      "symbol_type": "module"
+    },
+    {
+      "source": "dc-motor-130",
+      "model": "DC Motor 130",
+      "name": "微型直流电机大符号",
+      "file": "assets/large-schematic/actuators/dc-motor-130-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "cooling-fan",
+      "model": "DC Fan",
+      "name": "直流散热风扇大符号",
+      "file": "assets/large-schematic/actuators/cooling-fan-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "speaker-8r",
+      "model": "Speaker 8 Ω",
+      "name": "小型扬声器大符号",
+      "file": "assets/large-schematic/actuators/speaker-8r-schematic.svg",
+      "viewBox": "0 0 220 150",
+      "pin_count": 2,
+      "symbol_type": "simple"
+    },
+    {
+      "source": "usb-c-connector",
+      "model": "USB-C",
+      "name": "USB Type-C 母座大符号",
+      "file": "assets/large-schematic/connectors/usb-c-connector-schematic.svg",
+      "viewBox": "0 0 222 212",
+      "pin_count": 9,
+      "symbol_type": "module"
+    },
+    {
+      "source": "pin-header-40",
+      "model": "Pin Header",
+      "name": "单排针大符号",
+      "file": "assets/large-schematic/connectors/pin-header-40-schematic.svg",
+      "viewBox": "0 0 208 557",
+      "pin_count": 40,
+      "symbol_type": "module"
+    },
+    {
+      "source": "terminal-block-3p",
+      "model": "KF301-3P",
+      "name": "螺钉式接线端子大符号",
+      "file": "assets/large-schematic/connectors/terminal-block-3p-schematic.svg",
+      "viewBox": "0 0 208 190",
+      "pin_count": 3,
+      "symbol_type": "module"
     }
   ]
 }

@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Copy, Sparkles, Trash2 } from 'lucide-react'
 import type { CheckIssue, NetlistResult } from '../../model/types';
 import type { ParamDef } from '../../parts/types';
 import { getPart } from '../../parts/registry';
+import { partSvgAssets } from '../../parts/svgAssets';
 import { useCircuitStore } from '../../store/useCircuitStore';
 import { useSimStore } from '../../store/useSimStore';
 import { useUiStore } from '../../store/useUiStore';
@@ -36,6 +37,7 @@ export function InspectorPanel({ netlist, checks }: InspectorProps) {
 
   const selectedComp = selection.components.length === 1 ? doc.components.find((c) => c.id === selection.components[0]) : null;
   const selectedPart = selectedComp ? getPart(selectedComp.type) : undefined;
+  const selectedAssets = selectedPart ? partSvgAssets(selectedPart.type) : undefined;
   const selectedWire = selection.wires.length === 1 ? doc.wires.find((w) => w.id === selection.wires[0]) : null;
 
   const netOfWire = useMemo(() => {
@@ -127,6 +129,31 @@ export function InspectorPanel({ netlist, checks }: InspectorProps) {
           <>
             {selectedComp && selectedPart && (
               <>
+                {selectedAssets && (
+                  <section className="inspect-section">
+                    <div className="inspect-label">
+                      <span>封装预览</span>
+                      <span className="gt-mono">{selectedAssets.slug}</span>
+                    </div>
+                    <div className="package-preview">
+                      <div
+                        className="package-preview-thumb"
+                        aria-hidden="true"
+                        dangerouslySetInnerHTML={{ __html: selectedAssets.small }}
+                      />
+                      {selectedAssets.large && (
+                        <details className="package-preview-large">
+                          <summary>大封装 · 原理图</summary>
+                          <div
+                            className="package-preview-scroll"
+                            aria-hidden="true"
+                            dangerouslySetInnerHTML={{ __html: selectedAssets.large }}
+                          />
+                        </details>
+                      )}
+                    </div>
+                  </section>
+                )}
                 <section className="inspect-section">
                   <div className="inspect-label">
                     <span>参数</span>

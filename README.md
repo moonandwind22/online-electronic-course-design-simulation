@@ -54,6 +54,13 @@ src/
 └─ styles/           # Golden Time 设计令牌 + 应用样式
 ```
 
+### 器件 SVG 资产规范
+
+- 项目中芯片与外设的**预览小封装**（`eda-component-svg-pack/assets/current`、`assets/extended`）和**大封装原理图**（`eda-component-svg-pack/assets/large-schematic`）严格使用上传资产包内的 SVG 源文件，不允许使用手绘替代图标或外部图片。
+- SPA 在 `src/parts/svgAssets.ts` 中以 `?raw` 直接内联上述 SVG：器件库缩略图读取小封装，检查器“封装预览”读取小封装并提供“大封装 · 原理图”展开视图。
+- 新增或替换器件时，必须先在资产包中补齐同型号的小封装与大封装 SVG，更新 `manifest.json` 后再登记到 `PART_ASSET_SLUG`，不得以其他型号的图替代。
+- 资产包暂未覆盖的器件保留通用符号占位；补齐资产后应立即替换，缺口清单需要在提交说明中登记。
+
 ## 设计原型在线预览
 
 - 部署地址：<https://37lq98livj3r1ydtzxh.traesite.cn>
@@ -222,11 +229,11 @@ node "$TRAE_DESIGN_SKILL/shared-runtime/deterministic-tooling/validate-finish-re
 
 ## 部署与更新
 
-本项目是静态站点，入口为 `pages/project-hub.html`。
+本项目以静态站点方式部署 Vite 构建产物（`npm run build` 生成 `dist/`，入口 `index.html`）。
 
-- 在线地址：<https://37lq98livj3r1ydtzxh.traesite.cn>
-- 如需重新部署，在 Trae 中使用部署插件，将 `design/electronic-lab/pages/` 作为静态站点的 `public/` 内容，并把 `project-hub.html` 复制为 `index.html`。
-- 当前部署为“仅自己可见”；需要分享时调整访问策略为“所有人可见”。
+- 在线地址：<https://37lx73asijfytn9bpf0.traesite.cn>
+- 重新部署：在 Trae 中使用部署插件，将 `dist/` 作为静态站点的 `public/` 内容上传。
+- 当前访问策略：仅自己可见；需要分享时调整访问策略为“所有人可见”。
 
 ## 许可与第三方
 

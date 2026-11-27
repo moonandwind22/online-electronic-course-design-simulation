@@ -12,6 +12,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from catalog import ASSETS, NAME_MAP
+from large_schematic import generate_large_assets, large_schematic_entry
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE = ROOT.parent
@@ -92,6 +93,36 @@ def chip_dip(a):
     body += p("M40 5Q48 14 56 5", PACKAGE_INK, 1.5, extra='opacity="0.8"')
     body += c(33, 47, 2.2, ACCENT, "none", 0)
     return g("pins", pins) + g("package", body) + g("markings", label_block(a))
+
+
+def chip_dip14_schematic(a):
+    """Full DIP-14 schematic symbol; pin order and names follow the 74LS32 datasheet."""
+    body = p(
+        "M58 30H82C82 44 98 44 98 30H122Q130 30 130 38V216Q130 224 122 224H58Q50 224 50 216V38Q50 30 58 30Z",
+        INK,
+        1.6,
+        "var(--eda-symbol-body,#FFFFFF)",
+    )
+    markings = t(14, 18, "U1", 10, INK, "start", 700)
+    markings += t(166, 18, "DIP-14", 6.5, "var(--eda-muted,#94A3B8)", "end", 600)
+    markings += t(90, 55, a["label"], 11, INK, weight=700)
+    markings += t(90, 65, a["sub"], 4.8, "var(--eda-muted,#64748B)", weight=500, extra='letter-spacing="0.35"')
+    left = [("1", "1A", "input"), ("2", "1B", "input"), ("3", "1Y", "output"), ("4", "2A", "input"), ("5", "2B", "input"), ("6", "2Y", "output"), ("7", "GND", "power")]
+    right = [("14", "VCC", "power"), ("13", "4B", "input"), ("12", "4A", "input"), ("11", "4Y", "output"), ("10", "3B", "input"), ("9", "3A", "input"), ("8", "3Y", "output")]
+    pins = []
+    for side, entries in (("left", left), ("right", right)):
+        for index, (number, name, direction) in enumerate(entries):
+            y = 72 + index * 23
+            active = direction in ("output", "power")
+            endpoint_fill = ACCENT if active else "var(--eda-symbol-body,#FFFFFF)"
+            endpoint_stroke = ACCENT if active else "var(--eda-pin-line,#94A3B8)"
+            lead = line(14, y, 50, y, "var(--eda-pin-line,#94A3B8)", 1.25) if side == "left" else line(130, y, 166, y, "var(--eda-pin-line,#94A3B8)", 1.25)
+            endpoint = c(14 if side == "left" else 166, y, 3.2, endpoint_fill, endpoint_stroke, 1.1)
+            number_text = t(42 if side == "left" else 138, y - 5, number, 5.8, "var(--eda-muted,#94A3B8)", "end" if side == "left" else "start", 500)
+            name_text = t(57 if side == "left" else 123, y + 3, name, 7.5, INK, "start" if side == "left" else "end", 700 if direction == "power" else 600)
+            content = lead + endpoint + number_text + name_text
+            pins.append(g(f"pin-{number}", content, f'data-pin="{number}" data-name="{name}" data-direction="{direction}" data-side="{side}"'))
+    return g("package", body) + g("reference-and-markings", markings) + g("pins", "\n    ".join(pins))
 
 
 def chip_qfp(a):
@@ -616,6 +647,7 @@ def terminal_block(a):
 def render_geometry(a):
     kind = a["kind"]
     if kind == "dip": return chip_dip(a)
+    if kind == "dip14-schematic": return chip_dip14_schematic(a)
     if kind == "qfp": return chip_qfp(a)
     if kind == "soic": return chip_soic(a)
     if kind == "qfn": return chip_qfn(a)
@@ -695,8 +727,10 @@ def render_asset(a):
     title_id = f'title-{a["slug"]}'
     desc_id = f'desc-{a["slug"]}'
     description = f'{a["name"]}，{a["model"]}，{a["package"]}。统一 EDA 封装风格，可编辑矢量。'
+    viewbox, width, height = ("0 0 180 250", 180, 250) if a["kind"] == "dip14-schematic" else ("0 0 96 60", 96, 60)
+    root_color = ' color="#475569"' if a["kind"] == "dip14-schematic" else ""
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 60" width="96" height="60" '
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{viewbox}" width="{width}" height="{height}"{root_color} '
         f'fill="none" stroke-linecap="round" stroke-linejoin="round" shape-rendering="geometricPrecision" '
         f'role="img" aria-labelledby="{title_id} {desc_id}" data-component="{a["slug"]}">\n'
         f'  <title id="{title_id}">{esc(a["model"])} · {esc(a["name"])}</title>\n'
@@ -755,7 +789,7 @@ def inline_asset(a):
     source = re.sub(r'\s+id="[^"]+"', "", source)
     source = re.sub(r'\s+aria-labelledby="[^"]+"', "", source)
     source = re.sub(r'\s+role="img"', "", source)
-    source = re.sub(r'\s+width="96" height="60"', "", source)
+    source = re.sub(r'\s+width="\d+" height="\d+"', "", source, count=1)
     source = re.sub(r'\s*<title>.*?</title>\s*', "", source, flags=re.S)
     source = re.sub(r'\s*<desc>.*?</desc>\s*', "", source, flags=re.S)
     source = source.replace("<svg ", '<svg aria-hidden="true" class="eda-part-icon" ', 1)
@@ -766,29 +800,33 @@ def build_preview(entries):
     cards = []
     for a in entries:
         path = asset_path(a).as_posix()
+        large = large_schematic_entry(a["slug"])
+        large_link = f'<a class="large-symbol-link" href="../{large["file"]}" aria-label="查看 {esc(a["model"])} 大符号">查看大符号 →</a>' if large else ""
         search = " ".join([a["name"], a["model"], a["package"], a["category"], a["slug"]]).lower()
         cards.append(f'''<article class="asset-card" data-scope="{a['scope']}" data-category="{esc(a['category'])}" data-search="{esc(search)}">
   <a class="asset-art" href="../{path}" download aria-label="下载 {esc(a['model'])} SVG">{inline_asset(a)}<span class="download-hint">下载 SVG</span></a>
   <div class="asset-copy"><div class="asset-model">{esc(a['model'])}</div><h3>{esc(a['name'])}</h3><p>{esc(a['package'])}</p></div>
-  <div class="asset-foot"><span>{esc(a['category'])}</span><code>{a['slug']}</code></div>
+  <div class="asset-foot"><span>{esc(a['category'])}</span><code>{a['slug']}</code></div>{large_link}
 </article>''')
     categories = sorted({a["category"] for a in entries})
     options = "".join(f'<button class="filter" data-filter="{esc(cat)}">{esc(cat)}</button>' for cat in categories)
     current_count = sum(a["scope"] == "current" for a in entries)
     extended_count = len(entries) - current_count
+    large_count = sum(large_schematic_entry(a["slug"]) is not None for a in entries)
     return f'''<!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EDA 器件 SVG 资产库</title>
 <style>
-:root{{--bg:#f5f7fa;--panel:#fff;--panel2:#eef2f7;--text:#172033;--muted:#667085;--border:#dce3ec;--brand:#2563eb;--brand-soft:#e8f0fe;--eda-ink:#475569;--eda-package:#334155;--eda-package-ink:#f8fafc;--eda-pcb:#ddebe3;--eda-pcb-edge:#3f6f5b;--eda-soft:#f1f5f9;--eda-screen:#172554;--eda-screen-ink:#93c5fd;--eda-accent:#f59e0b;--eda-accent-soft:#fef3c7;color-scheme:light}}
-html[data-theme="dark"]{{--bg:#0c1220;--panel:#141d2e;--panel2:#1c283b;--text:#edf3fc;--muted:#9aaac0;--border:#2b3a50;--brand:#7aa7ff;--brand-soft:#1c3154;--eda-ink:#b6c3d5;--eda-package:#334155;--eda-package-ink:#f8fafc;--eda-pcb:#1f4a3c;--eda-pcb-edge:#79b89e;--eda-soft:#253248;--eda-screen:#081a3a;--eda-screen-ink:#7dd3fc;--eda-accent:#fbbf24;--eda-accent-soft:#453714;color-scheme:dark}}
+:root{{--bg:#f5f7fa;--panel:#fff;--panel2:#eef2f7;--text:#172033;--muted:#667085;--border:#dce3ec;--brand:#2563eb;--brand-soft:#e8f0fe;--eda-ink:#475569;--eda-package:#334155;--eda-package-ink:#f8fafc;--eda-pcb:#ddebe3;--eda-pcb-edge:#3f6f5b;--eda-soft:#f1f5f9;--eda-screen:#172554;--eda-screen-ink:#93c5fd;--eda-accent:#f59e0b;--eda-accent-soft:#fef3c7;--eda-symbol-body:#ffffff;--eda-pin-line:#94a3b8;--eda-muted:#64748b;color-scheme:light}}
+html[data-theme="dark"]{{--bg:#0c1220;--panel:#141d2e;--panel2:#1c283b;--text:#edf3fc;--muted:#9aaac0;--border:#2b3a50;--brand:#7aa7ff;--brand-soft:#1c3154;--eda-ink:#b6c3d5;--eda-package:#334155;--eda-package-ink:#f8fafc;--eda-pcb:#1f4a3c;--eda-pcb-edge:#79b89e;--eda-soft:#253248;--eda-screen:#081a3a;--eda-screen-ink:#7dd3fc;--eda-accent:#fbbf24;--eda-accent-soft:#453714;--eda-symbol-body:#141d2e;--eda-pin-line:#64748b;--eda-muted:#9aaac0;color-scheme:dark}}
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 Inter,"Microsoft YaHei",system-ui,sans-serif}}button,input{{font:inherit}}a{{color:inherit;text-decoration:none}}.wrap{{width:min(1440px,calc(100% - 48px));margin:auto}}header{{padding:48px 0 30px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--panel),var(--brand-soft))}}.eyebrow{{color:var(--brand);font:700 11px/1 ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase}}h1{{margin:12px 0 12px;font-size:clamp(30px,4vw,52px);line-height:1.08;letter-spacing:-.04em}}.lead{{max-width:760px;margin:0;color:var(--muted);font-size:15px}}.stats{{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}}.stat{{padding:10px 14px;border:1px solid var(--border);border-radius:12px;background:var(--panel);font:600 12px ui-monospace,monospace}}.toolbar{{position:sticky;top:0;z-index:5;padding:14px 0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}}.toolbar-row{{display:flex;gap:12px;align-items:center}}.search{{flex:1;min-width:200px;padding:11px 14px;border:1px solid var(--border);border-radius:11px;background:var(--panel);color:var(--text);outline:none}}.search:focus{{border-color:var(--brand)}}.theme,.filter{{border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:9px;padding:8px 11px;cursor:pointer}}.filters{{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}}.filter.active{{background:var(--brand);border-color:var(--brand);color:white}}main{{padding:28px 0 60px}}.section-head{{display:flex;justify-content:space-between;align-items:end;margin:20px 0 16px}}h2{{margin:0;font-size:22px}}.section-head p{{margin:0;color:var(--muted)}}.grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:14px}}.asset-card{{overflow:hidden;border:1px solid var(--border);border-radius:16px;background:var(--panel);transition:.18s ease}}.asset-card:hover{{transform:translateY(-2px);border-color:var(--brand);box-shadow:0 12px 28px -20px var(--text)}}.asset-art{{position:relative;display:flex;align-items:center;justify-content:center;height:134px;background:var(--panel2);border-bottom:1px solid var(--border)}}.asset-art svg{{width:144px;height:90px}}.download-hint{{position:absolute;right:9px;bottom:8px;padding:3px 6px;border-radius:6px;background:var(--panel);color:var(--brand);font-size:10px;opacity:0;transition:.15s}}.asset-art:hover .download-hint{{opacity:1}}.asset-copy{{padding:13px 14px 10px}}.asset-model{{color:var(--brand);font:700 12px ui-monospace,monospace}}h3{{margin:5px 0 3px;font-size:14px}}.asset-copy p{{margin:0;color:var(--muted);font-size:12px}}.asset-foot{{display:flex;justify-content:space-between;gap:8px;padding:9px 14px;border-top:1px solid var(--border);color:var(--muted);font-size:10px}}.asset-foot code{{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}.guide{{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0}}.guide article{{padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--panel)}}.guide b{{display:block;margin-bottom:6px}}.guide p{{margin:0;color:var(--muted);font-size:12px}}.integration{{padding:20px;border:1px solid var(--border);border-radius:16px;background:var(--panel);margin-top:26px}}.integration code{{color:var(--brand)}}.empty{{display:none;padding:50px;text-align:center;color:var(--muted)}}footer{{padding:24px 0 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--border)}}[hidden]{{display:none!important}}@media(max-width:800px){{.wrap{{width:min(100% - 24px,1440px)}}.guide{{grid-template-columns:1fr 1fr}}.toolbar-row{{flex-wrap:wrap}}.search{{flex-basis:100%}}}}@media(max-width:460px){{.guide{{grid-template-columns:1fr}}.grid{{grid-template-columns:1fr 1fr}}.asset-art{{height:110px}}.asset-art svg{{width:120px;height:75px}}}}
+.large-symbol-link{{display:block;padding:9px 14px;border-top:1px solid var(--border);color:var(--brand);font-size:12px;font-weight:700;text-align:right}}.large-symbol-link:hover{{background:var(--brand-soft)}}
 </style></head>
-<body><header><div class="wrap"><div class="eyebrow">Production-ready editable vector · EDA package language</div><h1>电子课程设计 · 器件 SVG 资产库</h1><p class="lead">为 online-electronic-course-design-simulation 重绘。统一封装轮廓、金属引脚、1 脚标识、PCB 与显示器件语义；同时保留可编辑结构与项目现有主题适应能力。</p><div class="stats"><span class="stat">{current_count} 枚现有器件</span><span class="stat">{extended_count} 枚扩展器件</span><span class="stat">{len(SYMBOLS)} 枚原理图符号</span><span class="stat">96 × 60 统一网格</span></div></div></header>
+<body><header><div class="wrap"><div class="eyebrow">Production-ready editable vector · EDA package language</div><h1>电子课程设计 · 器件 SVG 资产库</h1><p class="lead">为 online-electronic-course-design-simulation 重绘。统一封装轮廓、金属引脚、1 脚标识、PCB 与显示器件语义；同时保留可编辑结构与项目现有主题适应能力。</p><div class="stats"><span class="stat">{current_count} 枚现有器件</span><span class="stat">{extended_count} 枚扩展器件</span><span class="stat">{len(SYMBOLS)} 枚原理图符号</span><span class="stat">{large_count} 枚大符号</span><span class="stat">96 × 60 缩略图 / 动态大符号网格</span></div></div></header>
 <div class="toolbar"><div class="wrap"><div class="toolbar-row"><input class="search" id="search" type="search" placeholder="搜索型号、名称、封装或分类…" aria-label="搜索器件"><button class="theme" id="theme" type="button">切换深色预览</button><button class="filter active" data-filter="all">全部</button></div><div class="filters">{options}</div></div></div>
-<main class="wrap"><section class="guide"><article><b>封装语义</b><p>DIP 缺口、QFP 四边引脚、TO 系列散热片与极性标记均按行业常见表达绘制。</p></article><article><b>可编辑结构</b><p>独立 SVG 含 title、desc 与 pins/package/markings 等语义分组，无位图、脚本或外部依赖。</p></article><article><b>主题变量</b><p>通过 --eda-ink、--eda-package、--eda-pcb、--eda-accent 等变量适配界面，默认色可直接使用。</p></article><article><b>尺寸建议</b><p>缩略图 44–96 px；器件库卡片建议 48 px 以上。更小尺寸优先显示轮廓，避免添加额外文字。</p></article></section>
+<main class="wrap"><section class="guide"><article><b>封装语义</b><p>DIP 缺口、QFP 四边引脚、TO 系列散热片与极性标记均按行业常见表达绘制。</p></article><article><b>可编辑结构</b><p>独立 SVG 含 title、desc 与 pins/package/markings 等语义分组；大符号每脚附 data-pin 与 data-direction，无位图、脚本或外部依赖。</p></article><article><b>大符号规范</b><p>集成电路按标准脚序；开发板与模块采用功能端口，不为不同厂商版本虚构物理脚号；分立器件使用标准原理图符号。</p></article><article><b>主题变量</b><p>通过 --eda-ink、--eda-package、--eda-symbol-body、--eda-accent 等变量适配界面，默认色可直接使用。</p></article><article><b>尺寸建议</b><p>缩略图 44–96 px；原理图大符号按 23-unit 引脚间距动态扩展，画布中可直接缩放而不损失文字。</p></article></section>
 <section><div class="section-head"><h2>器件资产</h2><p id="count">{len(entries)} / {len(entries)}</p></div><div class="grid" id="grid">{''.join(cards)}</div><div class="empty" id="empty">没有匹配的器件，请更换关键词或分类。</div></section>
-<section class="integration"><h2>项目替换与文件结构</h2><p><code>redesigned-design/electronic-lab/</code> 是已替换器件缩略图与原理图符号的完整 design 副本，可对照预览。</p><p><code>assets/current/</code> 对应当前项目器件；<code>assets/extended/</code> 为后续扩展；<code>assets/schematic/schematic-symbols.svg</code> 保留原 symbol id，可替换共享符号文件。</p><p>页面状态建议：默认使用当前主题色；悬停提高描边对比；选中仅增加外框，不改变器件本身极性与引脚颜色；禁用态整体不透明度 40%。器件命名使用“型号-封装”小写短横线。</p></section></main>
+<section class="integration"><h2>项目替换与文件结构</h2><p><code>redesigned-design/electronic-lab/</code> 是已替换器件缩略图与原理图符号的完整 design 副本，可对照预览。</p><p><code>assets/current/</code> 对应当前项目器件；<code>assets/extended/</code> 为后续扩展；<code>assets/large-schematic/</code> 为其余器件的大符号版本；<code>assets/schematic/schematic-symbols.svg</code> 保留原 symbol id，可替换共享符号文件。</p><p>页面状态建议：默认使用当前主题色；悬停提高描边对比；选中仅增加外框，不改变器件本身极性与引脚颜色；禁用态整体不透明度 40%。器件命名使用“型号-封装”小写短横线。</p></section></main>
 <footer><div class="wrap">所有图形均为可编辑 SVG。品牌型号仅用于器件识别，未绘制厂商商标；通用兼容板不代表官方开发板外观复刻。</div></footer>
 <script>
 const cards=[...document.querySelectorAll('.asset-card')];let category='all';const q=document.getElementById('search');
@@ -849,6 +887,12 @@ def validate(entries):
             errors.append(f"{path.relative_to(ROOT)}: {exc}")
     slugs = [a["slug"] for a in entries]
     duplicates = [slug for slug, count in Counter(slugs).items() if count > 1]
+    large_files = list((ROOT / "assets" / "large-schematic").rglob("*.svg"))
+    large_files.append(ROOT / "assets" / "extended" / "chips" / "74ls32-dip14-schematic.svg")
+    large_pin_count = 0
+    for path in large_files:
+        root = ET.parse(path).getroot()
+        large_pin_count += len(root.findall(".//{http://www.w3.org/2000/svg}g[@data-pin]"))
     if duplicates:
         errors.append("Duplicate slugs: " + ", ".join(duplicates))
     if len(SYMBOLS) != len(set(SYMBOLS)):
@@ -859,10 +903,13 @@ def validate(entries):
         "current_assets": sum(a["scope"] == "current" for a in entries),
         "extended_assets": sum(a["scope"] == "extended" for a in entries),
         "schematic_symbols": len(SYMBOLS),
+        "large_schematic_symbols": len(large_files),
+        "large_schematic_pins": large_pin_count,
         "svg_files_validated": len(svg_files),
         "xml_errors": errors,
         "external_raster_or_script": False,
         "viewBox_components": "0 0 96 60",
+        "viewBox_large_schematic": "dynamic · 23-unit pin pitch",
     }
     (ROOT / "validation.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     if errors:
@@ -875,6 +922,7 @@ def main():
         path = ROOT / asset_path(a)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(render_asset(a), encoding="utf-8")
+    large_entries = generate_large_assets(ROOT)
     schematic_dir = ROOT / "assets" / "schematic"
     schematic_dir.mkdir(parents=True, exist_ok=True)
     (schematic_dir / "schematic-symbols.svg").write_text(schematic_sprite(), encoding="utf-8")
@@ -890,8 +938,10 @@ def main():
         "source_project": "https://github.com/moonandwind22/online-electronic-course-design-simulation",
         "version": "1.0.0",
         "component_viewBox": "0 0 96 60",
+        "large_schematic_viewBox": "dynamic · 23-unit pin pitch",
         "style": {"stroke": 2, "corner_radius": "2–6 units", "pin_fill": "#CBD5E1", "package_fill": "#334155", "pcb_fill": "#DDEBE3", "accent": "#F59E0B"},
         "assets": [{**a, "file": asset_path(a).as_posix()} for a in ASSETS],
+        "large_schematics": large_entries,
         "schematic_symbol_ids": list(SYMBOLS),
     }
     (ROOT / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")

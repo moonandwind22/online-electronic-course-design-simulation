@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useCircuitStore } from '../../store/useCircuitStore';
 import { useUiStore } from '../../store/useUiStore';
 import { CATEGORY_ORDER, partsForDomain } from '../../parts/registry';
+import { partSvgAssets } from '../../parts/svgAssets';
 import type { PartDef, PartSymbol } from '../../parts/types';
 
 export function PalettePanel() {
@@ -115,15 +116,26 @@ export function PalettePanel() {
               <span>{String(list.length).padStart(2, '0')}</span>
             </div>
             <div className="part-grid">
-              {list.map((part) => (
-                <button key={part.type} className="part-card" onClick={() => place(part)} title={part.description}>
-                  <span className="part-symbol">
-                    <PartThumb symbol={part.symbol} />
-                  </span>
-                  <span className="part-name">{part.name}</span>
-                  <span className="part-meta">{part.subtitle}</span>
-                </button>
-              ))}
+              {list.map((part) => {
+                const asset = partSvgAssets(part.type);
+                return (
+                  <button key={part.type} className="part-card" onClick={() => place(part)} title={part.description}>
+                    <span className={`part-symbol ${asset ? 'part-symbol--asset' : ''}`}>
+                      {asset ? (
+                        <span
+                          className="part-symbol-svg"
+                          aria-hidden="true"
+                          dangerouslySetInnerHTML={{ __html: asset.small }}
+                        />
+                      ) : (
+                        <PartThumb symbol={part.symbol} />
+                      )}
+                    </span>
+                    <span className="part-name">{part.name}</span>
+                    <span className="part-meta">{part.subtitle}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         ))}

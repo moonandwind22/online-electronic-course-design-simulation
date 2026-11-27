@@ -136,6 +136,72 @@ export function translateWireSegment(points: Point[], index: number, dx: number,
   return next;
 }
 
+/**
+ * 拖动任意一段导线：
+ * - 中间段直接平移；
+ * - 贴着引脚的横/竖段平移时，在引脚旁自动补一个折点，引脚位置不变。
+ */
+export function moveWireSegment(
+  points: Point[],
+  index: number,
+  dx: number,
+  dy: number,
+  startAnchored: boolean,
+  endAnchored: boolean,
+): Point[] {
+  const a = points[index];
+  const b = points[index + 1];
+  if (!a || !b || points.length < 2) return points;
+  const last = points.length - 1;
+  const horizontal = orientationOf(a, b) === 'h';
+  const vertical = orientationOf(a, b) === 'v';
+  if (!horizontal && !vertical) return points;
+
+  const atStart = index === 0 && startAnchored;
+  const atEnd = index === last - 1 && endAnchored;
+  const next = points.map((p) => ({ ...p }));
+
+  if (horizontal) {
+    if (dy === 0) return points;
+    const nextY = a.y + dy;
+    if (atStart && atEnd) {
+      return [{ ...a }, { x: a.x, y: nextY }, { x: b.x, y: nextY }, { ...b }];
+    }
+    if (atStart) {
+      next.splice(1, 0, { x: a.x, y: nextY });
+      next[2] = { ...next[2], y: nextY };
+      return next;
+    }
+    if (atEnd) {
+      next[index] = { ...next[index], y: nextY };
+      next.splice(index + 1, 0, { x: b.x, y: nextY });
+      return next;
+    }
+    next[index].y += dy;
+    next[index + 1].y += dy;
+    return next;
+  }
+
+  if (dx === 0) return points;
+  const nextX = a.x + dx;
+  if (atStart && atEnd) {
+    return [{ ...a }, { x: nextX, y: a.y }, { x: nextX, y: b.y }, { ...b }];
+  }
+  if (atStart) {
+    next.splice(1, 0, { x: nextX, y: a.y });
+    next[2] = { ...next[2], x: nextX };
+    return next;
+  }
+  if (atEnd) {
+    next[index] = { ...next[index], x: nextX };
+    next.splice(index + 1, 0, { x: nextX, y: b.y });
+    return next;
+  }
+  next[index].x += dx;
+  next[index + 1].x += dx;
+  return next;
+}
+
 /** 把两点直线拉成 6 点“狗腿”折线，两个引脚端点保持不变。 */
 export function doglegWirePoints(a: Point, b: Point, dx: number, dy: number): Point[] {
   const horizontal = Math.abs(a.y - b.y) < 0.5;
@@ -174,9 +240,7 @@ export function doglegWirePoints(a: Point, b: Point, dx: number, dy: number): Po
 export function isSegmentMovable(wire: Wire, index: number): boolean {
   const last = wire.points.length - 1;
   if (last < 1 || index < 0 || index >= last) return false;
-  if (index === 0 && wire.from) return false;
-  if (index === last - 1 && (wire.to || wire.join)) return false;
-  return true;
+  return orientationOf(wire.points[index], wire.points[index + 1]) !== null;
 }
 
 /** 合并重复点与共线点，避免拖动后产生零长度线段。 */

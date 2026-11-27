@@ -30,8 +30,8 @@ import {
 import {
   doglegWirePoints,
   isSegmentMovable,
+  moveWireSegment,
   normalizeWirePoints,
-  translateWireSegment,
 } from '../../lib/wires';
 
 interface CanvasProps {
@@ -91,6 +91,8 @@ export function Canvas({ netlist }: CanvasProps) {
     segmentIndex: number;
     startDoc: Point;
     originalPoints: Point[];
+    startAnchored: boolean;
+    endAnchored: boolean;
     moved: boolean;
     historyStarted: boolean;
   } | null>(null);
@@ -299,6 +301,7 @@ export function Canvas({ netlist }: CanvasProps) {
     if (!wireStart) {
       setWireStart({ componentId: comp.id, pinId, point: { x: world.x, y: world.y } });
       selectComponent(comp.id);
+      setTool('wire');
       return;
     }
     if (wireStart.componentId === comp.id && wireStart.pinId === pinId) {
@@ -320,11 +323,7 @@ export function Canvas({ netlist }: CanvasProps) {
     e.stopPropagation();
     const point = toDoc(e.clientX, e.clientY);
 
-    if (tool === 'wire') {
-      if (!wireStart) {
-        selectWire(wire.id, e.shiftKey);
-        return;
-      }
+    if (wireStart) {
       const hit = nearestPointOnPolyline(wire.points, point);
       if (!hit) return;
       const startComp = doc.components.find((c) => c.id === wireStart.componentId);
@@ -342,6 +341,11 @@ export function Canvas({ netlist }: CanvasProps) {
       return;
     }
 
+    if (tool === 'wire') {
+      selectWire(wire.id, e.shiftKey);
+      return;
+    }
+
     selectWire(wire.id, e.shiftKey);
     if (e.shiftKey) return;
     const hit = nearestPointOnPolyline(wire.points, point);
@@ -353,6 +357,8 @@ export function Canvas({ netlist }: CanvasProps) {
         segmentIndex: 0,
         startDoc: point,
         originalPoints: wire.points.map((p) => ({ ...p })),
+        startAnchored: Boolean(wire.from),
+        endAnchored: Boolean(wire.to || wire.join),
         moved: false,
         historyStarted: false,
       };
@@ -365,6 +371,8 @@ export function Canvas({ netlist }: CanvasProps) {
       segmentIndex: hit.segmentIndex,
       startDoc: point,
       originalPoints: wire.points.map((p) => ({ ...p })),
+      startAnchored: Boolean(wire.from),
+      endAnchored: Boolean(wire.to || wire.join),
       moved: false,
       historyStarted: false,
     };
@@ -417,11 +425,13 @@ export function Canvas({ netlist }: CanvasProps) {
                 Math.round(dx),
                 Math.round(dy),
               )
-            : translateWireSegment(
+            : moveWireSegment(
                 wireDrag.originalPoints,
                 wireDrag.segmentIndex,
                 Math.round(dx),
                 Math.round(dy),
+                wireDrag.startAnchored,
+                wireDrag.endAnchored,
               );
         updateWirePoints(wireDrag.wireId, next);
       }
@@ -522,7 +532,7 @@ export function Canvas({ netlist }: CanvasProps) {
               const mid = wire.points[Math.max(0, Math.floor((wire.points.length - 1) / 2))];
               const nxt = wire.points[Math.min(wire.points.length - 1, Math.floor((wire.points.length - 1) / 2) + 1)] ?? mid;
               const endpoint = wire.points[wire.points.length - 1];
-              const connectable = tool === 'wire' && Boolean(wireStart);
+              const connectable = Boolean(wireStart);
               return (
                 <g
                   key={wire.id}
@@ -630,7 +640,7 @@ export function Canvas({ netlist }: CanvasProps) {
       <div className="canvas-hint">
         {wireStart
           ? '点击引脚或导线完成连线，Esc 取消'
-          : '点击引脚连线 · 拖动导线中段调整走线 · 空格拖拽平移 · 滚轮缩放'}
+          : '点击引脚连线 · 拖动导线调整走线 · 空格拖拽平移 · 滚轮缩放'}
       </div>
 
       <div className="zoom-box">

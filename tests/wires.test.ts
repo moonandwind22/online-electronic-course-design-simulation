@@ -8,6 +8,7 @@ import {
   doglegWirePoints,
   forceWireEndpoints,
   isSegmentMovable,
+  moveWireSegment,
   reanchorWires,
   syncJoinedWires,
   translateWireSegment,
@@ -125,12 +126,33 @@ describe('导线交互与网表', () => {
     expect(points.some((p) => p.y === 240)).toBe(true);
   });
 
+  it('贴着引脚的横向段也能上下移动，两端引脚坐标不变', () => {
+    const points = [
+      { x: 0, y: 0 },
+      { x: 100, y: 0 },
+      { x: 100, y: 50 },
+      { x: 200, y: 50 },
+    ];
+    const movedStart = moveWireSegment(points, 0, 0, 24, true, true);
+    expect(movedStart[0]).toEqual(points[0]);
+    expect(movedStart[movedStart.length - 1]).toEqual(points[points.length - 1]);
+    expect(movedStart[1]).toEqual({ x: 0, y: 24 });
+    expect(movedStart[2]).toEqual({ x: 100, y: 24 });
+    expect(movedStart.length).toBe(5);
+
+    const movedEnd = moveWireSegment(points, 2, 0, -16, true, true);
+    expect(movedEnd[0]).toEqual(points[0]);
+    expect(movedEnd[movedEnd.length - 1]).toEqual(points[points.length - 1]);
+    expect(movedEnd[movedEnd.length - 2]).toEqual({ x: 200, y: 34 });
+    expect(movedEnd.length).toBe(5);
+  });
+
   it('拖动导线中段只平移该线段，引脚端点保持不动', () => {
     const doc = buildAnalogExample();
     const wire = doc.wires.find((w) => w.points.length === 4);
     expect(wire).toBeTruthy();
     expect(isSegmentMovable(wire!, 1)).toBe(true);
-    expect(isSegmentMovable(wire!, 0)).toBe(false);
+    expect(isSegmentMovable(wire!, 0)).toBe(true);
 
     const next = translateWireSegment(wire!.points, 1, 20, 0);
     expect(round(next[0])).toEqual(round(wire!.points[0]));
